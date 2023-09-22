@@ -1,4 +1,4 @@
-package com.janfer.estoque.domain.enums;
+package com.janfer.estoque.domain.entities.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

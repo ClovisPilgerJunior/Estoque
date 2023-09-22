@@ -1,0 +1,66 @@
+package com.janfer.estoque.domain.entities;
+
+import com.janfer.estoque.domain.entities.enums.MedidaUnidade;
+import com.janfer.estoque.domain.entities.enums.Resuprimento;
+import com.janfer.estoque.domain.entities.enums.TipoProduto;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProdutoCapa {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false)
+  private Long cod;
+  private Long codSistema;
+  private String description;
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = "tipo_produto")
+  private Set<Integer> tipoProduto = new HashSet<>();
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = "medida_unidade")
+  private Set<Integer> medidaUnidade = new HashSet<>();
+  @ManyToOne
+  @JoinColumn(name = "fornecedor_id")
+  private Fornecedor fornecedor;
+  @ManyToOne
+  @JoinColumn(name = "ProdutoEntrada_id")
+  private Long entrada;
+  @ManyToOne
+  @JoinColumn(name = "ProdutoSaida_id")
+  private Long saida;
+  @ManyToOne
+  @JoinColumn(name = "ProdutoPerda_id")
+  private Long percas;
+  private Long saldo;
+  private Double precoUnitario;
+  private Double valor;
+  private Long minimo;
+  private Long maximo;
+  private Resuprimento resuprimento;
+  private boolean ativo;
+
+  public Set<TipoProduto> getTipoProduto() {
+    return tipoProduto.stream().map(TipoProduto::toEnum).collect(Collectors.toSet());
+  }
+
+  public void addTipoProduto(TipoProduto tipoProduto) {
+    this.tipoProduto.add(tipoProduto.getCod());
+  }
+
+  public Set<MedidaUnidade> getMedidaUnidade() {
+    return medidaUnidade.stream().map(MedidaUnidade::toEnum).collect(Collectors.toSet());
+  }
+
+  public void addMedidaUnidade(MedidaUnidade medidaUnidade){
+    this.medidaUnidade.add(medidaUnidade.getCod());
+  }
+}
