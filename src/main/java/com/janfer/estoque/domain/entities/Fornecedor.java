@@ -24,5 +24,8 @@ public class Fornecedor {
   private String telefone;
   private String endereco;
   private boolean ativo;
+  @ManyToOne
+  @JoinColumn(name = "produto_capa_sku")
+  private ProdutoCapa produtoCapa;
 
 }

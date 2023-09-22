@@ -35,9 +35,6 @@ public class ProdutoCapaDTO implements Serializable {
   private final Set<Integer> tipoProduto = new HashSet<>();
   private final Set<Integer> medidaUnidade = new HashSet<>();
   private Fornecedor fornecedor;
-  private ProdutoEntrada quantidadeEntrada;
-  private ProdutoSaida quantidadeSaida;
-  private ProdutoPerda quantidadePerda;
   private Long saldo;
   private Double precoUnitario;
   private Double valor;

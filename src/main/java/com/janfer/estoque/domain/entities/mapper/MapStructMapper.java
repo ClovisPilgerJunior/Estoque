@@ -4,9 +4,11 @@ import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.entities.dtos.ProdutoCapaDTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
-public interface ProdutoCapaMapper {
+import java.util.List;
 
-   ProdutoCapa toEntity(ProdutoCapaDTO teste);
+@Mapper(componentModel = "Spring")
+public interface MapStructMapper {
+
+   List<ProdutoCapaDTO> produtoCapaToProdutocapaDTO(List<ProdutoCapa> produtoCapa);
 
 }

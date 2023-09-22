@@ -22,9 +22,6 @@ public class ProdutoEntrada {
   @Column(name = "id", nullable = false)
   private Long id;
   private int sku;
-  private String desc;
-  private TipoProduto tipoProduto;
-  private MedidaUnidade medidaUnidade;
   private Long numeroNota;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataPedido;

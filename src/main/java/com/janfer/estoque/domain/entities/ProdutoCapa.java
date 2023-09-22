@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "ProdutoCapa")
 public class ProdutoCapa {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,14 +31,6 @@ public class ProdutoCapa {
   @ManyToOne
   @JoinColumn(name = "fornecedor_id")
   private Fornecedor fornecedor;
-  @ManyToOne
-  @JoinColumn(name = "ProdutoEntrada_id")
-  private Long entrada;
-  @ManyToOne
-  @JoinColumn(name = "ProdutoSaida_id")
-  private Long saida;
-  @ManyToOne
-  @JoinColumn(name = "ProdutoPerda_id")
   private Long percas;
   private Long saldo;
   private Double precoUnitario;
