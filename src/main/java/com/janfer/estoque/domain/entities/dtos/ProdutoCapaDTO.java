@@ -30,8 +30,7 @@ public class ProdutoCapaDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-  private Long cod;
-  private Long codSistema;
+  private Long sku;
   private String description;
   private final Set<Integer> tipoProduto = new HashSet<>();
   private final Set<Integer> medidaUnidade = new HashSet<>();

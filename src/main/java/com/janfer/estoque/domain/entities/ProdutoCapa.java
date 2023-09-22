@@ -18,9 +18,8 @@ import java.util.stream.Collectors;
 public class ProdutoCapa {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
-  private Long cod;
-  private Long codSistema;
+  @Column(name = "sku", nullable = false)
+  private Long sku;
   private String description;
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "tipo_produto")
