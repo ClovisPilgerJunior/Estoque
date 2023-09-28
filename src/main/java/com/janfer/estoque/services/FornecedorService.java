@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FornecedorService {
@@ -23,4 +24,12 @@ public class FornecedorService {
         return fornecedorRepository.save(fornecedor);
     }
 
+    @Transactional
+    public void delete(Fornecedor fornecedor){
+        fornecedorRepository.delete(fornecedor);
+    }
+
+    public Optional<Fornecedor> findById(Long id) {
+        return fornecedorRepository.findById(id);
+    }
 }

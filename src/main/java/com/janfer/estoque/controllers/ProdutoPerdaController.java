@@ -1,9 +1,9 @@
 package com.janfer.estoque.controllers;
 
-import com.janfer.estoque.domain.entities.ProdutoCapa;
-import com.janfer.estoque.domain.entities.dtos.ProdutoCapaDTO;
+import com.janfer.estoque.domain.entities.ProdutoPerda;
+import com.janfer.estoque.domain.entities.dtos.ProdutoPerdaDTO;
 import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
-import com.janfer.estoque.services.ProdutoCapaService;
+import com.janfer.estoque.services.ProdutoPerdaService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,31 +14,30 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(value = "/api/produtoCapa")
-public class ProdutoCapaController {
+@RequestMapping(value = "/api/produtoPerda")
+public class ProdutoPerdaController {
 
     private MapStructMapper mapStructMapper;
 
-    private ProdutoCapaService produtoCapaService;
+    private ProdutoPerdaService produtoPerdaService;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody ProdutoCapaDTO produtoCapaDTO) {
-        
-        produtoCapaService.save(mapStructMapper.produtoCapaDTOToProdutoCapa(produtoCapaDTO));
+    public ResponseEntity<Object> create(@RequestBody ProdutoPerdaDTO produtoPerdaDTO) {
+        produtoPerdaService.save(mapStructMapper.produtoPerdaToProdutoPerdaDTO(produtoPerdaDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutoCapaDTO>> findAll() {
-        return new ResponseEntity<>(mapStructMapper.produtoCapaAllToProdutoCapaDTO(produtoCapaService.findAll()), HttpStatus.OK);
+    public ResponseEntity<List<ProdutoPerdaDTO>> findAll() {
+        return new ResponseEntity<>(mapStructMapper.produtoPerdaDTOAllToProdutoPerda(produtoPerdaService.findAll()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> findById(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
-        return produtoCapaOptional.<ResponseEntity<Object>>map(ProdutoCapa -> ResponseEntity
+        Optional<ProdutoPerda> produtoPerdaOptional = produtoPerdaService.findById(id);
+        return produtoPerdaOptional.<ResponseEntity<Object>>map(ProdutoPerda -> ResponseEntity
                         .status(HttpStatus.OK)
-                        .body(ProdutoCapa))
+                        .body(ProdutoPerda))
                 .orElseGet(() -> ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
                         .body("Produto não encontrado")
@@ -47,8 +46,8 @@ public class ProdutoCapaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
-        if (produtoCapaOptional.isEmpty()) {
+        Optional<ProdutoPerda> produtoPerdaOptional = produtoPerdaService.findById(id);
+        if (produtoPerdaOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
         }
         return ResponseEntity.status(HttpStatus.OK).body("Produto " + id + " excluído com sucesso");

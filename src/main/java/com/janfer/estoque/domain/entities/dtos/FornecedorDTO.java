@@ -1,6 +1,7 @@
 package com.janfer.estoque.domain.entities.dtos;
 
 import com.janfer.estoque.domain.entities.ProdutoCapa;
+import com.janfer.estoque.domain.entities.enums.TipoEmpresa;
 import lombok.Data;
 
 import java.io.Serial;
@@ -15,11 +16,10 @@ public class FornecedorDTO implements Serializable {
     private Long id;
     private String empresa;
     private String nome;
-    private Integer tipoEmpresa;
+    private TipoEmpresa tipoEmpresa;
     private String email;
     private String telefone;
     private String endereco;
     private boolean ativo;
-    private ProdutoCapa produtoCapa;
 
 }

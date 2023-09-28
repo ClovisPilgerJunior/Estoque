@@ -28,6 +28,6 @@ public class ProdutoSaida {
   private Long quantidade;
   private String retiradoPor;
   private Setor setor;
-  private String obersvacao;
+  private String observacao;
 
 }

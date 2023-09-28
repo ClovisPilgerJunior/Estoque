@@ -7,24 +7,24 @@ import lombok.Getter;
 @Getter
 public enum TipoProduto {
 
-  MATERIA_PRIMA(0, "MATERIA PRIMA"),
-  PRODUTO_PRONTO(1, "PRODUTO PRONTO"),
-  DIVERSOS(2, "DIVERSOS");
+    MATERIA_PRIMA(0, "MATERIA PRIMA"),
+    PRODUTO_PRONTO(1, "PRODUTO PRONTO"),
+    DIVERSOS(2, "DIVERSOS");
 
-  private int cod;
-  private String desc;
+    private int cod;
+    private String desc;
 
-  public static TipoProduto toEnum(Integer cod){
-    if(cod == null){
-      return null;
+    public static TipoProduto toEnum(Integer cod) {
+        if (cod == null) {
+            return null;
+        }
+        for (TipoProduto tipoProduto : TipoProduto.values()) {
+            if (cod.equals(tipoProduto.getCod())) {
+                return tipoProduto;
+            }
+        }
+        throw new IllegalArgumentException("Tipo de produto inválido");
     }
-    for(TipoProduto tipoProduto : TipoProduto.values()){
-      if(cod.equals(tipoProduto.getCod())){
-        return tipoProduto;
-      }
-    }
-    throw new IllegalArgumentException("Tipo de produto inválido");
-  }
 
 
-  }
+}

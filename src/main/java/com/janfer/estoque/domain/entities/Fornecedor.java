@@ -17,6 +17,7 @@ public class Fornecedor {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
+  @Column(unique = true)
   private String empresa;
   private String nome;
   private TipoEmpresa tipoEmpresa;
@@ -24,8 +25,5 @@ public class Fornecedor {
   private String telefone;
   private String endereco;
   private boolean ativo;
-  @ManyToOne
-  @JoinColumn(name = "produto_capa_sku")
-  private ProdutoCapa produtoCapa;
 
 }

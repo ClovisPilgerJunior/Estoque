@@ -19,21 +19,12 @@ import java.util.stream.Collectors;
 @Data
 public class ProdutoCapaDTO implements Serializable {
 
-  @Autowired
-  private ProdutoEntrada produtoEntrada;
-
-  @Autowired
-  private ProdutoSaida produtoSaida;
-
-  @Autowired
-  private ProdutoPerda produtoPerda;
-
   @Serial
   private static final long serialVersionUID = 1L;
   private Long sku;
   private String description;
-  private final Set<Integer> tipoProduto = new HashSet<>();
-  private final Set<Integer> medidaUnidade = new HashSet<>();
+  private TipoProduto tipoProduto;
+  private MedidaUnidade medidaUnidade;
   private Fornecedor fornecedor;
   private Long saldo;
   private Double precoUnitario;
@@ -42,21 +33,5 @@ public class ProdutoCapaDTO implements Serializable {
   private Long maximo;
   private Resuprimento resuprimento;
   private boolean ativo;
-
-  public Set<TipoProduto> getTipoProduto() {
-    return tipoProduto.stream().map(TipoProduto::toEnum).collect(Collectors.toSet());
-  }
-
-  public void addTipoProduto(TipoProduto tipoProduto) {
-    this.tipoProduto.add(tipoProduto.getCod());
-  }
-
-  public Set<MedidaUnidade> getMedidaUnidade() {
-    return medidaUnidade.stream().map(MedidaUnidade::toEnum).collect(Collectors.toSet());
-  }
-
-  public void addMedidaUnidade(MedidaUnidade medidaUnidade){
-    this.medidaUnidade.add(medidaUnidade.getCod());
-  }
 
 }
