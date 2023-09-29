@@ -19,8 +19,7 @@ import java.util.Date;
 public class ProdutoEntrada {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
-  private Long id;
+  @Column(name = "sku", nullable = false)
   private Long sku;
   private Long numeroNota;
   @JsonFormat(pattern = "dd/MM/yyyy")
@@ -28,6 +27,6 @@ public class ProdutoEntrada {
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataEntrega;
   private Double precoCompra;
-  private Long Quantidade;
+  private Long quantidade;
   private String observacao;
 }

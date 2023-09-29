@@ -22,18 +22,15 @@ import java.util.stream.Collectors;
 public class ProdutoCapa {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id", nullable = false)
-  private Long id;
+  @Column(name = "sku", nullable = false)
   private Long sku;
+  @Column(unique = true)
   private String description;
   private TipoProduto tipoProduto;
   private MedidaUnidade medidaUnidade;
   @ManyToOne
   @JoinColumn(name = "fornecedor_id")
   private Fornecedor fornecedor;
-  private Long saldo;
-  private Double precoUnitario;
-  private Double valor;
   private Long minimo;
   private Long maximo;
   private Resuprimento resuprimento;

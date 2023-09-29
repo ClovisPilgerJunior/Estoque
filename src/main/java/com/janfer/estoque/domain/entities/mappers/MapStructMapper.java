@@ -14,12 +14,13 @@ public interface MapStructMapper {
    MapStructMapper INSTANCE = Mappers.getMapper(MapStructMapper.class);
 
    // mapeamento do produtoCapa
-   List<ProdutoCapaDTO> produtoCapaAllToProdutoCapaDTO(List<ProdutoCapa> produtoCapa);
+   List<ProdutoCapaPostDTO> produtoCapaAllToProdutoCapaDTO(List<ProdutoCapa> produtoCapa);
 
 
    @Mapping(target = "tipoProduto", source = "tipoProduto")
    @Mapping(target = "medidaUnidade", source = "medidaUnidade")
-   ProdutoCapa produtoCapaDTOToProdutoCapa(ProdutoCapaDTO produtoCapaDTO);
+   @Mapping(target = "fornecedor", source = "fornecedor")
+   ProdutoCapa produtoCapaDTOToProdutoCapa(ProdutoCapaPostDTO produtoCapaDTO);
 //   ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaDTO produtoCapaDTO);
 
 

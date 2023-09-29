@@ -1,7 +1,8 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.entities.ProdutoCapa;
-import com.janfer.estoque.domain.entities.dtos.ProdutoCapaDTO;
+import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.entities.dtos.ProdutoCapaPostDTO;
 import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
 import com.janfer.estoque.services.ProdutoCapaService;
 import lombok.AllArgsConstructor;
@@ -22,14 +23,14 @@ public class ProdutoCapaController {
     private ProdutoCapaService produtoCapaService;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody ProdutoCapaDTO produtoCapaDTO) {
+    public ResponseEntity<Object> create(@RequestBody ProdutoCapaPostDTO produtoCapaDTO) {
         
         produtoCapaService.save(mapStructMapper.produtoCapaDTOToProdutoCapa(produtoCapaDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutoCapaDTO>> findAll() {
+    public ResponseEntity<List<ProdutoCapaPostDTO>> findAll() {
         return new ResponseEntity<>(mapStructMapper.produtoCapaAllToProdutoCapaDTO(produtoCapaService.findAll()), HttpStatus.OK);
     }
 
@@ -44,6 +45,11 @@ public class ProdutoCapaController {
                         .body("Produto não encontrado")
                 );
     }
+
+//    @GetMapping("/teste/{idProduto}")
+//    public ProdutoCapaGetDTO consultarEstoque(@PathVariable Long idProduto) {
+//        return produtoCapaService.consultarEstoquePorId(idProduto);
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
