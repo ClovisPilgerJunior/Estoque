@@ -2,8 +2,8 @@ package com.janfer.estoque.domain.entities.mappers;
 
 import com.janfer.estoque.domain.entities.*;
 import com.janfer.estoque.domain.entities.dtos.*;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import com.janfer.estoque.repositories.ProdutoEntradaRepository;
+import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -14,39 +14,34 @@ public interface MapStructMapper {
    MapStructMapper INSTANCE = Mappers.getMapper(MapStructMapper.class);
 
    // mapeamento do produtoCapa
-   List<ProdutoCapaPostDTO> produtoCapaAllToProdutoCapaDTO(List<ProdutoCapa> produtoCapa);
+   List<ProdutoCapaGetDTO> produtoCapaAllToProdutoCapaDTO(List<ProdutoCapa> produtoCapa);
 
 
    @Mapping(target = "tipoProduto", source = "tipoProduto")
    @Mapping(target = "medidaUnidade", source = "medidaUnidade")
    @Mapping(target = "fornecedor", source = "fornecedor")
-   ProdutoCapa produtoCapaDTOToProdutoCapa(ProdutoCapaPostDTO produtoCapaDTO);
-//   ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaDTO produtoCapaDTO);
+   @Mapping(target = "id", source = "id")
+   ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaDTO);
 
+   ProdutoCapaGetDTO produtoCapaToProdutoCapaGetDTO(ProdutoCapa produtoCapa);
 
    // mapeamento do Fornecedor
    List<FornecedorDTO> fornecedorAllToFornecedorDTO(List<Fornecedor> fornecedor);
 
    @Mapping(target = "tipoEmpresa", source = "tipoEmpresa")
-   Fornecedor fornecedorTofornecedorDTO(FornecedorDTO fornecedorDTO);
+   Fornecedor fornecedorToFornecedorDTO(FornecedorDTO fornecedorDTO);
 
-//   default Integer tipoProduto(Set<TipoProduto> tipoProdutos) {
-//      return tipoProdutos.size();
-//   }
-//
-//   default Integer medidaUnidade(Set<MedidaUnidade> medidaUnidades) {
-//      return medidaUnidades.size();
-//   }
-//
-//   @Named("mapTipoEmpresaToEnum")
-//   default TipoEmpresa mapTipoEmpresaToEnum(Integer tipoEmpresaCode) {
-//      return TipoEmpresa.toEnum(tipoEmpresaCode);
-//   }
-
+   @Mapping(target = "empresa", source = "tipoEmpresa")
+   FornecedorGetDTO fornecedorGetDTOToFornecedor(Fornecedor fornecedor);
 
    // Mapeamento de ProdutoEntrada
    List<ProdutoEntradaDTO> produtoEntradaAllToProdutoEntrada(List<ProdutoEntrada> produtoEntradas);
+
    ProdutoEntrada produtoEntradaToProdutoEntradaDTO(ProdutoEntradaDTO produtoEntradaDTO);
+
+
+   @Mapping(target = "id", source = "id")
+   ProdutoEntradaDTO produtoEntradaToProdutoEntradaDTO(ProdutoEntrada produtoEntrada);
 
    // Mapeamento de ProdutoSaida
    List<ProdutoSaidaDTO> produtoSaidaDTOAllToProdutoSaida(List<ProdutoSaida> produtoSaidas);

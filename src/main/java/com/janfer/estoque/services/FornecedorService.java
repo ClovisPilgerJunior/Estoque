@@ -32,4 +32,8 @@ public class FornecedorService {
     public Optional<Fornecedor> findById(Long id) {
         return fornecedorRepository.findById(id);
     }
+
+    public boolean existsByEmpresa(String empresa){
+        return fornecedorRepository.existsByEmpresa(empresa);
+    }
 }

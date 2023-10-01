@@ -21,7 +21,6 @@ public class ProdutoPerda {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
-  private Long sku;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date data;
   private Long quantidade;

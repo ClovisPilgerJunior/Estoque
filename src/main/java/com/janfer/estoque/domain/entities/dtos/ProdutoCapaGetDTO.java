@@ -5,6 +5,7 @@ import com.janfer.estoque.domain.entities.enums.MedidaUnidade;
 import com.janfer.estoque.domain.entities.enums.Resuprimento;
 import com.janfer.estoque.domain.entities.enums.TipoProduto;
 import lombok.Data;
+import org.springframework.http.HttpStatusCode;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -14,15 +15,13 @@ public class ProdutoCapaGetDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-  private Long sku;
-  private String description;
+  private Long id;
+  private String desc;
   private TipoProduto tipoProduto;
   private MedidaUnidade medidaUnidade;
-  private Fornecedor fornecedor;
-  private Integer quantidadeEntrada;
-  private Long saldo;
-  private Double precoUnitario;
-  private Double valor;
+  private FornecedorGetDTO fornecedor;
+  private Double somaEntradas;
+  private Double ultimoPrecoCompra;
   private Long minimo;
   private Long maximo;
   private Resuprimento resuprimento;

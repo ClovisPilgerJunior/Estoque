@@ -20,8 +20,8 @@ import java.util.Date;
 public class ProdutoSaida {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "sku", nullable = false)
-  private Long sku;
+  @Column(name = "id", nullable = false)
+  private Long id;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataSaida;
   private Long quantidade;

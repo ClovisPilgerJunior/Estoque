@@ -15,7 +15,6 @@ public class ProdutoSaidaDTO implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
   private Long id;
-  private Long sku;
   private Date dataSaida;
   private Long quantidade;
   private String retiradoPor;

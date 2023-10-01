@@ -4,6 +4,7 @@ import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.dtos.FornecedorDTO;
 import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
 import com.janfer.estoque.services.FornecedorService;
+import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -25,8 +26,12 @@ public class FornecedorController {
     private FornecedorService fornecedorService;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody FornecedorDTO fornecedorDTO){
-        fornecedorService.save(mapStructMapper.fornecedorTofornecedorDTO(fornecedorDTO));
+    public ResponseEntity<Object> create(@Valid @RequestBody FornecedorDTO fornecedorDTO){
+
+        if (fornecedorService.existsByEmpresa(fornecedorDTO.getEmpresa())) {
+             throw new DataIntegrityViolationException("Violação na integridade dos dados");
+        }
+        fornecedorService.save(mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body("Fornecedor cadastrado com sucesso!");
     }
 
@@ -65,6 +70,7 @@ public class FornecedorController {
         if(fornecedorOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
         }
+        fornecedorService.delete(fornecedorOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Fornecedor " + id + " excluído com sucesso!");
     }
 

@@ -1,8 +1,6 @@
 package com.janfer.estoque.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.janfer.estoque.domain.entities.enums.MedidaUnidade;
-import com.janfer.estoque.domain.entities.enums.TipoProduto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +17,8 @@ import java.util.Date;
 public class ProdutoEntrada {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "sku", nullable = false)
-  private Long sku;
+  @Column(name = "id", nullable = false)
+  private Long id;
   private Long numeroNota;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataPedido;
@@ -29,4 +27,8 @@ public class ProdutoEntrada {
   private Double precoCompra;
   private Long quantidade;
   private String observacao;
+  @ManyToOne // Define a relação muitos-para-um
+  @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false) // Define a coluna de chave estrangeira
+  private ProdutoCapa produtoCapa; // Referência para o ProdutoCapa correspondente
+
 }

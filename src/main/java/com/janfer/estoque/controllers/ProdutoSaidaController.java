@@ -50,6 +50,7 @@ public class ProdutoSaidaController {
         if (produtoSaidaOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
         }
+        produtoSaidaService.delete(produtoSaidaOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Produto " + id + " excluído com sucesso");
     }
 

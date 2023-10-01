@@ -1,6 +1,7 @@
 package com.janfer.estoque.domain.entities.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.janfer.estoque.domain.entities.ProdutoCapa;
 import lombok.Data;
 
 import java.io.Serial;
@@ -12,7 +13,7 @@ public class ProdutoEntradaDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-  private int sku;
+  private Long id;
   private Long numeroNota;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataPedido;
@@ -21,4 +22,6 @@ public class ProdutoEntradaDTO implements Serializable {
   private Double precoCompra;
   private Long Quantidade;
   private String observacao;
+  private ProdutoCapa produtoCapa;
+
 }

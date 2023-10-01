@@ -1,8 +1,9 @@
 package com.janfer.estoque.services;
 
 import com.janfer.estoque.domain.entities.ProdutoCapa;
+import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.repositories.*;
-import com.janfer.estoque.services.exceptions.FornecedorNaoEncontradoException;
+import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class ProdutoCapaService {
     if (produtoCapa.getFornecedor() != null && produtoCapa.getFornecedor().getId() != null) {
       Long fornecedorId = produtoCapa.getFornecedor().getId();
       if (!fornecedorRepository.existsById(fornecedorId)) {
-        throw new FornecedorNaoEncontradoException("Fornecedor não encontrado");
+        throw new ObjectNotFoundException("Fornecedor não encontrado");
       }
     }
 
@@ -55,22 +56,12 @@ public class ProdutoCapaService {
     return produtoCapaRepository.findById(id);
   }
 
-//  public ProdutoCapaGetDTO consultarEstoquePorId(Long idProduto) {
-//    ProdutoCapa produtoCapa = produtoCapaRepository.findById(idProduto)
-//        .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado"));
-//
-//    Integer quantidadeEntrada = produtoEntradaRepository.sumQuantidadeByIdProduto(idProduto);
-//
-//    // Consultar o fornecedor do produto
-////    Fornecedor fornecedor = fornecedorRepository.findById(produtoCapa.getFornecedor().getId())
-////        .orElse(null);
-//
-//    ProdutoCapaGetDTO produtoCapaGetDTO = new ProdutoCapaGetDTO();
-//    produtoCapaGetDTO.setSku(produtoCapa.getId());
-//    produtoCapaGetDTO.setDescription(produtoCapa.getDescription());
-//    produtoCapaGetDTO.setQuantidadeEntrada(quantidadeEntrada != null ? quantidadeEntrada : 0);
-//
-//    return produtoCapaGetDTO;
-//  }
-  
+  public boolean existById(Long id){
+    return produtoCapaRepository.existsById(id);
+  }
+
+  public boolean existByDesc(String desc){
+    return produtoCapaRepository.existsByDesc(desc);
+  }
+
 }

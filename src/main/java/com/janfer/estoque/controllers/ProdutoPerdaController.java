@@ -50,6 +50,7 @@ public class ProdutoPerdaController {
         if (produtoPerdaOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
         }
+        produtoPerdaService.delete(produtoPerdaOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Produto " + id + " excluído com sucesso");
     }
 

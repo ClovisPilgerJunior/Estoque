@@ -1,8 +1,6 @@
 package com.janfer.estoque.services;
 
-import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.ProdutoEntrada;
-import com.janfer.estoque.repositories.FornecedorRepository;
 import com.janfer.estoque.repositories.ProdutoEntradaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +32,14 @@ public class ProdutoEntradaService {
     public Optional<ProdutoEntrada> findById(Long id) {
         return produtoEntradaRepository.findById(id);
     }
+
+    public Double calcularSomaEntradas(Long produtoCapaId) {
+        return produtoEntradaRepository.calcularSomaEntradas(produtoCapaId);
+    }
+
+    public Double recuperarUltimoPrecoCompra(Long produtoCapaId){
+        return produtoEntradaRepository.recuperarUltimoPrecoCompra(produtoCapaId);
+    }
+
+
 }
