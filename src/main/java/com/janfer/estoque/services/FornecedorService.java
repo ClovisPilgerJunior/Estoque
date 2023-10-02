@@ -2,6 +2,8 @@ package com.janfer.estoque.services;
 
 import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.repositories.FornecedorRepository;
+import com.janfer.estoque.repositories.ProdutoCapaRepository;
+import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class FornecedorService {
     @Autowired
     FornecedorRepository fornecedorRepository;
 
+    @Autowired
+    ProdutoCapaRepository produtoCapaRepository;
     @Transactional
     public List<Fornecedor> findAll(){
         return fornecedorRepository.findAll();
@@ -26,6 +30,11 @@ public class FornecedorService {
 
     @Transactional
     public void delete(Fornecedor fornecedor){
+
+        if(produtoCapaRepository.existsById(fornecedor.getId())){
+            throw new DataIntegrityViolationException("Não é possível excluir um fornecedor com produto existente");
+        }
+
         fornecedorRepository.delete(fornecedor);
     }
 

@@ -3,6 +3,7 @@ package com.janfer.estoque.services;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.repositories.*;
+import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class ProdutoCapaService {
 
   @Transactional
   public void delete(ProdutoCapa produtoCapa){
+    if(produtoEntradaRepository.existsById(produtoCapa.getId())){
+      throw new DataIntegrityViolationException("Não é possível excluir um produto com entrada existente");
+    }
     produtoCapaRepository.delete(produtoCapa);
   }
 

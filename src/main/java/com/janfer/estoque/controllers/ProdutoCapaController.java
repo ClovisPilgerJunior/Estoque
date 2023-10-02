@@ -43,15 +43,9 @@ public class ProdutoCapaController {
 
     @GetMapping
     public ResponseEntity<List<ProdutoCapaGetDTO>> findAll() {
-        return new ResponseEntity<>(MapStructMapper.INSTANCE.produtoCapaAllToProdutoCapaDTO(produtoCapaService.
+        return new ResponseEntity<>(mapStructMapper.produtoCapaAllToProdutoCapaDTO(produtoCapaService.
                 findAll()), HttpStatus.OK);
     }
-
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ProdutoCapaGetDTO> findById(@PathVariable(value = "id") Long id) {
-//        return new ResponseEntity<>(mapStructMapper.produtoCapaToProdutoCapaGetDTO(
-//                produtoCapaService.findById(id).orElseThrow(()-> new ObjectNotFoundException("Não encontrado"))), HttpStatus.OK);
-//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
