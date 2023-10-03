@@ -1,10 +1,17 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.entities.ProdutoPerda;
-import com.janfer.estoque.domain.entities.dtos.ProdutoPerdaDTO;
+import com.janfer.estoque.domain.entities.ProdutoPerda;
+import com.janfer.estoque.domain.entities.dtos.ProdutoPerdaGetDTO;
+import com.janfer.estoque.domain.entities.dtos.ProdutoPerdaPostDTO;
 import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
+import com.janfer.estoque.services.ProdutoCapaService;
 import com.janfer.estoque.services.ProdutoPerdaService;
+import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,34 +24,47 @@ import java.util.Optional;
 @RequestMapping(value = "/api/produtoPerda")
 public class ProdutoPerdaController {
 
-    private MapStructMapper mapStructMapper;
+    @Autowired
+    MapStructMapper mapStructMapper;
 
-    private ProdutoPerdaService produtoPerdaService;
+    @Autowired
+    ProdutoPerdaService produtoPerdaService;
 
-    @PostMapping
-    public ResponseEntity<Object> create(@RequestBody ProdutoPerdaDTO produtoPerdaDTO) {
+    @Autowired
+    ProdutoCapaService produtoCapaService;
+
+    @PostMapping("/cadastrar")
+    public ResponseEntity<Object> create(@RequestBody ProdutoPerdaPostDTO produtoPerdaDTO) {
+
+        if (produtoPerdaDTO.getProdutoCapa().getId() == null) {
+            return ResponseEntity.badRequest().body("ProdutoCapa não pode ser nulo.");
+        }
+
+        Long produtoCapaId = produtoPerdaDTO.getProdutoCapa().getId();
+        if (!produtoCapaService.existById(produtoCapaId)) {
+            return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
+        }
+
         produtoPerdaService.save(mapStructMapper.produtoPerdaToProdutoPerdaDTO(produtoPerdaDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
     }
 
     @GetMapping
-    public ResponseEntity<List<ProdutoPerdaDTO>> findAll() {
-        return new ResponseEntity<>(mapStructMapper.produtoPerdaDTOAllToProdutoPerda(produtoPerdaService.findAll()), HttpStatus.OK);
+    public ResponseEntity<List<ProdutoPerdaGetDTO>> findAll() {
+        return new ResponseEntity<>(mapStructMapper.produtoPerdaGetDTOAllToProdutoPerda(produtoPerdaService.findAll()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> findById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<ProdutoPerdaGetDTO> findById(@PathVariable(value = "id") Long id) {
         Optional<ProdutoPerda> produtoPerdaOptional = produtoPerdaService.findById(id);
-        return produtoPerdaOptional.<ResponseEntity<Object>>map(ProdutoPerda -> ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(ProdutoPerda))
-                .orElseGet(() -> ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .body("Produto não encontrado")
-                );
+
+        return produtoPerdaOptional.map(produtoPerda -> {
+            ProdutoPerdaGetDTO produtoPerdaGetDTO = mapStructMapper.produtoPerdaGetDTOToProdutoPerda(produtoPerda);
+            return ResponseEntity.status(HttpStatus.OK).body(produtoPerdaGetDTO);
+        }).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado com ID: " + id));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
         Optional<ProdutoPerda> produtoPerdaOptional = produtoPerdaService.findById(id);
         if (produtoPerdaOptional.isEmpty()) {
@@ -52,6 +72,18 @@ public class ProdutoPerdaController {
         }
         produtoPerdaService.delete(produtoPerdaOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Produto " + id + " excluído com sucesso");
+    }
+
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoPerdaPostDTO produtoPerdaDTO){
+        Optional<ProdutoPerda> produtoPerdaOptional = produtoPerdaService.findById(id);
+        if(produtoPerdaOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
+        }
+        var produtoPerda = new ProdutoPerda();
+        BeanUtils.copyProperties(produtoPerdaDTO, produtoPerda);
+        produtoPerda.setId(produtoPerdaOptional.get().getId());
+        return ResponseEntity.status(HttpStatus.OK).body(produtoPerdaService.save(produtoPerda));
     }
 
 

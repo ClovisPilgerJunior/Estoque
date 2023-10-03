@@ -25,7 +25,7 @@ public class FornecedorController {
 
     private FornecedorService fornecedorService;
 
-    @PostMapping
+    @PostMapping("/cadastrar")
     public ResponseEntity<Object> create(@Valid @RequestBody FornecedorDTO fornecedorDTO){
 
         if (fornecedorService.existsByEmpresa(fornecedorDTO.getEmpresa())) {
@@ -52,7 +52,7 @@ public class FornecedorController {
                 );
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid FornecedorDTO fornecedorDTO){
         Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
         if(fornecedorOptional.isEmpty()) {
@@ -64,7 +64,7 @@ public class FornecedorController {
         return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.save(fornecedor));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/{id}")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id){
         Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
         if(fornecedorOptional.isEmpty()){

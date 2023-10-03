@@ -86,7 +86,7 @@ public class ProdutoCapaService {
       Double somaEntradas = produtoEntradaService.calcularSomaEntradas(produtoCapa.getId());
       Double ultimoPrecoCompra = produtoEntradaService.recuperarUltimoPrecoCompra(produtoCapa.getId());
 
-      produtoCapaGetDTO.setSomaEntradas(somaEntradas != null ? somaEntradas : 0.0);
+      produtoCapaGetDTO.setEntradas(somaEntradas != null ? somaEntradas : 0.0);
       produtoCapaGetDTO.setUltimoPrecoCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
 
       produtoCapaGetDTOs.add(produtoCapaGetDTO);

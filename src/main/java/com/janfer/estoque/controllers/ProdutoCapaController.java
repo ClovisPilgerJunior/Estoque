@@ -2,6 +2,7 @@ package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
+import com.janfer.estoque.domain.entities.dtos.FornecedorDTO;
 import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.dtos.ProdutoCapaPostDTO;
 import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
@@ -12,6 +13,7 @@ import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +33,7 @@ public class ProdutoCapaController {
 
   private ProdutoEntradaService produtoEntradaService;
 
-  @PostMapping
+  @PostMapping("/cadastrar")
   public ResponseEntity<Object> create(@Valid @RequestBody ProdutoCapaPostDTO produtoCapaDTO) {
 
     if (produtoCapaService.existByDesc(produtoCapaDTO.getDesc())) {
@@ -42,7 +44,19 @@ public class ProdutoCapaController {
     return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
   }
 
-  @DeleteMapping("/{id}")
+  @PutMapping("/atualizar/{id}")
+  public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO){
+    Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
+    if(produtoCapaOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
+    }
+    var produtoCapa = new ProdutoCapa();
+    BeanUtils.copyProperties(produtoCapaPostDTO, produtoCapa);
+    produtoCapa.setId(produtoCapaOptional.get().getId());
+    return ResponseEntity.status(HttpStatus.OK).body(produtoCapaService.save(produtoCapa));
+  }
+
+  @DeleteMapping("/deletar/{id}")
   public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
     Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
     if (produtoCapaOptional.isEmpty()) {

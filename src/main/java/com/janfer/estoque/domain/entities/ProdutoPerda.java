@@ -25,5 +25,8 @@ public class ProdutoPerda {
   private Date data;
   private Long quantidade;
   private String motivo;
+  @ManyToOne // Define a relação muitos-para-um
+  @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false) // Define a coluna de chave estrangeira
+  private ProdutoCapa produtoCapa; // Referência para o ProdutoCapa correspondente
 
 }

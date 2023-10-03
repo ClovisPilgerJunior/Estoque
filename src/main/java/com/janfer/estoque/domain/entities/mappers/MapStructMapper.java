@@ -2,7 +2,6 @@ package com.janfer.estoque.domain.entities.mappers;
 
 import com.janfer.estoque.domain.entities.*;
 import com.janfer.estoque.domain.entities.dtos.*;
-import com.janfer.estoque.repositories.ProdutoEntradaRepository;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -35,22 +34,24 @@ public interface MapStructMapper {
    FornecedorGetDTO fornecedorGetDTOToFornecedor(Fornecedor fornecedor);
 
    // Mapeamento de ProdutoEntrada
-   List<ProdutoEntradaDTO> produtoEntradaAllToProdutoEntrada(List<ProdutoEntrada> produtoEntradas);
+   List<ProdutoEntradaGetDTO> produtoEntradaGetAllToProdutoEntrada(List<ProdutoEntrada> produtoEntradas);
 
-   ProdutoEntrada produtoEntradaToProdutoEntradaDTO(ProdutoEntradaDTO produtoEntradaDTO);
+   ProdutoEntrada produtoEntradaToProdutoEntradaDTO(ProdutoEntradaPostDTO produtoEntradaDTO);
 
-
-   @Mapping(target = "id", source = "id")
-   ProdutoEntradaDTO produtoEntradaToProdutoEntradaDTO(ProdutoEntrada produtoEntrada);
+   ProdutoEntradaGetDTO produtoEntradaToProdutoEntradaGetDTO(ProdutoEntrada produtoEntrada);
 
    // Mapeamento de ProdutoSaida
-   List<ProdutoSaidaDTO> produtoSaidaDTOAllToProdutoSaida(List<ProdutoSaida> produtoSaidas);
+   List<ProdutoSaidaGetDTO> produtoSaidaGetDTOAllToProdutoSaida(List<ProdutoSaida> produtoSaidas);
 
-   ProdutoSaida produtoSaidaToProdutoSaidaDTO(ProdutoSaidaDTO produtoSaidaDTO);
+   ProdutoSaida produtoSaidaToProdutoSaidaDTO(ProdutoSaidaPostDTO produtoSaidaDTO);
+
+   ProdutoSaidaGetDTO produtoSaidaGetDTOToProdutoSaida(ProdutoSaida produtoSaida);
 
    // Mapeamento de ProdutoPerda
 
-   List<ProdutoPerdaDTO> produtoPerdaDTOAllToProdutoPerda(List<ProdutoPerda> produtoPerdas);
+   List<ProdutoPerdaGetDTO> produtoPerdaGetDTOAllToProdutoPerda(List<ProdutoPerda> produtoPerdas);
 
-   ProdutoPerda produtoPerdaToProdutoPerdaDTO(ProdutoPerdaDTO produtoPerdaDTO);
+   ProdutoPerda produtoPerdaToProdutoPerdaDTO(ProdutoPerdaPostDTO produtoPerdaDTO);
+
+   ProdutoPerdaGetDTO produtoPerdaGetDTOToProdutoPerda(ProdutoPerda produtoPerda);
 }

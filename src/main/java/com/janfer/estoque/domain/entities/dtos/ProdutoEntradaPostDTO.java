@@ -9,14 +9,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class ProdutoEntradaDTO implements Serializable {
+public class ProdutoEntradaPostDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
   private Long id;
   private Long numeroNota;
   @JsonFormat(pattern = "dd/MM/yyyy")
-  private Date dataPedido;
+  private Date dataPedido = new Date();
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataEntrega;
   private Double precoCompra;

@@ -28,5 +28,8 @@ public class ProdutoSaida {
   private String retiradoPor;
   private Setor setor;
   private String observacao;
+  @ManyToOne // Define a relação muitos-para-um
+  @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false) // Define a coluna de chave estrangeira
+  private ProdutoCapa produtoCapa; // Referência para o ProdutoCapa correspondente
 
 }
