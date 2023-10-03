@@ -2,6 +2,7 @@ package com.janfer.estoque.services;
 
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.*;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
@@ -9,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +31,12 @@ public class ProdutoCapaService {
 
   @Autowired
   private FornecedorRepository fornecedorRepository;
+
+  @Autowired
+  private ProdutoEntradaService produtoEntradaService;
+
+  @Autowired
+  private MapStructMapper mapStructMapper;
 
   @Transactional
   public List<ProdutoCapa> findAll(){
@@ -66,6 +74,25 @@ public class ProdutoCapaService {
 
   public boolean existByDesc(String desc){
     return produtoCapaRepository.existsByDesc(desc);
+  }
+
+  public List<ProdutoCapaGetDTO> obterProdutoCapaComCalculos(List<ProdutoCapa> produtoCapas) {
+    List<ProdutoCapaGetDTO> produtoCapaGetDTOs = new ArrayList<>();
+
+    for (ProdutoCapa produtoCapa : produtoCapas) {
+      ProdutoCapaGetDTO produtoCapaGetDTO = mapStructMapper.produtoCapaToProdutoCapaGetDTO(produtoCapa);
+
+      // Faça os cálculos necessários e defina os valores aqui
+      Double somaEntradas = produtoEntradaService.calcularSomaEntradas(produtoCapa.getId());
+      Double ultimoPrecoCompra = produtoEntradaService.recuperarUltimoPrecoCompra(produtoCapa.getId());
+
+      produtoCapaGetDTO.setSomaEntradas(somaEntradas != null ? somaEntradas : 0.0);
+      produtoCapaGetDTO.setUltimoPrecoCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
+
+      produtoCapaGetDTOs.add(produtoCapaGetDTO);
+    }
+
+    return produtoCapaGetDTOs;
   }
 
 }
