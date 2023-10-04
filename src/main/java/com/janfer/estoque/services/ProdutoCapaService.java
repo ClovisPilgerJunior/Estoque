@@ -2,6 +2,7 @@ package com.janfer.estoque.services;
 
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.entities.enums.Resuprimento;
 import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.*;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
@@ -128,10 +129,27 @@ public class ProdutoCapaService {
       produtoCapaGetDTO.setSaldo(saldo);
       produtoCapaGetDTO.setValorTotal(totalGeral);
 
+      Resuprimento resuprimento = calcularResuprimento(produtoCapaGetDTO.getSaldo(), produtoCapaGetDTO.getMinimo(), produtoCapaGetDTO.getMaximo());
+      produtoCapaGetDTO.setResuprimento(resuprimento);
+
       produtoCapaGetDTOs.add(produtoCapaGetDTO);
     }
 
     return produtoCapaGetDTOs;
   }
 
+  public Resuprimento calcularResuprimento(Double saldo, Long minimo, Long maximo) {
+    if (saldo < 0) {
+      return Resuprimento.ESTOQUE_NEGATIVO;
+    } else if (saldo == 0) {
+      return Resuprimento.SALDO_ZERADO;
+    } else if (saldo > maximo) {
+      return Resuprimento.PRODUTO_EXCESSO;
+    } else if (saldo >= minimo && saldo <= maximo) {
+      return Resuprimento.QUANTIDADE_IDEAL;
+    } else {
+      return Resuprimento.COMPRAR_AGORA;
+    }
+
+  }
 }
