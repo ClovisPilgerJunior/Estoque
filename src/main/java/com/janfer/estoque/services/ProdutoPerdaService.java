@@ -34,4 +34,8 @@ public class ProdutoPerdaService {
     public Optional<ProdutoPerda> findById(Long id) {
         return produtoPerdaRepository.findById(id);
     }
+
+    public Double calcularSomaPerdas(Long produtoCapaId) {
+        return produtoPerdaRepository.calcularSomaPerdas(produtoCapaId);
+    }
 }

@@ -34,4 +34,8 @@ public class ProdutoSaidaService {
     public Optional<ProdutoSaida> findById(Long id) {
         return produtoSaidaRepository.findById(id);
     }
+
+    public Double calcularSomaSaida(Long produtoCapaId) {
+        return produtoSaidaRepository.calcularSomaSaidas(produtoCapaId);
+    }
 }

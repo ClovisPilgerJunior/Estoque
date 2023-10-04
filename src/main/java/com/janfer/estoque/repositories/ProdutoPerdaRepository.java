@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProdutoPerdaRepository extends JpaRepository<ProdutoPerda, Long> {
 
-  @Query("SELECT COALESCE(SUM(pe.quantidade), 0) FROM ProdutoEntrada pe WHERE pe.produtoCapa.id = :produtoCapaId GROUP BY pe.produtoCapa.id")
+  @Query("SELECT COALESCE(SUM(pe.quantidade), 0) FROM ProdutoPerda pe WHERE pe.produtoCapa.id = :produtoCapaId GROUP BY pe.produtoCapa.id")
   Double calcularSomaPerdas(@Param("produtoCapaId") Long produtoCapaId);
 
 

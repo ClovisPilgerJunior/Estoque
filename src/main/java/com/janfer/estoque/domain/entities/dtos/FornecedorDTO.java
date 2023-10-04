@@ -1,6 +1,5 @@
 package com.janfer.estoque.domain.entities.dtos;
 
-import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.entities.enums.TipoEmpresa;
 import lombok.Data;
 

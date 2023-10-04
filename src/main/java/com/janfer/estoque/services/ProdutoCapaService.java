@@ -18,25 +18,31 @@ import java.util.Optional;
 public class ProdutoCapaService {
 
   @Autowired
-  private ProdutoCapaRepository produtoCapaRepository;
+  ProdutoCapaRepository produtoCapaRepository;
 
   @Autowired
-  private ProdutoEntradaRepository produtoEntradaRepository;
+  ProdutoEntradaRepository produtoEntradaRepository;
 
   @Autowired
-  private ProdutoSaidaRepository produtoSaidaRepository;
+  ProdutoSaidaRepository produtoSaidaRepository;
 
   @Autowired
-  private ProdutoPerdaRepository produtoPerdaRepository;
+  ProdutoPerdaRepository produtoPerdaRepository;
 
   @Autowired
-  private FornecedorRepository fornecedorRepository;
+  FornecedorRepository fornecedorRepository;
 
   @Autowired
-  private ProdutoEntradaService produtoEntradaService;
+  ProdutoEntradaService produtoEntradaService;
 
   @Autowired
-  private MapStructMapper mapStructMapper;
+  ProdutoPerdaService produtoPerdaService;
+
+  @Autowired
+  ProdutoSaidaService produtoSaidaService;
+
+  @Autowired
+  MapStructMapper mapStructMapper;
 
   @Transactional
   public List<ProdutoCapa> findAll(){
@@ -82,12 +88,26 @@ public class ProdutoCapaService {
     for (ProdutoCapa produtoCapa : produtoCapas) {
       ProdutoCapaGetDTO produtoCapaGetDTO = mapStructMapper.produtoCapaToProdutoCapaGetDTO(produtoCapa);
 
-      // Faça os cálculos necessários e defina os valores aqui
+      // Calculo de produtoEntrada
+
       Double somaEntradas = produtoEntradaService.calcularSomaEntradas(produtoCapa.getId());
       Double ultimoPrecoCompra = produtoEntradaService.recuperarUltimoPrecoCompra(produtoCapa.getId());
 
+      // Calculo de produtoPerda
+      Double somaPerdas = produtoPerdaService.calcularSomaPerdas(produtoCapa.getId());
+
+      // Calculo do ProdutoSaida
+      Double somaSaida = produtoSaidaService.calcularSomaSaida(produtoCapa.getId());
+
+
       produtoCapaGetDTO.setEntradas(somaEntradas != null ? somaEntradas : 0.0);
-      produtoCapaGetDTO.setUltimoPrecoCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
+      produtoCapaGetDTO.setValorCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
+      produtoCapaGetDTO.setPerdas(somaPerdas != null ? somaPerdas : 0.0);
+      produtoCapaGetDTO.setSaidas(somaSaida != null ? somaSaida : 0.0);
+      Double saldo = (
+              (somaEntradas != null ? somaEntradas : 0.0) - (somaPerdas != null ? somaPerdas : 0.0)
+                      - (somaSaida != null ? somaSaida : 0.0));
+      produtoCapaGetDTO.setSaldo(saldo);
 
       produtoCapaGetDTOs.add(produtoCapaGetDTO);
     }
