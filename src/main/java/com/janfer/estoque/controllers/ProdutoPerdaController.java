@@ -34,18 +34,21 @@ public class ProdutoPerdaController {
     ProdutoCapaService produtoCapaService;
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Object> create(@RequestBody ProdutoPerdaPostDTO produtoPerdaDTO) {
+    public ResponseEntity<Object> create(@RequestBody ProdutoPerdaPostDTO produtoPerdaPostDTO) {
 
-        if (produtoPerdaDTO.getProdutoCapa().getId() == null) {
+        if (produtoPerdaPostDTO.getProdutoCapa().getId() == null) {
             return ResponseEntity.badRequest().body("ProdutoCapa não pode ser nulo.");
         }
 
-        Long produtoCapaId = produtoPerdaDTO.getProdutoCapa().getId();
+        Long produtoCapaId = produtoPerdaPostDTO.getProdutoCapa().getId();
+
+        System.out.println(produtoPerdaPostDTO.getProdutoCapa().isAtivo());
+
         if (!produtoCapaService.existById(produtoCapaId)) {
             return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
         }
 
-        produtoPerdaService.save(mapStructMapper.produtoPerdaToProdutoPerdaDTO(produtoPerdaDTO));
+        produtoPerdaService.save(mapStructMapper.produtoPerdaToProdutoPerdaDTO(produtoPerdaPostDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
     }
 

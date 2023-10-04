@@ -42,6 +42,11 @@ public class ProdutoSaidaController {
         }
 
         Long produtoCapaId = produtoSaidaDTO.getProdutoCapa().getId();
+
+        if (!produtoSaidaDTO.getProdutoCapa().isAtivo()){
+            return ResponseEntity.badRequest().body("Não é possível lançar entrada para um produto inativo");
+        }
+
         if (!produtoCapaService.existById(produtoCapaId)) {
             return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
         }

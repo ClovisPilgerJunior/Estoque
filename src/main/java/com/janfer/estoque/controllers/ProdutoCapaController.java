@@ -1,12 +1,9 @@
 package com.janfer.estoque.controllers;
 
-import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
-import com.janfer.estoque.domain.entities.dtos.FornecedorDTO;
 import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.dtos.ProdutoCapaPostDTO;
 import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
-import com.janfer.estoque.repositories.ProdutoEntradaRepository;
 import com.janfer.estoque.services.ProdutoCapaService;
 import com.janfer.estoque.services.ProdutoEntradaService;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
@@ -45,21 +42,20 @@ public class ProdutoCapaController {
   }
 
   @PutMapping("/atualizar/{id}")
-  public ResponseEntity<Object> update(@PathVariable(value = "id") Long id,
-                                       @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO){
-    Optional<ProdutoCapa> produtoCapaOptional = Optional.ofNullable(produtoCapaService.findById(id));
+  public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO){
+    Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
     if(produtoCapaOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
     }
     var produtoCapa = new ProdutoCapa();
     BeanUtils.copyProperties(produtoCapaPostDTO, produtoCapa);
     produtoCapa.setId(produtoCapaOptional.get().getId());
-    return ResponseEntity.status(HttpStatus.OK).body(produtoCapaService.update(produtoCapa));
+    return ResponseEntity.status(HttpStatus.OK).body(produtoCapaService.save(produtoCapa));
   }
 
   @DeleteMapping("/deletar/{id}")
   public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
-    Optional<ProdutoCapa> produtoCapaOptional = Optional.ofNullable(produtoCapaService.findById(id));
+    Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
     if (produtoCapaOptional.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
     }
@@ -76,7 +72,7 @@ public class ProdutoCapaController {
 
   @GetMapping("/{id}")
   public ResponseEntity<ProdutoCapaGetDTO> findById(@PathVariable(value = "id") Long id) {
-    Optional<ProdutoCapa> produtoCapaOptional = Optional.ofNullable(produtoCapaService.findById(id));
+    Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
     if (produtoCapaOptional.isEmpty()) {
       throw new ObjectNotFoundException("Produto não encontrado!");
     }

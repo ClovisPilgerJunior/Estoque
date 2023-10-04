@@ -6,17 +6,13 @@ import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.*;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
-import com.janfer.estoque.services.exceptions.ProductDisableException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class ProdutoCapaService {
@@ -48,16 +44,14 @@ public class ProdutoCapaService {
   @Autowired
   MapStructMapper mapStructMapper;
 
-  @Autowired
-  private HttpServletRequest request;
 
   @Transactional
-  public List<ProdutoCapa> findAll(){
-    return produtoCapaRepository.findAll();
+  public List<ProdutoCapa> findAll() {
+    return produtoCapaRepository.findAllAtivos();
   }
 
-
-  public ProdutoCapa save(ProdutoCapa produtoCapa){
+  @Transactional
+  public ProdutoCapa save(ProdutoCapa produtoCapa) {
 
     if (produtoCapa.getFornecedor() != null && produtoCapa.getFornecedor().getId() != null) {
       Long fornecedorId = produtoCapa.getFornecedor().getId();
@@ -66,52 +60,39 @@ public class ProdutoCapaService {
       }
     }
 
-    return produtoCapaRepository.save(produtoCapa);
-  }
+    produtoCapa = produtoCapaRepository.save(produtoCapa);
 
-  public ProdutoCapa update(ProdutoCapa produtoCapa){
-    return produtoCapaRepository.save(produtoCapa);
+    Long produtoCapaId = produtoCapa.getId();
+    if (!produtoCapaRepository.isProdutoAtivoById(produtoCapaId)) {
+      produtoCapa.setAtivo(false);
+      produtoCapaRepository.save(produtoCapa);
+    }
+
+    return produtoCapa;
   }
 
   @Transactional
-  public void delete(ProdutoCapa produtoCapa){
-    if(produtoEntradaRepository.existsById(produtoCapa.getId())){
+  public void delete(ProdutoCapa produtoCapa) {
+    if (produtoEntradaRepository.existsById(produtoCapa.getId())) {
       throw new DataIntegrityViolationException("Não é possível excluir um produto com entrada existente");
     }
     produtoCapaRepository.delete(produtoCapa);
   }
 
   @Transactional
-  public ProdutoCapa findById(Long id) {
-    Optional<ProdutoCapa> produtoCapaOptional = produtoCapaRepository.findById(id);
-
-    if (produtoCapaOptional.isPresent()) {
-      ProdutoCapa produtoCapa = produtoCapaOptional.get();
-
-      // Verifique se a solicitação é uma requisição PUT
-      if (request.getMethod().equals(HttpMethod.PUT.name()) && !produtoCapa.isAtivo()) {
-        // Atualize o status do produto para ativo
-        produtoCapa.setAtivo(true);
-        // Salve as alterações no banco de dados
-        produtoCapaRepository.save(produtoCapa);
-      }
-
-      if (produtoCapa.isAtivo()) {
-        return produtoCapa;
-      } else {
-        throw new ProductDisableException("Produto está inativado");
-      }
-    } else {
-      // Produto não encontrado
-      throw new ObjectNotFoundException("Produto não encontrado com ID: " + id);
-    }
+  public Optional<ProdutoCapa> findById(Long id) {
+    return produtoCapaRepository.findById(id);
   }
-  public boolean existById(Long id){
+
+  public boolean existById(Long id) {
     return produtoCapaRepository.existsById(id);
   }
 
+  public boolean isProdutoAtivoById(Long id) {
+    return produtoCapaRepository.isProdutoAtivoById(id);
+  }
 
-  public boolean existByDesc(String desc){
+  public boolean existByDesc(String desc) {
     return produtoCapaRepository.existsByDesc(desc);
   }
 
@@ -140,13 +121,9 @@ public class ProdutoCapaService {
       produtoCapaGetDTO.setValorCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
       produtoCapaGetDTO.setPerdas(somaPerdas != null ? somaPerdas : 0.0);
       produtoCapaGetDTO.setSaidas(somaSaida != null ? somaSaida : 0.0);
-      double saldo = (
-          (somaEntradas != null ? somaEntradas : 0.0) -
-              (somaPerdas != null ? somaPerdas : 0.0) -
-              (somaSaida != null ? somaSaida : 0.0)
-      );
+      double saldo = ((somaEntradas != null ? somaEntradas : 0.0) - (somaPerdas != null ? somaPerdas : 0.0) - (somaSaida != null ? somaSaida : 0.0));
 
-      double totalGeral = (saldo * (ultimoPrecoCompra != null ? ultimoPrecoCompra :0.0 ));
+      double totalGeral = (saldo * (ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0));
 
       produtoCapaGetDTO.setSaldo(saldo);
       produtoCapaGetDTO.setValorTotal(totalGeral);
