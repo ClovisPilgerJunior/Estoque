@@ -3,6 +3,7 @@ package com.janfer.estoque.controllers.exceptions;
 import com.janfer.estoque.services.exceptions.ConstraintViolationException;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
+import com.janfer.estoque.services.exceptions.ProductDisableException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +64,17 @@ public class ResourceExceptionHandler {
         request.getRequestURI()
     );
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+  }
+
+  @ExceptionHandler({ProductDisableException.class})
+  public ResponseEntity<StandardError> productDisableException(ProductDisableException ex, HttpServletRequest request) {
+    StandardError error = new StandardError(
+        System.currentTimeMillis(),
+        HttpStatus.CONFLICT.value(),
+        "Produto está desativado no sistema",
+        ex.getMessage(),
+        request.getRequestURI()
+    );
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
   }
 }

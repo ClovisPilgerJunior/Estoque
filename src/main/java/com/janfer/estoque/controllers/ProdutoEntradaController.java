@@ -1,6 +1,7 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.entities.ProdutoEntrada;
+import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.dtos.ProdutoEntradaGetDTO;
 import com.janfer.estoque.domain.entities.dtos.ProdutoEntradaPostDTO;
 import com.janfer.estoque.domain.entities.mappers.MapStructMapper;

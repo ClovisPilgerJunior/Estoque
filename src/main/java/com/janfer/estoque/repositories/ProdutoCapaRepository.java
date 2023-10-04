@@ -10,4 +10,8 @@ public interface ProdutoCapaRepository extends JpaRepository<ProdutoCapa, Long> 
     @Query("select (count(p) > 0) from ProdutoCapa p where p.desc = ?1")
     boolean existsByDesc(String desc);
 
+    @Query("select p from ProdutoCapa p where p.ativo = :ativo")
+    ProdutoCapa findByAtivo(@Param("ativo") boolean ativo);
+
+
 }

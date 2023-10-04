@@ -23,6 +23,7 @@ public class ProdutoCapaGetDTO implements Serializable {
   private Double perdas;
   private Double saldo;
   private Double valorCompra;
+  private Double valorTotal;
   private Long minimo;
   private Long maximo;
   private Resuprimento resuprimento;

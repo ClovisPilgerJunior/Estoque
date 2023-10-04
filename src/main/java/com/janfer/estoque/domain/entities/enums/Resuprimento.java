@@ -6,9 +6,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Resuprimento {
-  COMPRAR_AGORA(0, "COMPRAR AGORA"),
-  QUANTIDADE_IDEAL(1, "QUANTIDADE IDEAL"),
-  PRODUTO_EXCESSO(2, "PRODUTO EM EXCESSO");
+  ESTOQUE_NEGATIVO(0, "ESTOQUE NEGATIVO"),
+  COMPRAR_AGORA(1, "COMPRAR AGORA"),
+  QUANTIDADE_IDEAL(2, "QUANTIDADE IDEAL"),
+  PRODUTO_EXCESSO(3, "PRODUTO EM EXCESSO");
 
   private final int cod;
   private final String desc;
