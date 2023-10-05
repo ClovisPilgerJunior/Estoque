@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > MapStructMapper</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.janfer.estoque.domain.entities.mappers</a>
+</div>
+
+<h1>Coverage Summary for Class: MapStructMapper (com.janfer.estoque.domain.entities.mappers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MapStructMapper</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.domain.entities.mappers;
+&nbsp;
+&nbsp;import com.janfer.estoque.domain.entities.*;
+&nbsp;import com.janfer.estoque.domain.entities.dtos.*;
+&nbsp;import org.mapstruct.*;
+&nbsp;import org.mapstruct.factory.Mappers;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Mapper(componentModel = &quot;Spring&quot;)
+&nbsp;public interface MapStructMapper {
+&nbsp;
+<b class="nc">&nbsp;   MapStructMapper INSTANCE = Mappers.getMapper(MapStructMapper.class);</b>
+&nbsp;
+&nbsp;   // mapeamento do produtoCapa
+&nbsp;   List&lt;ProdutoCapaGetDTO&gt; produtoCapaAllToProdutoCapaDTO(List&lt;ProdutoCapa&gt; produtoCapa);
+&nbsp;
+&nbsp;
+&nbsp;   @Mapping(target = &quot;tipoProduto&quot;, source = &quot;tipoProduto&quot;)
+&nbsp;   @Mapping(target = &quot;medidaUnidade&quot;, source = &quot;medidaUnidade&quot;)
+&nbsp;   @Mapping(target = &quot;fornecedor&quot;, source = &quot;fornecedor&quot;)
+&nbsp;   @Mapping(target = &quot;id&quot;, source = &quot;id&quot;)
+&nbsp;   @Mapping(target = &quot;resuprimento&quot;, ignore = true)
+&nbsp;   ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaDTO);
+&nbsp;
+&nbsp;   ProdutoCapaGetDTO produtoCapaToProdutoCapaGetDTO(ProdutoCapa produtoCapa);
+&nbsp;
+&nbsp;   // mapeamento do Fornecedor
+&nbsp;   List&lt;FornecedorDTO&gt; fornecedorAllToFornecedorDTO(List&lt;Fornecedor&gt; fornecedor);
+&nbsp;
+&nbsp;   @Mapping(target = &quot;tipoEmpresa&quot;, source = &quot;tipoEmpresa&quot;)
+&nbsp;   Fornecedor fornecedorToFornecedorDTO(FornecedorDTO fornecedorDTO);
+&nbsp;
+&nbsp;   @Mapping(target = &quot;empresa&quot;, source = &quot;tipoEmpresa&quot;)
+&nbsp;   FornecedorGetDTO fornecedorGetDTOToFornecedor(Fornecedor fornecedor);
+&nbsp;
+&nbsp;   // Mapeamento de ProdutoEntrada
+&nbsp;   List&lt;ProdutoEntradaGetDTO&gt; produtoEntradaGetAllToProdutoEntrada(List&lt;ProdutoEntrada&gt; produtoEntradas);
+&nbsp;
+&nbsp;   ProdutoEntrada produtoEntradaToProdutoEntradaDTO(ProdutoEntradaPostDTO produtoEntradaDTO);
+&nbsp;
+&nbsp;   ProdutoEntradaGetDTO produtoEntradaToProdutoEntradaGetDTO(ProdutoEntrada produtoEntrada);
+&nbsp;
+&nbsp;   // Mapeamento de ProdutoSaida
+&nbsp;   List&lt;ProdutoSaidaGetDTO&gt; produtoSaidaGetDTOAllToProdutoSaida(List&lt;ProdutoSaida&gt; produtoSaidas);
+&nbsp;
+&nbsp;   ProdutoSaida produtoSaidaToProdutoSaidaDTO(ProdutoSaidaPostDTO produtoSaidaDTO);
+&nbsp;
+&nbsp;   ProdutoSaidaGetDTO produtoSaidaGetDTOToProdutoSaida(ProdutoSaida produtoSaida);
+&nbsp;
+&nbsp;   // Mapeamento de ProdutoPerda
+&nbsp;
+&nbsp;   List&lt;ProdutoPerdaGetDTO&gt; produtoPerdaGetDTOAllToProdutoPerda(List&lt;ProdutoPerda&gt; produtoPerdas);
+&nbsp;
+&nbsp;   ProdutoPerda produtoPerdaToProdutoPerdaDTO(ProdutoPerdaPostDTO produtoPerdaDTO);
+&nbsp;
+&nbsp;   ProdutoPerdaGetDTO produtoPerdaGetDTOToProdutoPerda(ProdutoPerda produtoPerda);
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-05 10:41</div>
+</div>
+</body>
+</html>

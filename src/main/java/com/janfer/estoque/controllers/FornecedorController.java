@@ -8,6 +8,7 @@ import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +22,11 @@ import java.util.Optional;
 @RequestMapping(value = "/api/fornecedor")
 public class FornecedorController {
 
-    private MapStructMapper mapStructMapper;
+    @Autowired
+    MapStructMapper mapStructMapper;
 
-    private FornecedorService fornecedorService;
+    @Autowired
+    FornecedorService fornecedorService;
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Object> create(@Valid @RequestBody FornecedorDTO fornecedorDTO){
@@ -58,8 +61,8 @@ public class FornecedorController {
         if(fornecedorOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
         }
-        var fornecedor = new Fornecedor();
-        BeanUtils.copyProperties(fornecedorDTO, fornecedor);
+
+        Fornecedor fornecedor = mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO);
         fornecedor.setId(fornecedorOptional.get().getId());
         return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.save(fornecedor));
     }
