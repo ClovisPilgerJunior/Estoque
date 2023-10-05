@@ -27,7 +27,6 @@ public class ProdutoCapaPostDTO implements Serializable {
   private Fornecedor fornecedor;
   private Long minimo;
   private Long maximo;
-  private Resuprimento resuprimento;
   private boolean ativo;
 
 }

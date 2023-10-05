@@ -33,10 +33,6 @@ public class ProdutoCapaController {
   @PostMapping("/cadastrar")
   public ResponseEntity<Object> create(@Valid @RequestBody ProdutoCapaPostDTO produtoCapaDTO) {
 
-    if (produtoCapaService.existByDesc(produtoCapaDTO.getDesc())) {
-      throw new DataIntegrityViolationException("Já existe uma descrição de produto igual");
-    }
-
     produtoCapaService.save(mapStructMapper.produtoCapaToProdutoCapaDTO(produtoCapaDTO));
     return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
   }
@@ -45,8 +41,9 @@ public class ProdutoCapaController {
   public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO){
     Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
     if(produtoCapaOptional.isEmpty()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
     }
+
     var produtoCapa = new ProdutoCapa();
     BeanUtils.copyProperties(produtoCapaPostDTO, produtoCapa);
     produtoCapa.setId(produtoCapaOptional.get().getId());

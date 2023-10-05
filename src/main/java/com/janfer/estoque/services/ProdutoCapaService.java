@@ -54,11 +54,19 @@ public class ProdutoCapaService {
   @Transactional
   public ProdutoCapa save(ProdutoCapa produtoCapa) {
 
+    if(produtoCapaRepository.existsByDescAndIdNot(produtoCapa.getDesc(), produtoCapa.getId())){
+      throw new DataIntegrityViolationException("Produto já cadastrado");
+    }
+
     if (produtoCapa.getFornecedor() != null && produtoCapa.getFornecedor().getId() != null) {
       Long fornecedorId = produtoCapa.getFornecedor().getId();
       if (!fornecedorRepository.existsById(fornecedorId)) {
         throw new ObjectNotFoundException("Fornecedor não encontrado");
       }
+    }
+
+    if(produtoCapa.getResuprimento() == null){
+      produtoCapa.setResuprimento(Resuprimento.SALDO_ZERADO);
     }
 
     produtoCapa = produtoCapaRepository.save(produtoCapa);
@@ -93,18 +101,11 @@ public class ProdutoCapaService {
     return produtoCapaRepository.isProdutoAtivoById(id);
   }
 
-  public boolean existByDesc(String desc) {
-    return produtoCapaRepository.existsByDesc(desc);
-  }
-
   public List<ProdutoCapaGetDTO> obterProdutoCapaComCalculos(List<ProdutoCapa> produtoCapas) {
     List<ProdutoCapaGetDTO> produtoCapaGetDTOs = new ArrayList<>();
 
     for (ProdutoCapa produtoCapa : produtoCapas) {
       ProdutoCapaGetDTO produtoCapaGetDTO = mapStructMapper.produtoCapaToProdutoCapaGetDTO(produtoCapa);
-
-      Long estoqueMinimo = produtoCapa.getMinimo();
-      Long estoqueMaximo = produtoCapa.getMaximo();
 
       // Calculo de produtoEntrada
 

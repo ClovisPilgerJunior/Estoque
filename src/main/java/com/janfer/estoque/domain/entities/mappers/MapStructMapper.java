@@ -20,6 +20,7 @@ public interface MapStructMapper {
    @Mapping(target = "medidaUnidade", source = "medidaUnidade")
    @Mapping(target = "fornecedor", source = "fornecedor")
    @Mapping(target = "id", source = "id")
+   @Mapping(target = "resuprimento", ignore = true)
    ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaDTO);
 
    ProdutoCapaGetDTO produtoCapaToProdutoCapaGetDTO(ProdutoCapa produtoCapa);
