@@ -6,21 +6,31 @@ import static org.junit.Assert.*;
 
 public class FieldMessageTest {
 
-  @org.junit.Before
-  public void setUp() throws Exception {
+  @Test
+  public void testFieldMessageConstructorAndGetters() {
+    String field = "fieldName";
+    String message = "Test message";
+
+    FieldMessage fieldMessage = new FieldMessage(field, message);
+
+    // Verifying if the constructor correctly initializes the object
+    assertEquals(field, fieldMessage.getField());
+    assertEquals(message, fieldMessage.getMessage());
   }
 
   @Test
-  public void test_createFieldMessageWithValidStrings() {
-    FieldMessage fieldMessage = new FieldMessage("field", "message");
-    assertEquals("field", fieldMessage.getField());
-    assertEquals("message", fieldMessage.getMessage());
-  }
+  public void testFieldMessageSetters() {
+    FieldMessage fieldMessage = new FieldMessage();
 
-  @Test
-  public void test_createFieldMessageWithNullField() {
-    FieldMessage fieldMessage = new FieldMessage(null, "message");
-    assertNull(fieldMessage.getField());
-    assertEquals("message", fieldMessage.getMessage());
+    // Using setters to set the field and message
+    String field = "fieldName";
+    String message = "Test message";
+
+    fieldMessage.setField(field);
+    fieldMessage.setMessage(message);
+
+    // Verifying if the setters correctly set the values
+    assertEquals(field, fieldMessage.getField());
+    assertEquals(message, fieldMessage.getMessage());
   }
 }
