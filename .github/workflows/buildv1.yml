@@ -33,4 +33,4 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build and analyze
         env:
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sqp_9b73746d8440b38eb0fe3fc3f914c27d597b8b4d -Dsonar.projectName='home' -Dsonar.host.url=http://189.11.183.127:9000
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=sqp_9b73746d8440b38eb0fe3fc3f914c27d597b8b4d -Dsonar.projectName='home' -Dsonar.host.url=http://189.11.183.127:9000 -Dsonar.token=sqp_9b73746d8440b38eb0fe3fc3f914c27d597b8b4d
