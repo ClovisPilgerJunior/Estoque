@@ -1,12 +1,11 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.entities.ProdutoCapa;
-import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
-import com.janfer.estoque.domain.entities.dtos.ProdutoCapaPostDTO;
-import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
+import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoCapaPostDTO;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.services.ProdutoCapaService;
 import com.janfer.estoque.services.ProdutoEntradaService;
-import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

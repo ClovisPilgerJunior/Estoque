@@ -1,8 +1,6 @@
 package com.janfer.estoque.services;
 
-import com.janfer.estoque.domain.entities.ProdutoEntrada;
 import com.janfer.estoque.domain.entities.ProdutoSaida;
-import com.janfer.estoque.repositories.ProdutoEntradaRepository;
 import com.janfer.estoque.repositories.ProdutoSaidaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

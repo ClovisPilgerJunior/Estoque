@@ -1,11 +1,9 @@
 package com.janfer.estoque.controllers;
 
+import com.janfer.estoque.domain.dtos.ProdutoSaidaGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoSaidaPostDTO;
 import com.janfer.estoque.domain.entities.ProdutoSaida;
-import com.janfer.estoque.domain.entities.ProdutoSaida;
-import com.janfer.estoque.domain.entities.dtos.*;
-import com.janfer.estoque.domain.entities.dtos.ProdutoSaidaGetDTO;
-import com.janfer.estoque.domain.entities.dtos.ProdutoSaidaGetDTO;
-import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.services.ProdutoCapaService;
 import com.janfer.estoque.services.ProdutoSaidaService;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;

@@ -1,6 +1,6 @@
 package com.janfer.estoque.domain.entities;
 
-import com.janfer.estoque.domain.entities.enums.TipoEmpresa;
+import com.janfer.estoque.domain.enums.TipoEmpresa;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

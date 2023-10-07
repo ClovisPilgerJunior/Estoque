@@ -1,9 +1,7 @@
 package com.janfer.estoque.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.janfer.estoque.domain.entities.enums.MedidaUnidade;
-import com.janfer.estoque.domain.entities.enums.Setor;
-import com.janfer.estoque.domain.entities.enums.TipoProduto;
+import com.janfer.estoque.domain.enums.Setor;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

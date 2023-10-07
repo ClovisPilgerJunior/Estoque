@@ -19,26 +19,26 @@ import java.time.Instant;
 public class ResourceExceptionHandler {
 
   @ExceptionHandler({ObjectNotFoundException.class})
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  public StandardError objectNotFoundException(ObjectNotFoundException ex, HttpServletRequest request) {
-    return new StandardError(
-        Instant.now().toEpochMilli(),
-        HttpStatus.NOT_FOUND.value(),
-        "Object Not Found",
-        ex.getMessage(),
-        request.getRequestURI()
+  public ResponseEntity<StandardError> objectNotFoundException(ObjectNotFoundException ex, HttpServletRequest request) {
+    StandardError error = new StandardError(
+            System.currentTimeMillis(),
+            HttpStatus.NOT_FOUND.value(),
+            "Object Not Found",
+            ex.getMessage(),
+            request.getRequestURI()
     );
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
   }
   @ExceptionHandler({DataIntegrityViolationException.class})
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  public StandardError dataIntegrityViolationException(DataIntegrityViolationException ex, HttpServletRequest request) {
-    return new StandardError(
-        Instant.now().toEpochMilli(),
-        HttpStatus.BAD_REQUEST.value(),
-        "Violation of data integrity",
-        ex.getMessage(),
-        request.getRequestURI()
+  public ResponseEntity<StandardError> dataIntegrityViolationException(DataIntegrityViolationException ex, HttpServletRequest request) {
+    StandardError error = new StandardError(
+            System.currentTimeMillis(),
+            HttpStatus.BAD_REQUEST.value(),
+            "Violation of data integrity",
+            ex.getMessage(),
+            request.getRequestURI()
     );
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
   @ExceptionHandler({MethodArgumentNotValidException.class})
   public ResponseEntity<StandardError> validationErrors(MethodArgumentNotValidException ex, HttpServletRequest request) {

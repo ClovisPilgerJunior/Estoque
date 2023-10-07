@@ -1,17 +1,13 @@
 package com.janfer.estoque.domain.entities;
 
-import com.janfer.estoque.domain.entities.enums.MedidaUnidade;
-import com.janfer.estoque.domain.entities.enums.Resuprimento;
-import com.janfer.estoque.domain.entities.enums.TipoProduto;
+import com.janfer.estoque.domain.enums.MedidaUnidade;
+import com.janfer.estoque.domain.enums.Resuprimento;
+import com.janfer.estoque.domain.enums.TipoProduto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter

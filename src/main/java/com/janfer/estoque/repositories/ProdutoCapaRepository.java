@@ -12,6 +12,9 @@ public interface ProdutoCapaRepository extends JpaRepository<ProdutoCapa, Long> 
     @Query("SELECT CASE WHEN COUNT(p) > 0 THEN TRUE ELSE FALSE END FROM ProdutoCapa p WHERE p.desc = ?1 AND p.id <> ?2")
     boolean existsByDescAndIdNot(String desc, Long id);
 
+    @Query("select (count(p) > 0) from ProdutoCapa p where p.desc = ?1")
+    boolean existsByDesc(String desc);
+
     @Query("SELECT p.ativo FROM ProdutoCapa p WHERE p.id = :id")
     Boolean isProdutoAtivoById(@Param("id") Long id);
 

@@ -1,13 +1,12 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.entities.Fornecedor;
-import com.janfer.estoque.domain.entities.dtos.FornecedorDTO;
-import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
+import com.janfer.estoque.domain.dtos.FornecedorDTO;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.services.FornecedorService;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

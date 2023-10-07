@@ -1,9 +1,9 @@
 package com.janfer.estoque.services;
 
 import com.janfer.estoque.domain.entities.ProdutoCapa;
-import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
-import com.janfer.estoque.domain.entities.enums.Resuprimento;
-import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
+import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.enums.Resuprimento;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.*;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
@@ -69,7 +69,10 @@ public class ProdutoCapaService {
       produtoCapa.setResuprimento(Resuprimento.SALDO_ZERADO);
     }
 
-    produtoCapa = produtoCapaRepository.save(produtoCapa);
+    if(produtoCapaRepository.existsByDesc(produtoCapa.getDesc())){
+      throw new DataIntegrityViolationException("Produto já cadastrado");
+    }
+    produtoCapaRepository.save(produtoCapa);
 
     Long produtoCapaId = produtoCapa.getId();
     if (!produtoCapaRepository.isProdutoAtivoById(produtoCapaId)) {

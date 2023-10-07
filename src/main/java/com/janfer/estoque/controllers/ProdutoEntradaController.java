@@ -1,10 +1,9 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.entities.ProdutoEntrada;
-import com.janfer.estoque.domain.entities.dtos.ProdutoCapaGetDTO;
-import com.janfer.estoque.domain.entities.dtos.ProdutoEntradaGetDTO;
-import com.janfer.estoque.domain.entities.dtos.ProdutoEntradaPostDTO;
-import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
+import com.janfer.estoque.domain.dtos.ProdutoEntradaGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoEntradaPostDTO;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.services.ProdutoCapaService;
 import com.janfer.estoque.services.ProdutoEntradaService;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
@@ -24,11 +23,14 @@ import java.util.Optional;
 @RequestMapping(value = "/api/produtoEntrada")
 public class ProdutoEntradaController {
 
-    private MapStructMapper mapStructMapper;
-    private ProdutoEntradaService produtoEntradaService;
+    @Autowired
+    MapStructMapper mapStructMapper;
 
     @Autowired
-    private ProdutoCapaService produtoCapaService;
+    ProdutoEntradaService produtoEntradaService;
+
+    @Autowired
+    ProdutoCapaService produtoCapaService;
 
     @GetMapping
     public ResponseEntity<List<ProdutoEntradaGetDTO>> findAll() {

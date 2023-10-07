@@ -1,10 +1,9 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.entities.ProdutoPerda;
-import com.janfer.estoque.domain.entities.ProdutoPerda;
-import com.janfer.estoque.domain.entities.dtos.ProdutoPerdaGetDTO;
-import com.janfer.estoque.domain.entities.dtos.ProdutoPerdaPostDTO;
-import com.janfer.estoque.domain.entities.mappers.MapStructMapper;
+import com.janfer.estoque.domain.dtos.ProdutoPerdaGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoPerdaPostDTO;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.services.ProdutoCapaService;
 import com.janfer.estoque.services.ProdutoPerdaService;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
@@ -41,8 +40,6 @@ public class ProdutoPerdaController {
         }
 
         Long produtoCapaId = produtoPerdaPostDTO.getProdutoCapa().getId();
-
-        System.out.println(produtoPerdaPostDTO.getProdutoCapa().isAtivo());
 
         if (!produtoCapaService.existById(produtoCapaId)) {
             return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
