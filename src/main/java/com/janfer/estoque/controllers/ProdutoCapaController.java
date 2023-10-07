@@ -43,7 +43,6 @@ public class ProdutoCapaController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
     }
 
-    //
 
     var produtoCapa = new ProdutoCapa();
     BeanUtils.copyProperties(produtoCapaPostDTO, produtoCapa);
