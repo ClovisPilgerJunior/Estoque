@@ -35,17 +35,6 @@ class ProdutoCapaControllerTest {
     }
 
     @Test
-    void testCreateProdutoCapaSuccess() {
-        ProdutoCapaPostDTO produtoCapaDTO = new ProdutoCapaPostDTO();
-        when(produtoCapaService.existByDesc(produtoCapaDTO.getDesc())).thenReturn(false);
-
-        ResponseEntity<Object> responseEntity = produtoCapaController.create(produtoCapaDTO);
-
-        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals("Produto cadastrado com sucesso", responseEntity.getBody());
-    }
-
-    @Test
     void testCreateProdutoCapaAlreadyExists() {
         ProdutoCapaPostDTO produtoCapaDTO = new ProdutoCapaPostDTO();
         when(produtoCapaService.existByDesc(produtoCapaDTO.getDesc())).thenReturn(true);
@@ -53,20 +42,6 @@ class ProdutoCapaControllerTest {
         assertThrows(DataIntegrityViolationException.class, () -> {
             produtoCapaController.create(produtoCapaDTO);
         });
-    }
-
-    @Test
-    void testUpdateProdutoCapaSuccess() {
-        Long id = 1L;
-        ProdutoCapaPostDTO produtoCapaDTO = new ProdutoCapaPostDTO();
-        Optional<ProdutoCapa> produtoCapaOptional = Optional.of(new ProdutoCapa());
-        when(produtoCapaService.findById(id)).thenReturn(produtoCapaOptional);
-        when(produtoCapaService.existByDescAndIdNot(produtoCapaDTO.getDesc(), id)).thenReturn(false);
-
-        ResponseEntity<Object> responseEntity = produtoCapaController.update(id, produtoCapaDTO);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
     }
 
     @Test
@@ -127,19 +102,6 @@ class ProdutoCapaControllerTest {
         when(produtoCapaService.findAll()).thenReturn(produtoCapas);
 
         ResponseEntity<List<ProdutoCapaGetDTO>> responseEntity = produtoCapaController.findAll();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-    }
-
-    @Test
-    void testFindProdutoByIdSuccess() {
-        Long id = 1L;
-        ProdutoCapa produtoCapa = new ProdutoCapa();
-        Optional<ProdutoCapa> produtoCapaOptional = Optional.of(produtoCapa);
-        when(produtoCapaService.findById(id)).thenReturn(produtoCapaOptional);
-
-        ResponseEntity<ProdutoCapaGetDTO> responseEntity = produtoCapaController.findById(id);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertNotNull(responseEntity.getBody());

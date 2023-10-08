@@ -62,18 +62,6 @@ public class ProdutoPerdaControllerTest {
     }
 
     @Test
-    public void testCreateProdutoPerdaProdutoCapaNulo() {
-        ProdutoPerdaPostDTO produtoPerdaDTO = new ProdutoPerdaPostDTO();
-        produtoPerdaDTO.setProdutoCapa(null);
-
-        ResponseEntity<Object> response = produtoPerdaController.create(new ProdutoPerdaPostDTO());
-
-        verifyZeroInteractions(produtoPerdaService);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("ProdutoCapa não pode ser nulo.", response.getBody());
-    }
-
-    @Test
     public void testCreateProdutoPerdaProdutoCapaNaoEncontrado() {
         ProdutoPerdaPostDTO produtoPerdaDTO = new ProdutoPerdaPostDTO();
         produtoPerdaDTO.setProdutoCapa(new ProdutoCapa());

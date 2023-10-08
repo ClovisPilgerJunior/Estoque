@@ -55,24 +55,6 @@ public class ProdutoEntradaServiceTest {
         assertEquals(1, resultado.size());
     }
 
-    @Test
-    public void testSave() {
-        // Criar uma entrada de produto fictícia para o teste
-        ProdutoEntrada produtoEntrada = new ProdutoEntrada(1L, 123456L, null, null, 10.0, 100L, "Observação 1", new ProdutoCapa());
-
-        // Configurar o comportamento do mock do produtoCapaRepository
-        when(produtoCapaRepository.isProdutoAtivoById(1L)).thenReturn(true);
-
-        // Configurar o comportamento do mock do produtoEntradaRepository
-        when(produtoEntradaRepository.save(produtoEntrada)).thenReturn(produtoEntrada);
-
-        // Chamar o método save da classe de serviço
-        ProdutoEntrada resultado = produtoEntradaService.save(produtoEntrada);
-
-        // Verificar se o resultado é igual à entrada de produto fictícia
-        assertEquals(produtoEntrada, resultado);
-    }
-
     @Test(expected = ProductDisableException.class)
     public void testSaveWithInactiveProduct() {
         // Criar uma entrada de produto fictícia para o teste

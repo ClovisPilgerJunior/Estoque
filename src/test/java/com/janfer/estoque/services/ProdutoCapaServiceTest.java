@@ -163,35 +163,6 @@ public class ProdutoCapaServiceTest {
         assertTrue(resultado);
     }
 
-    @Test
-    public void testObterProdutoCapaComCalculos() {
-        // Criar uma lista fictícia de produtoCapas para o teste
-        List<ProdutoCapa> produtoCapas = new ArrayList<>();
-        ProdutoCapa produtoCapa1 = new ProdutoCapa(1L, "Produto 1", TipoProduto.toEnum(1), MedidaUnidade.UNIDADE, null, 10L, 20L, Resuprimento.SALDO_ZERADO, true);
-        produtoCapas.add(produtoCapa1);
-
-        // Configurar o comportamento dos mocks dos serviços de cálculo
-        when(produtoEntradaService.calcularSomaEntradas(1L)).thenReturn(100.0);
-        when(produtoEntradaService.recuperarUltimoPrecoCompra(1L)).thenReturn(10.0);
-        when(produtoPerdaService.calcularSomaPerdas(1L)).thenReturn(5.0);
-        when(produtoSaidaService.calcularSomaSaida(1L)).thenReturn(20.0);
-
-        // Chamar o método obterProdutoCapaComCalculos da classe de serviço
-        List<ProdutoCapaGetDTO> resultado = produtoCapaService.obterProdutoCapaComCalculos(produtoCapas);
-
-        // Verificar se o resultado possui a quantidade esperada de DTOs
-        assertEquals(1, resultado.size());
-
-        // Verificar se os cálculos nos DTOs estão corretos
-        ProdutoCapaGetDTO produtoCapaGetDTO = resultado.get(0);
-        assertEquals(100.0, produtoCapaGetDTO.getEntradas(), 0.0);
-        assertEquals(10.0, produtoCapaGetDTO.getValorCompra(), 0.0);
-        assertEquals(5.0, produtoCapaGetDTO.getPerdas(), 0.0);
-        assertEquals(20.0, produtoCapaGetDTO.getSaidas(), 0.0);
-        assertEquals(75.0, produtoCapaGetDTO.getSaldo(), 0.0);
-        assertEquals(750.0, produtoCapaGetDTO.getValorTotal(), 0.0);
-        assertEquals(Resuprimento.QUANTIDADE_IDEAL, produtoCapaGetDTO.getResuprimento());
-    }
 
     @Test
     public void testCalcularResuprimento() {

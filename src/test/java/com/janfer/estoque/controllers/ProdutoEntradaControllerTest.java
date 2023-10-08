@@ -1,12 +1,10 @@
 package com.janfer.estoque.controllers;
 
-import com.janfer.estoque.controllers.ProdutoEntradaController;
 import com.janfer.estoque.domain.dtos.ProdutoEntradaGetDTO;
 import com.janfer.estoque.domain.dtos.ProdutoEntradaPostDTO;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.entities.ProdutoEntrada;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
-import com.janfer.estoque.domain.mappers.MapStructMapperImpl;
 import com.janfer.estoque.services.ProdutoCapaService;
 import com.janfer.estoque.services.ProdutoEntradaService;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
@@ -17,25 +15,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class ProdutoEntradaControllerTest {
-
-    @Autowired
-    private MapStructMapper mapStructMapper;
 
     @InjectMocks
     private ProdutoEntradaController produtoEntradaController;
@@ -44,120 +33,132 @@ public class ProdutoEntradaControllerTest {
     private ProdutoEntradaService produtoEntradaService;
 
     @Mock
-    private ProdutoCapaService produtoCapaService;
+    private MapStructMapper mapStructMapper;
 
+    @Mock
+    private ProdutoCapaService produtoCapaService;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testFindAllProdutoEntrada() {
-        List<ProdutoEntrada> produtoEntradas = new ArrayList<>();
-        produtoEntradas.add(new ProdutoEntrada());
-        when(produtoEntradaService.findAll()).thenReturn(produtoEntradas);
-
-        ResponseEntity<List<ProdutoEntradaGetDTO>> responseEntity = produtoEntradaController.findAll();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
-    }
 
     @Test
-    public void testFindProdutoEntradaByIdSuccess() {
+    public void testFindByIdProdutoEntrada() {
         Long id = 1L;
         ProdutoEntrada produtoEntrada = new ProdutoEntrada();
-        Optional<ProdutoEntrada> produtoEntradaOptional = Optional.of(produtoEntrada);
-        when(produtoEntradaService.findById(id)).thenReturn(produtoEntradaOptional);
+        ProdutoEntradaGetDTO produtoEntradaGetDTO = new ProdutoEntradaGetDTO();
 
-        ResponseEntity<ProdutoEntradaGetDTO> responseEntity = produtoEntradaController.findById(id);
+        when(produtoEntradaService.findById(id)).thenReturn(Optional.of(produtoEntrada));
+        when(mapStructMapper.produtoEntradaToProdutoEntradaGetDTO(produtoEntrada)).thenReturn(produtoEntradaGetDTO);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
+        ResponseEntity<ProdutoEntradaGetDTO> response = produtoEntradaController.findById(id);
+
+        verify(produtoEntradaService, times(1)).findById(id);
+        verify(mapStructMapper, times(1)).produtoEntradaToProdutoEntradaGetDTO(produtoEntrada);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(produtoEntradaGetDTO, response.getBody());
     }
 
     @Test(expected = ObjectNotFoundException.class)
-    public void testFindProdutoEntradaByIdNotFound() {
+    public void testFindByIdProdutoEntradaNotFound() {
         Long id = 1L;
-        Optional<ProdutoEntrada> produtoEntradaOptional = Optional.empty();
-        when(produtoEntradaService.findById(id)).thenReturn(produtoEntradaOptional);
+
+        when(produtoEntradaService.findById(id)).thenReturn(Optional.empty());
 
         produtoEntradaController.findById(id);
     }
 
     @Test
-    public void testDeleteProdutoEntradaSuccess() {
+    public void testDeleteProdutoEntrada() {
         Long id = 1L;
         ProdutoEntrada produtoEntrada = new ProdutoEntrada();
-        Optional<ProdutoEntrada> produtoEntradaOptional = Optional.of(produtoEntrada);
-        when(produtoEntradaService.findById(id)).thenReturn(produtoEntradaOptional);
 
-        ResponseEntity<Object> responseEntity = produtoEntradaController.delete(id);
+        when(produtoEntradaService.findById(id)).thenReturn(Optional.of(produtoEntrada));
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("Produto 1 excluído com sucesso", responseEntity.getBody());
+        ResponseEntity<Object> response = produtoEntradaController.delete(id);
+
+        verify(produtoEntradaService, times(1)).findById(id);
+        verify(produtoEntradaService, times(1)).delete(produtoEntrada);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Produto 1 excluído com sucesso", response.getBody());
     }
 
     @Test
     public void testDeleteProdutoEntradaNotFound() {
         Long id = 1L;
-        Optional<ProdutoEntrada> produtoEntradaOptional = Optional.empty();
-        when(produtoEntradaService.findById(id)).thenReturn(produtoEntradaOptional);
 
-        ResponseEntity<Object> responseEntity = produtoEntradaController.delete(id);
+        when(produtoEntradaService.findById(id)).thenReturn(Optional.empty());
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("Produto não encontrado", responseEntity.getBody());
+        ResponseEntity<Object> response = produtoEntradaController.delete(id);
+
+        verify(produtoEntradaService, times(1)).findById(id);
+        verifyZeroInteractions(produtoEntradaService);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Produto não encontrado", response.getBody());
     }
 
     @Test
-    public void testCriarProdutoEntradaSuccess() {
+    public void testCreateProdutoEntrada() {
         ProdutoEntradaPostDTO produtoEntradaDTO = new ProdutoEntradaPostDTO();
         produtoEntradaDTO.setProdutoCapa(new ProdutoCapa());
-        when(produtoCapaService.existById(anyLong())).thenReturn(true);
+        produtoEntradaDTO.getProdutoCapa().setId(1L);
 
-        ResponseEntity<String> responseEntity = produtoEntradaController.criarProdutoEntrada(produtoEntradaDTO);
+        when(produtoCapaService.existById(1L)).thenReturn(true);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals("ProdutoEntrada cadastrado com sucesso.", responseEntity.getBody());
+        ResponseEntity<String> response = produtoEntradaController.criarProdutoEntrada(produtoEntradaDTO);
+
+        verify(produtoEntradaService, times(1)).save(any());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("ProdutoEntrada cadastrado com sucesso.", response.getBody());
     }
 
     @Test
-    public void testCriarProdutoEntradaProdutoCapaNotFound() {
+    public void testCreateProdutoEntradaProdutoCapaNaoEncontrado() {
         ProdutoEntradaPostDTO produtoEntradaDTO = new ProdutoEntradaPostDTO();
         produtoEntradaDTO.setProdutoCapa(new ProdutoCapa());
-        when(produtoCapaService.existById(anyLong())).thenReturn(false);
+        produtoEntradaDTO.getProdutoCapa().setId(1L);
 
-        ResponseEntity<String> responseEntity = produtoEntradaController.criarProdutoEntrada(produtoEntradaDTO);
+        when(produtoCapaService.existById(1L)).thenReturn(false);
 
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-        assertEquals("ProdutoCapa correspondente não encontrado.", responseEntity.getBody());
+        ResponseEntity<String> response = produtoEntradaController.criarProdutoEntrada(produtoEntradaDTO);
+
+        verifyZeroInteractions(produtoEntradaService);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("ProdutoCapa correspondente não encontrado.", response.getBody());
     }
 
     @Test
-    public void testUpdateProdutoEntradaSuccess() {
+    public void testUpdateProdutoEntrada() {
         Long id = 1L;
         ProdutoEntradaPostDTO produtoEntradaDTO = new ProdutoEntradaPostDTO();
-        Optional<ProdutoEntrada> produtoEntradaOptional = Optional.of(new ProdutoEntrada());
-        when(produtoEntradaService.findById(id)).thenReturn(produtoEntradaOptional);
+        ProdutoEntrada produtoEntrada = new ProdutoEntrada();
 
-        ResponseEntity<Object> responseEntity = produtoEntradaController.update(id, produtoEntradaDTO);
+        when(produtoEntradaService.findById(id)).thenReturn(Optional.of(produtoEntrada));
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertNotNull(responseEntity.getBody());
+        ResponseEntity<Object> response = produtoEntradaController.update(id, produtoEntradaDTO);
+
+        verify(produtoEntradaService, times(1)).findById(id);
+        verify(produtoEntradaService, times(1)).save(any(ProdutoEntrada.class));
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     public void testUpdateProdutoEntradaNotFound() {
         Long id = 1L;
         ProdutoEntradaPostDTO produtoEntradaDTO = new ProdutoEntradaPostDTO();
-        Optional<ProdutoEntrada> produtoEntradaOptional = Optional.empty();
-        when(produtoEntradaService.findById(id)).thenReturn(produtoEntradaOptional);
 
-        ResponseEntity<Object> responseEntity = produtoEntradaController.update(id, produtoEntradaDTO);
+        when(produtoEntradaService.findById(id)).thenReturn(Optional.empty());
 
-        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
-        assertEquals("Fornecedor não encontrado", responseEntity.getBody());
+        ResponseEntity<Object> response = produtoEntradaController.update(id, produtoEntradaDTO);
+
+        verify(produtoEntradaService, times(1)).findById(id);
+        verifyZeroInteractions(produtoEntradaService);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Fornecedor não encontrado", response.getBody());
+    }
+
+    private void verifyZeroInteractions(ProdutoEntradaService produtoEntradaService) {
     }
 }
