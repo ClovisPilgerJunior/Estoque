@@ -1,29 +1,25 @@
 package com.janfer.estoque.services;
 
-import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.MedidaUnidade;
 import com.janfer.estoque.domain.enums.Resuprimento;
 import com.janfer.estoque.domain.enums.TipoEmpresa;
 import com.janfer.estoque.domain.enums.TipoProduto;
-import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.FornecedorRepository;
 import com.janfer.estoque.repositories.ProdutoCapaRepository;
 import com.janfer.estoque.repositories.ProdutoEntradaRepository;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -31,7 +27,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
+@SpringBootTest
+@RunWith(SpringRunner.class)
 public class ProdutoCapaServiceTest {
 
     @InjectMocks
