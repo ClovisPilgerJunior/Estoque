@@ -5,6 +5,7 @@ import com.janfer.estoque.repositories.FornecedorRepository;
 import com.janfer.estoque.repositories.ProdutoCapaRepository;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@NoArgsConstructor
 public class FornecedorService {
 
     @Autowired

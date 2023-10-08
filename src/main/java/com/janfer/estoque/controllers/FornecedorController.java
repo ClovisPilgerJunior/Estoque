@@ -1,11 +1,14 @@
 package com.janfer.estoque.controllers;
 
-import com.janfer.estoque.controllers.messages.FornecedorMessage;
-import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.dtos.FornecedorDTO;
+import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.services.FornecedorService;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+
+import static com.janfer.estoque.controllers.messages.FornecedorMessage.NOT_FOUND;
 
 @AllArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Fornecedores", description = "Endpoint de Fornecedores")
+@Server(url = "http://localhost:8080", description = "Servidor local de desenvolvimento")
+@Server(url = "http://estoque-production.up.railway.app", description = "Servidor de produção")
 @RestController
 @RequestMapping(value = "/api/fornecedor")
 public class FornecedorController {
@@ -30,6 +37,9 @@ public class FornecedorController {
     FornecedorService fornecedorService;
 
     @PostMapping("/cadastrar")
+    @Operation(summary = "Cadastrar um novo fornecedor", description = "Cadastra um novo fornecedor com base nos dados fornecidos.")
+    @ApiResponse(responseCode = "201", description = "Fornecedor cadastrado com sucesso!")
+    @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
     public ResponseEntity<Object> create(@Valid @RequestBody FornecedorDTO fornecedorDTO){
 
         if (fornecedorService.existByEmpresa(fornecedorDTO.getEmpresa())) {
@@ -41,11 +51,16 @@ public class FornecedorController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar todos os fornecedores", description = "Recupera a lista de todos os fornecedores cadastrados.")
+    @ApiResponse(responseCode = "200", description = "Lista de fornecedores encontrada com sucesso!")
     public ResponseEntity<List<FornecedorDTO>> getAll(){
         return new ResponseEntity<>(mapStructMapper.fornecedorAllToFornecedorDTO(fornecedorService.findAll()), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar fornecedor por ID", description = "Recupera um fornecedor pelo ID fornecido.")
+    @ApiResponse(responseCode = "200", description = "Fornecedor encontrado com sucesso.")
+    @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
     public ResponseEntity<Object> findById(@PathVariable(value = "id")Long id){
         Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
         return fornecedorOptional.<ResponseEntity<Object>>map(fornecedor -> ResponseEntity
@@ -53,15 +68,19 @@ public class FornecedorController {
                 .body(fornecedor))
                 .orElseGet(() -> ResponseEntity
                         .status(HttpStatus.NOT_FOUND)
-                        .body(FornecedorMessage.NOT_FOUND)
+                        .body(NOT_FOUND)
                 );
     }
 
     @PutMapping("/atualizar/{id}")
+    @Operation(summary = "Atualizar fornecedor por ID", description = "Atualiza um fornecedor pelo ID fornecido.")
+    @ApiResponse(responseCode = "200", description = "Fornecedor atualizado com sucesso.")
+    @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
+    @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
     public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid FornecedorDTO fornecedorDTO){
         Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
         if(fornecedorOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FornecedorMessage.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND);
         }
 
         Fornecedor fornecedor = mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO);
@@ -76,10 +95,13 @@ public class FornecedorController {
     }
 
     @DeleteMapping("/deletar/{id}")
+    @Operation(summary = "Deletar fornecedor por ID", description = "Exclui um fornecedor pelo ID fornecido.")
+    @ApiResponse(responseCode = "200", description = "Fornecedor excluído com sucesso!")
+    @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
     public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id){
         Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
         if(fornecedorOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(FornecedorMessage.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND);
         }
         fornecedorService.delete(fornecedorOptional.get());
         return ResponseEntity.status(HttpStatus.OK).body("Fornecedor " + id + " excluído com sucesso!");

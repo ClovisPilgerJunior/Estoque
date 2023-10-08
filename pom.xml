@@ -93,6 +93,13 @@
 			<type>maven-plugin</type>
 		</dependency>
 
+		<!-- Documentação com o Swagger -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -148,9 +155,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.0</version>
 				<configuration>
-					<excludes>
-						<exclude>com\.janfer\.estoque\.domain.\dtos\..*</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 

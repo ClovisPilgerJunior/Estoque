@@ -1,15 +1,11 @@
 package com.janfer.estoque.controllers.messages;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@Getter
-@AllArgsConstructor
-public enum FornecedorMessage {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class FornecedorMessage {
 
-    NOT_FOUND("Fornecedor não encontrado");
-
-    private final String desc;
+    public static final String NOT_FOUND = "Fornecedor não encontrado";
 
 }

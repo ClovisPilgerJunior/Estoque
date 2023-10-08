@@ -13,7 +13,6 @@ public class ProdutoSaidaPostDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-  private Long id;
   private Date dataSaida = new Date();
   private Long quantidade;
   private String retiradoPor;

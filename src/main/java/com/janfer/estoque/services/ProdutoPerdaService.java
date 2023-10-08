@@ -1,7 +1,9 @@
 package com.janfer.estoque.services;
 
 import com.janfer.estoque.domain.entities.ProdutoPerda;
+import com.janfer.estoque.repositories.ProdutoCapaRepository;
 import com.janfer.estoque.repositories.ProdutoPerdaRepository;
+import com.janfer.estoque.services.exceptions.ProductDisableException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +17,20 @@ public class ProdutoPerdaService {
     @Autowired
     ProdutoPerdaRepository produtoPerdaRepository;
 
+    @Autowired
+    ProdutoCapaRepository produtoCapaRepository;
+
     @Transactional
     public List<ProdutoPerda> findAll(){
         return produtoPerdaRepository.findAll();
     }
 
     public ProdutoPerda save(ProdutoPerda produtoPerda){
+
+        if(Boolean.FALSE.equals(produtoCapaRepository.isProdutoAtivoById(produtoPerda.getProdutoCapa().getId()))){
+            throw new ProductDisableException("Produto está inativo");
+        }
+
         return produtoPerdaRepository.save(produtoPerda);
     }
 

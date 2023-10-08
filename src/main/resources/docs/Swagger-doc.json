@@ -1,0 +1,1622 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Gerenciamento de Estoque",
+    "description": "API restful criado para facilitar o estoque de produtos.",
+    "version": "v1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Servidor local de desenvolvimento"
+    },
+    {
+      "url": "http://estoque-production.up.railway.app",
+      "description": "Servidor de produção"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Fornecedores",
+      "description": "Endpoint de Fornecedores"
+    },
+    {
+      "name": "Produto Saida",
+      "description": "Endpoint da saida de produtos"
+    },
+    {
+      "name": "Produto Entrada",
+      "description": "Endpoint da entrada de produtos"
+    },
+    {
+      "name": "Produto Perda",
+      "description": "Endpoint da perda de produtos"
+    },
+    {
+      "name": "ProdutoCapa",
+      "description": "Endpoint do ProdutoCapa"
+    }
+  ],
+  "paths": {
+    "/api/produtoSaida/atualizar/{id}": {
+      "put": {
+        "tags": [
+          "Produto Saida"
+        ],
+        "summary": "Atualizar uma saída de produto",
+        "description": "Atualiza uma saída de produto existente com base nos dados fornecidos.",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoSaidaPostDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Saída de produto atualizada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Saída de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Produto está inativado no sistema",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoPerda/atualizar/{id}": {
+      "put": {
+        "tags": [
+          "Produto Perda"
+        ],
+        "summary": "Atualizar uma perda de produto",
+        "description": "Atualiza uma perda de produto existente com base nos dados fornecidos.",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoPerdaPostDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Perda de produto atualizada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Perda de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Produto está inativado no sistema",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoEntrada/atualizar/{id}": {
+      "put": {
+        "tags": [
+          "Produto Entrada"
+        ],
+        "summary": "Atualizar uma entrada de produto",
+        "description": "Atualiza uma entrada de produto existente com base nos dados fornecidos.",
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoEntradaPostDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Entrada de produto atualizada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entrada de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Produto está inativado no sistema",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoCapa/atualizar/{id}": {
+      "put": {
+        "tags": [
+          "ProdutoCapa"
+        ],
+        "summary": "Atualizar um produto",
+        "description": "Atualiza um produto existente com base nos dados fornecidos.",
+        "operationId": "update_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoCapaPostDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Produto atualizado com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Violação na integridade dos dados",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fornecedor/atualizar/{id}": {
+      "put": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Atualizar fornecedor por ID",
+        "description": "Atualiza um fornecedor pelo ID fornecido.",
+        "operationId": "update_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FornecedorDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Fornecedor atualizado com sucesso.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Violação na integridade dos dados",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Fornecedor não encontrado.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoSaida/cadastrar": {
+      "post": {
+        "tags": [
+          "Produto Saida"
+        ],
+        "summary": "Cadastrar uma nova saída de produto",
+        "description": "Cadastra uma nova saída de produto com base nos dados fornecidos.",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoSaidaPostDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Saída de produto cadastrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Violação na integridade dos dados",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Produto está inativado no sistema",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoPerda/cadastrar": {
+      "post": {
+        "tags": [
+          "Produto Perda"
+        ],
+        "summary": "Cadastrar uma nova perda de produto",
+        "description": "Cadastra uma nova perda de produto com base nos dados fornecidos.",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoPerdaPostDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Perda de produto cadastrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Violação na integridade dos dados",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Produto está inativado no sistema",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoEntrada/cadastrar": {
+      "post": {
+        "tags": [
+          "Produto Entrada"
+        ],
+        "summary": "Cadastrar uma nova entrada de produto",
+        "description": "Cadastra uma nova entrada de produto com base nos dados fornecidos.",
+        "operationId": "criarProdutoEntrada",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoEntradaPostDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Entrada de produto cadastrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Violação na integridade dos dados",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Produto está inativado no sistema",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoCapa/cadastrar": {
+      "post": {
+        "tags": [
+          "ProdutoCapa"
+        ],
+        "summary": "Cadastrar um novo produto",
+        "description": "Cadastra um novo produto com base nos dados fornecidos.",
+        "operationId": "create_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProdutoCapaPostDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Produto cadastrado com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Violação na integridade dos dados",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fornecedor/cadastrar": {
+      "post": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Cadastrar um novo fornecedor",
+        "description": "Cadastra um novo fornecedor com base nos dados fornecidos.",
+        "operationId": "create_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FornecedorDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Fornecedor cadastrado com sucesso!",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Violação na integridade dos dados",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoSaida": {
+      "get": {
+        "tags": [
+          "Produto Saida"
+        ],
+        "summary": "Listar todas as saídas de produtos",
+        "description": "Recupera a lista de todas as saídas de produtos cadastradas.",
+        "operationId": "findAll",
+        "responses": {
+          "200": {
+            "description": "Lista de saídas de produtos encontrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProdutoSaidaGetDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoSaida/{id}": {
+      "get": {
+        "tags": [
+          "Produto Saida"
+        ],
+        "summary": "Buscar saída de produto por ID",
+        "description": "Recupera uma saída de produto pelo seu ID.",
+        "operationId": "findById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saída de produto encontrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProdutoSaidaGetDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Saída de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProdutoSaidaGetDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoPerda": {
+      "get": {
+        "tags": [
+          "Produto Perda"
+        ],
+        "summary": "Listar todas as perdas de produtos",
+        "description": "Recupera a lista de todas as perdas de produtos cadastradas.",
+        "operationId": "findAll_1",
+        "responses": {
+          "200": {
+            "description": "Lista de perdas de produtos encontrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProdutoPerdaGetDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoPerda/{id}": {
+      "get": {
+        "tags": [
+          "Produto Perda"
+        ],
+        "summary": "Buscar perda de produto por ID",
+        "description": "Recupera uma perda de produto pelo seu ID.",
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Perda de produto encontrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProdutoPerdaGetDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Perda de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProdutoPerdaGetDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoEntrada": {
+      "get": {
+        "tags": [
+          "Produto Entrada"
+        ],
+        "summary": "Listar todas as entradas de produtos",
+        "description": "Recupera a lista de todas as entradas de produtos cadastradas.",
+        "operationId": "findAll_2",
+        "responses": {
+          "200": {
+            "description": "Lista de entradas de produtos encontrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProdutoEntradaGetDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoEntrada/{id}": {
+      "get": {
+        "tags": [
+          "Produto Entrada"
+        ],
+        "summary": "Buscar entrada de produto por ID",
+        "description": "Recupera uma entrada de produto pelo seu ID.",
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Entrada de produto encontrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProdutoEntradaGetDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entrada de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProdutoEntradaGetDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoCapa": {
+      "get": {
+        "tags": [
+          "ProdutoCapa"
+        ],
+        "summary": "Listar todos os produtos",
+        "description": "Recupera a lista de todos os produtos cadastrados.",
+        "operationId": "findAll_3",
+        "responses": {
+          "200": {
+            "description": "Lista de produtos encontrada com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProdutoCapaGetDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoCapa/{id}": {
+      "get": {
+        "tags": [
+          "ProdutoCapa"
+        ],
+        "summary": "Buscar produto por ID",
+        "description": "Recupera um produto pelo seu ID.",
+        "operationId": "findById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto encontrado com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProdutoCapaGetDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProdutoCapaGetDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fornecedor": {
+      "get": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Listar todos os fornecedores",
+        "description": "Recupera a lista de todos os fornecedores cadastrados.",
+        "operationId": "getAll",
+        "responses": {
+          "200": {
+            "description": "Lista de fornecedores encontrada com sucesso!",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FornecedorDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fornecedor/{id}": {
+      "get": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Buscar fornecedor por ID",
+        "description": "Recupera um fornecedor pelo ID fornecido.",
+        "operationId": "findById_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fornecedor encontrado com sucesso.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Fornecedor não encontrado.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoSaida/deletar/{id}": {
+      "delete": {
+        "tags": [
+          "Produto Saida"
+        ],
+        "summary": "Excluir uma saída de produto",
+        "description": "Exclui uma saída de produto existente com base no ID fornecido.",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saída de produto excluída com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Saída de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoPerda/deletar/{id}": {
+      "delete": {
+        "tags": [
+          "Produto Perda"
+        ],
+        "summary": "Excluir uma perda de produto",
+        "description": "Exclui uma perda de produto existente com base no ID fornecido.",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Perda de produto excluída com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Perda de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoEntrada/deletar/{id}": {
+      "delete": {
+        "tags": [
+          "Produto Entrada"
+        ],
+        "summary": "Excluir uma entrada de produto",
+        "description": "Exclui uma entrada de produto existente com base no ID fornecido.",
+        "operationId": "delete_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Entrada de produto excluída com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entrada de produto não encontrada",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/produtoCapa/deletar/{id}": {
+      "delete": {
+        "tags": [
+          "ProdutoCapa"
+        ],
+        "summary": "Excluir um produto",
+        "description": "Exclui um produto existente com base no ID fornecido.",
+        "operationId": "delete_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto excluído com sucesso",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Produto não encontrado",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/fornecedor/deletar/{id}": {
+      "delete": {
+        "tags": [
+          "Fornecedores"
+        ],
+        "summary": "Deletar fornecedor por ID",
+        "description": "Exclui um fornecedor pelo ID fornecido.",
+        "operationId": "delete_4",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fornecedor excluído com sucesso!",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Fornecedor não encontrado.",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Fornecedor": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "empresa": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "tipoEmpresa": {
+            "type": "string",
+            "enum": [
+              "FORNECEDOR",
+              "CLIENTE"
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
+          },
+          "endereco": {
+            "type": "string"
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ProdutoCapa": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "tipoProduto": {
+            "type": "string",
+            "enum": [
+              "MATERIA_PRIMA",
+              "PRODUTO_PRONTO",
+              "DIVERSOS"
+            ]
+          },
+          "medidaUnidade": {
+            "type": "string",
+            "enum": [
+              "UNIDADE",
+              "PACOTE",
+              "KILO",
+              "PECA",
+              "METRO",
+              "GRAMAS",
+              "CAIXA",
+              "SACO",
+              "PAR",
+              "MILHEIRO",
+              "MILIGRAMAS"
+            ]
+          },
+          "fornecedor": {
+            "$ref": "#/components/schemas/Fornecedor"
+          },
+          "minimo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "maximo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "resuprimento": {
+            "type": "string",
+            "enum": [
+              "ESTOQUE_NEGATIVO",
+              "SALDO_ZERADO",
+              "COMPRAR_AGORA",
+              "QUANTIDADE_IDEAL",
+              "PRODUTO_EXCESSO"
+            ]
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ProdutoSaidaPostDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dataSaida": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "retiradoPor": {
+            "type": "string"
+          },
+          "setor": {
+            "type": "string",
+            "enum": [
+              "MARKETING",
+              "ESCRITORIO",
+              "USO_INTERNO",
+              "SERVICOS_GERAIS"
+            ]
+          },
+          "observacao": {
+            "type": "string"
+          },
+          "produtoCapa": {
+            "$ref": "#/components/schemas/ProdutoCapa"
+          }
+        }
+      },
+      "ProdutoPerdaPostDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "data": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "motivo": {
+            "type": "string"
+          },
+          "produtoCapa": {
+            "$ref": "#/components/schemas/ProdutoCapa"
+          }
+        }
+      },
+      "ProdutoEntradaPostDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "numeroNota": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dataPedido": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dataEntrega": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "precoCompra": {
+            "type": "number",
+            "format": "double"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "observacao": {
+            "type": "string"
+          },
+          "produtoCapa": {
+            "$ref": "#/components/schemas/ProdutoCapa"
+          }
+        }
+      },
+      "ProdutoCapaPostDTO": {
+        "required": [
+          "desc",
+          "medidaUnidade",
+          "tipoProduto"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "tipoProduto": {
+            "type": "string",
+            "enum": [
+              "MATERIA_PRIMA",
+              "PRODUTO_PRONTO",
+              "DIVERSOS"
+            ]
+          },
+          "medidaUnidade": {
+            "type": "string",
+            "enum": [
+              "UNIDADE",
+              "PACOTE",
+              "KILO",
+              "PECA",
+              "METRO",
+              "GRAMAS",
+              "CAIXA",
+              "SACO",
+              "PAR",
+              "MILHEIRO",
+              "MILIGRAMAS"
+            ]
+          },
+          "minimo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "maximo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "fornecedor": {
+            "$ref": "#/components/schemas/Fornecedor"
+          }
+        }
+      },
+      "FornecedorDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "empresa": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "tipoEmpresa": {
+            "type": "string",
+            "enum": [
+              "FORNECEDOR",
+              "CLIENTE"
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
+          },
+          "endereco": {
+            "type": "string"
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ProdutoSaidaGetDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dataSaida": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "retiradoPor": {
+            "type": "string"
+          },
+          "setor": {
+            "type": "string",
+            "enum": [
+              "MARKETING",
+              "ESCRITORIO",
+              "USO_INTERNO",
+              "SERVICOS_GERAIS"
+            ]
+          },
+          "observacao": {
+            "type": "string"
+          }
+        }
+      },
+      "ProdutoPerdaGetDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "data": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "ProdutoEntradaGetDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "numeroNota": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dataPedido": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dataEntrega": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "precoCompra": {
+            "type": "number",
+            "format": "double"
+          },
+          "quantidade": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "observacao": {
+            "type": "string"
+          }
+        }
+      },
+      "FornecedorGetDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "empresa": {
+            "type": "string"
+          },
+          "nome": {
+            "type": "string"
+          }
+        }
+      },
+      "ProdutoCapaGetDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "desc": {
+            "type": "string"
+          },
+          "tipoProduto": {
+            "type": "string",
+            "enum": [
+              "MATERIA_PRIMA",
+              "PRODUTO_PRONTO",
+              "DIVERSOS"
+            ]
+          },
+          "medidaUnidade": {
+            "type": "string",
+            "enum": [
+              "UNIDADE",
+              "PACOTE",
+              "KILO",
+              "PECA",
+              "METRO",
+              "GRAMAS",
+              "CAIXA",
+              "SACO",
+              "PAR",
+              "MILHEIRO",
+              "MILIGRAMAS"
+            ]
+          },
+          "fornecedor": {
+            "$ref": "#/components/schemas/FornecedorGetDTO"
+          },
+          "entradas": {
+            "type": "number",
+            "format": "double"
+          },
+          "saidas": {
+            "type": "number",
+            "format": "double"
+          },
+          "perdas": {
+            "type": "number",
+            "format": "double"
+          },
+          "saldo": {
+            "type": "number",
+            "format": "double"
+          },
+          "valorCompra": {
+            "type": "number",
+            "format": "double"
+          },
+          "valorTotal": {
+            "type": "number",
+            "format": "double"
+          },
+          "minimo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "maximo": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "resuprimento": {
+            "type": "string",
+            "enum": [
+              "ESTOQUE_NEGATIVO",
+              "SALDO_ZERADO",
+              "COMPRAR_AGORA",
+              "QUANTIDADE_IDEAL",
+              "PRODUTO_EXCESSO"
+            ]
+          },
+          "ativo": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "author": "",
+  "config": {},
+  "createAt": "",
+  "homepage": "",
+  "identifier": "",
+  "meta": {},
+  "schemaVersion": 0
+}

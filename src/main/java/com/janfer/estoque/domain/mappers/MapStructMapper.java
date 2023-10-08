@@ -5,6 +5,7 @@ import com.janfer.estoque.domain.entities.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -20,7 +21,6 @@ public interface MapStructMapper {
    @Mapping(target = "tipoProduto", source = "tipoProduto")
    @Mapping(target = "medidaUnidade", source = "medidaUnidade")
    @Mapping(target = "fornecedor", source = "fornecedor")
-   @Mapping(target = "id", source = "id")
    @Mapping(target = "resuprimento", ignore = true)
    ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaDTO);
 

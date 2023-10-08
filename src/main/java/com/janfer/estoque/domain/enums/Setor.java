@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum Setor {
 
   MARKETING(0, "MERKETING"),
-  ESCRITORIO(1, "ESCRITORIA"),
+  ESCRITORIO(1, "ESCRITORIO"),
   USO_INTERNO(2, "USO INTERNO"),
   SERVICOS_GERAIS(3, "SERVIÇOS GERAIS");
 

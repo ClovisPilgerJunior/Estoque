@@ -15,7 +15,6 @@ public class ProdutoCapaPostDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-  private Long id;
   @NotBlank(message = "A descrição não pode estar vazio!")
   private String desc;
   @NotNull(message = "O tipo de produto não pode estar vazio!")

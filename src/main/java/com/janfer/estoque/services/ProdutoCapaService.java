@@ -1,7 +1,7 @@
 package com.janfer.estoque.services;
 
-import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.Resuprimento;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.*;
@@ -23,12 +23,6 @@ public class ProdutoCapaService {
 
   @Autowired
   ProdutoEntradaRepository produtoEntradaRepository;
-
-  @Autowired
-  ProdutoSaidaRepository produtoSaidaRepository;
-
-  @Autowired
-  ProdutoPerdaRepository produtoPerdaRepository;
 
   @Autowired
   FornecedorRepository fornecedorRepository;
@@ -54,10 +48,6 @@ public class ProdutoCapaService {
   @Transactional
   public ProdutoCapa save(ProdutoCapa produtoCapa) {
 
-    if(produtoCapaRepository.existsByDescAndIdNot(produtoCapa.getDesc(), produtoCapa.getId())){
-      throw new DataIntegrityViolationException("Produto já cadastrado");
-    }
-
     if (produtoCapa.getFornecedor() != null && produtoCapa.getFornecedor().getId() != null) {
       Long fornecedorId = produtoCapa.getFornecedor().getId();
       if (!fornecedorRepository.existsById(fornecedorId)) {
@@ -69,19 +59,18 @@ public class ProdutoCapaService {
       produtoCapa.setResuprimento(Resuprimento.SALDO_ZERADO);
     }
 
-    if(produtoCapaRepository.existsByDesc(produtoCapa.getDesc())){
-      throw new DataIntegrityViolationException("Produto já cadastrado");
-    }
+    // Salve o produtoCapa
     produtoCapaRepository.save(produtoCapa);
 
     Long produtoCapaId = produtoCapa.getId();
-    if (!produtoCapaRepository.isProdutoAtivoById(produtoCapaId)) {
+    if (Boolean.FALSE.equals(produtoCapaRepository.isProdutoAtivoById(produtoCapaId))) {
       produtoCapa.setAtivo(false);
       produtoCapaRepository.save(produtoCapa);
     }
 
     return produtoCapa;
   }
+
 
   @Transactional
   public void delete(ProdutoCapa produtoCapa) {
@@ -156,4 +145,13 @@ public class ProdutoCapaService {
     }
 
   }
+
+  public boolean existByDesc(String desc){
+    return produtoCapaRepository.existsByDesc(desc);
+  }
+
+  public boolean existByDescAndIdNot(String desc, Long id){
+    return produtoCapaRepository.existsByDescAndIdNot(desc, id);
+  }
+
 }

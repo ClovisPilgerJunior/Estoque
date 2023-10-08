@@ -26,7 +26,7 @@ public class ProdutoEntradaService {
 
     public ProdutoEntrada save(ProdutoEntrada produtoEntrada){
 
-        if(!produtoCapaRepository.isProdutoAtivoById(produtoEntrada.getProdutoCapa().getId())){
+        if(Boolean.FALSE.equals(produtoCapaRepository.isProdutoAtivoById(produtoEntrada.getProdutoCapa().getId()))){
             throw new ProductDisableException("Produto está inativo");
         }
 
@@ -49,6 +49,5 @@ public class ProdutoEntradaService {
     public Double recuperarUltimoPrecoCompra(Long produtoCapaId){
         return produtoEntradaRepository.recuperarUltimoPrecoCompra(produtoCapaId);
     }
-
 
 }
