@@ -42,7 +42,12 @@ public class FornecedorService {
         return fornecedorRepository.findById(id);
     }
 
-    public boolean existsByEmpresa(String empresa){
+    public boolean existByEmpresaAndIdNot(String empresa, Long id){
+       return fornecedorRepository.existsByEmpresaAndIdNot(empresa, id);
+    }
+
+    public boolean existByEmpresa(String empresa){
         return fornecedorRepository.existsByEmpresa(empresa);
     }
+
 }
