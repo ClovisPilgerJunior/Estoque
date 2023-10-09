@@ -1,0 +1,145 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > TipoProduto</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.janfer.estoque.domain.enums</a>
+</div>
+
+<h1>Coverage Summary for Class: TipoProduto (com.janfer.estoque.domain.enums)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TipoProduto</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91,7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.domain.enums;
+&nbsp;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Getter;
+&nbsp;
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;@Getter
+&nbsp;public enum TipoProduto {
+&nbsp;
+<b class="fc">&nbsp;    MATERIA_PRIMA(0, &quot;MATERIA PRIMA&quot;),</b>
+<b class="fc">&nbsp;    PRODUTO_PRONTO(1, &quot;PRODUTO PRONTO&quot;),</b>
+<b class="fc">&nbsp;    DIVERSOS(2, &quot;DIVERSOS&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;    private int cod;</b>
+<b class="nc">&nbsp;    private String desc;</b>
+&nbsp;
+&nbsp;    public static TipoProduto toEnum(Integer cod) {
+<b class="fc">&nbsp;        if (cod == null) {</b>
+<b class="fc">&nbsp;            return null;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        for (TipoProduto tipoProduto : TipoProduto.values()) {</b>
+<b class="fc">&nbsp;            if (cod.equals(tipoProduto.getCod())) {</b>
+<b class="fc">&nbsp;                return tipoProduto;</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        throw new IllegalArgumentException(&quot;Tipo de produto inválido&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-09 20:24</div>
+</div>
+</body>
+</html>

@@ -39,8 +39,6 @@ public class ProdutoCapaController {
   @Autowired
   ProdutoCapaService produtoCapaService;
 
-  @Autowired
-  ProdutoEntradaService produtoEntradaService;
 
   @PostMapping("/cadastrar")
   @Operation(summary = "Cadastrar um novo produto", description = "Cadastra um novo produto com base nos dados fornecidos.")

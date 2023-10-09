@@ -1,0 +1,230 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ProdutoPerdaController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.janfer.estoque.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: ProdutoPerdaController (com.janfer.estoque.controllers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProdutoPerdaController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    87,5%
+  </span>
+  <span class="absValue">
+    (7/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96,2%
+  </span>
+  <span class="absValue">
+    (25/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.controllers;
+&nbsp;
+&nbsp;import com.janfer.estoque.domain.entities.ProdutoPerda;
+&nbsp;import com.janfer.estoque.domain.dtos.ProdutoPerdaGetDTO;
+&nbsp;import com.janfer.estoque.domain.dtos.ProdutoPerdaPostDTO;
+&nbsp;import com.janfer.estoque.domain.mappers.MapStructMapper;
+&nbsp;import com.janfer.estoque.services.ProdutoCapaService;
+&nbsp;import com.janfer.estoque.services.ProdutoPerdaService;
+&nbsp;import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
+&nbsp;import io.swagger.v3.oas.annotations.servers.Server;
+&nbsp;import io.swagger.v3.oas.annotations.tags.Tag;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.beans.BeanUtils;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;@Tag(name = &quot;Produto Perda&quot;, description = &quot;Endpoint da perda de produtos&quot;)
+&nbsp;@Server(url = &quot;http://localhost:8080&quot;, description = &quot;Servidor local de desenvolvimento&quot;)
+&nbsp;@Server(url = &quot;http://estoque-production.up.railway.app&quot;, description = &quot;Servidor de produção&quot;)
+&nbsp;@RestController
+&nbsp;@RequestMapping(value = &quot;/api/produtoPerda&quot;)
+&nbsp;public class ProdutoPerdaController {
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    MapStructMapper mapStructMapper;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    ProdutoPerdaService produtoPerdaService;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    ProdutoCapaService produtoCapaService;
+&nbsp;
+&nbsp;    @PostMapping(&quot;/cadastrar&quot;)
+&nbsp;    @Operation(summary = &quot;Cadastrar uma nova perda de produto&quot;, description = &quot;Cadastra uma nova perda de produto com base nos dados fornecidos.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Perda de produto cadastrada com sucesso&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violação na integridade dos dados&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;409&quot;, description = &quot;Produto está inativado no sistema&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; create(@RequestBody ProdutoPerdaPostDTO produtoPerdaPostDTO) {
+&nbsp;
+<b class="pc">&nbsp;        if (produtoPerdaPostDTO.getProdutoCapa().getId() == null) {</b>
+<b class="nc">&nbsp;            return ResponseEntity.badRequest().body(&quot;ProdutoCapa não pode ser nulo.&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Long produtoCapaId = produtoPerdaPostDTO.getProdutoCapa().getId();</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!produtoCapaService.existById(produtoCapaId)) {</b>
+<b class="fc">&nbsp;            return ResponseEntity.badRequest().body(&quot;ProdutoCapa correspondente não encontrado.&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        produtoPerdaService.save(mapStructMapper.produtoPerdaToProdutoPerdaDTO(produtoPerdaPostDTO));</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(&quot;Produto cadastrado com sucesso&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping
+&nbsp;    @Operation(summary = &quot;Listar todas as perdas de produtos&quot;, description = &quot;Recupera a lista de todas as perdas de produtos cadastradas.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista de perdas de produtos encontrada com sucesso&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;ProdutoPerdaGetDTO&gt;&gt; findAll() {
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(mapStructMapper.produtoPerdaGetDTOAllToProdutoPerda(produtoPerdaService.findAll()), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/{id}&quot;)
+&nbsp;    @Operation(summary = &quot;Buscar perda de produto por ID&quot;, description = &quot;Recupera uma perda de produto pelo seu ID.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Perda de produto encontrada com sucesso&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Perda de produto não encontrada&quot;)
+&nbsp;    public ResponseEntity&lt;ProdutoPerdaGetDTO&gt; findById(@PathVariable(value = &quot;id&quot;) Long id) {
+<b class="fc">&nbsp;        Optional&lt;ProdutoPerda&gt; produtoPerdaOptional = produtoPerdaService.findById(id);</b>
+&nbsp;
+<b class="fc">&nbsp;        return produtoPerdaOptional.map(produtoPerda -&gt; {</b>
+<b class="fc">&nbsp;            ProdutoPerdaGetDTO produtoPerdaGetDTO = mapStructMapper.produtoPerdaGetDTOToProdutoPerda(produtoPerda);</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.OK).body(produtoPerdaGetDTO);</b>
+<b class="fc">&nbsp;        }).orElseThrow(() -&gt; new ObjectNotFoundException(&quot;Produto não encontrado com ID: &quot; + id));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;/deletar/{id}&quot;)
+&nbsp;    @Operation(summary = &quot;Excluir uma perda de produto&quot;, description = &quot;Exclui uma perda de produto existente com base no ID fornecido.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Perda de produto excluída com sucesso&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Perda de produto não encontrada&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; delete(@PathVariable(value = &quot;id&quot;) Long id) {
+<b class="fc">&nbsp;        Optional&lt;ProdutoPerda&gt; produtoPerdaOptional = produtoPerdaService.findById(id);</b>
+<b class="fc">&nbsp;        if (produtoPerdaOptional.isEmpty()) {</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto não encontrado&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        produtoPerdaService.delete(produtoPerdaOptional.get());</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(&quot;Produto &quot; + id + &quot; excluído com sucesso&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;/atualizar/{id}&quot;)
+&nbsp;    @Operation(summary = &quot;Atualizar uma perda de produto&quot;, description = &quot;Atualiza uma perda de produto existente com base nos dados fornecidos.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Perda de produto atualizada com sucesso&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Perda de produto não encontrada&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;409&quot;, description = &quot;Produto está inativado no sistema&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; update(@PathVariable(value = &quot;id&quot;) Long id, @RequestBody @Valid ProdutoPerdaPostDTO produtoPerdaDTO){
+<b class="fc">&nbsp;        Optional&lt;ProdutoPerda&gt; produtoPerdaOptional = produtoPerdaService.findById(id);</b>
+<b class="fc">&nbsp;        if(produtoPerdaOptional.isEmpty()) {</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto Não encontrado&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        var produtoPerda = new ProdutoPerda();</b>
+<b class="fc">&nbsp;        BeanUtils.copyProperties(produtoPerdaDTO, produtoPerda);</b>
+<b class="fc">&nbsp;        produtoPerda.setId(produtoPerdaOptional.get().getId());</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(produtoPerdaService.save(produtoPerda));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-09 20:24</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,226 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > FornecedorController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.janfer.estoque.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: FornecedorController (com.janfer.estoque.controllers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FornecedorController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (26/26)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.controllers;
+&nbsp;
+&nbsp;import com.janfer.estoque.domain.dtos.FornecedorDTO;
+&nbsp;import com.janfer.estoque.domain.entities.Fornecedor;
+&nbsp;import com.janfer.estoque.domain.mappers.MapStructMapper;
+&nbsp;import com.janfer.estoque.services.FornecedorService;
+&nbsp;import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
+&nbsp;import io.swagger.v3.oas.annotations.servers.Server;
+&nbsp;import io.swagger.v3.oas.annotations.tags.Tag;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;import static com.janfer.estoque.controllers.messages.FornecedorMessage.NOT_FOUND;
+&nbsp;
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;@CrossOrigin(origins = &quot;*&quot;, maxAge = 3600)
+&nbsp;@Tag(name = &quot;Fornecedores&quot;, description = &quot;Endpoint de Fornecedores&quot;)
+&nbsp;@Server(url = &quot;http://localhost:8080&quot;, description = &quot;Servidor local de desenvolvimento&quot;)
+&nbsp;@Server(url = &quot;http://estoque-production.up.railway.app&quot;, description = &quot;Servidor de produção&quot;)
+&nbsp;@RestController
+&nbsp;@RequestMapping(value = &quot;/api/fornecedor&quot;)
+&nbsp;public class FornecedorController {
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    MapStructMapper mapStructMapper;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    FornecedorService fornecedorService;
+&nbsp;
+&nbsp;    @PostMapping(&quot;/cadastrar&quot;)
+&nbsp;    @Operation(summary = &quot;Cadastrar um novo fornecedor&quot;, description = &quot;Cadastra um novo fornecedor com base nos dados fornecidos.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Fornecedor cadastrado com sucesso!&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violação na integridade dos dados&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; create(@Valid @RequestBody FornecedorDTO fornecedorDTO){
+&nbsp;
+<b class="fc">&nbsp;        if (fornecedorService.existByEmpresa(fornecedorDTO.getEmpresa())) {</b>
+<b class="fc">&nbsp;            throw new DataIntegrityViolationException(&quot;Violação na integridade dos dados&quot;);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        fornecedorService.save(mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO));</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.CREATED).body(&quot;Fornecedor cadastrado com sucesso!&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping
+&nbsp;    @Operation(summary = &quot;Listar todos os fornecedores&quot;, description = &quot;Recupera a lista de todos os fornecedores cadastrados.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista de fornecedores encontrada com sucesso!&quot;)
+&nbsp;    public ResponseEntity&lt;List&lt;FornecedorDTO&gt;&gt; getAll(){
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(mapStructMapper.fornecedorAllToFornecedorDTO(fornecedorService.findAll()), HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/{id}&quot;)
+&nbsp;    @Operation(summary = &quot;Buscar fornecedor por ID&quot;, description = &quot;Recupera um fornecedor pelo ID fornecido.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Fornecedor encontrado com sucesso.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Fornecedor não encontrado.&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; findById(@PathVariable(value = &quot;id&quot;)Long id){
+<b class="fc">&nbsp;        Optional&lt;Fornecedor&gt; fornecedorOptional = fornecedorService.findById(id);</b>
+<b class="fc">&nbsp;        return fornecedorOptional.&lt;ResponseEntity&lt;Object&gt;&gt;map(fornecedor -&gt; ResponseEntity</b>
+<b class="fc">&nbsp;                .status(HttpStatus.OK)</b>
+<b class="fc">&nbsp;                .body(fornecedor))</b>
+<b class="fc">&nbsp;                .orElseGet(() -&gt; ResponseEntity</b>
+<b class="fc">&nbsp;                        .status(HttpStatus.NOT_FOUND)</b>
+<b class="fc">&nbsp;                        .body(NOT_FOUND)</b>
+&nbsp;                );
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(&quot;/atualizar/{id}&quot;)
+&nbsp;    @Operation(summary = &quot;Atualizar fornecedor por ID&quot;, description = &quot;Atualiza um fornecedor pelo ID fornecido.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Fornecedor atualizado com sucesso.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Fornecedor não encontrado.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violação na integridade dos dados&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; update(@PathVariable(value = &quot;id&quot;) Long id, @RequestBody @Valid FornecedorDTO fornecedorDTO){
+<b class="fc">&nbsp;        Optional&lt;Fornecedor&gt; fornecedorOptional = fornecedorService.findById(id);</b>
+<b class="fc">&nbsp;        if(fornecedorOptional.isEmpty()) {</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Fornecedor fornecedor = mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO);</b>
+<b class="fc">&nbsp;        fornecedor.setId(fornecedorOptional.get().getId());</b>
+&nbsp;
+<b class="fc">&nbsp;        if(fornecedorService.existByEmpresaAndIdNot(fornecedorDTO.getEmpresa(), id)){</b>
+<b class="fc">&nbsp;            throw new DataIntegrityViolationException(&quot;Já existe um fornecedor com esse nome cadastrado&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.save(fornecedor));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(&quot;/deletar/{id}&quot;)
+&nbsp;    @Operation(summary = &quot;Deletar fornecedor por ID&quot;, description = &quot;Exclui um fornecedor pelo ID fornecido.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Fornecedor excluído com sucesso!&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Fornecedor não encontrado.&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; delete(@PathVariable(value = &quot;id&quot;) Long id){
+<b class="fc">&nbsp;        Optional&lt;Fornecedor&gt; fornecedorOptional = fornecedorService.findById(id);</b>
+<b class="fc">&nbsp;        if(fornecedorOptional.isEmpty()){</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        fornecedorService.delete(fornecedorOptional.get());</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(&quot;Fornecedor &quot; + id + &quot; excluído com sucesso!&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-09 20:24</div>
+</div>
+</body>
+</html>

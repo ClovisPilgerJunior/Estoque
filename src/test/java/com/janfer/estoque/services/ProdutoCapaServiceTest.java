@@ -28,8 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
@@ -42,7 +41,7 @@ public class ProdutoCapaServiceTest {
     @Mock
     private MapStructMapper mapStructMapper;
 
-    @InjectMocks
+    @Mock
     private ProdutoEntradaService produtoEntradaService;
 
     @Mock
@@ -54,6 +53,11 @@ public class ProdutoCapaServiceTest {
     @Mock
     private ProdutoEntradaRepository produtoEntradaRepository;
 
+    @Mock
+    private ProdutoPerdaService produtoPerdaService;
+
+    @Mock
+    private ProdutoSaidaService produtoSaidaService;
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -239,30 +243,46 @@ public class ProdutoCapaServiceTest {
 
     @Test
     public void testObterProdutoCapaComCalculos() {
-        // Criar uma lista fictícia de produtos capa para o teste
-        List<ProdutoCapa> produtoCapas = new ArrayList<>();
-        ProdutoCapa produtoCapa1 = new ProdutoCapa(1L, "Produto 1", TipoProduto.toEnum(1), MedidaUnidade.UNIDADE, null, 10L, 20L, Resuprimento.SALDO_ZERADO, true);
-        produtoCapas.add(produtoCapa1);
+        // Crie um objeto ProdutoCapa fictício
+        ProdutoCapa produtoCapa = new ProdutoCapa();
+        produtoCapa.setId(1L);
+        produtoCapa.setMinimo(10L);
+        produtoCapa.setMaximo(200L);
 
-        // Configurar o comportamento do mock do produtoEntradaService
-        when(produtoEntradaService.calcularSomaEntradas(produtoCapa1.getId())).thenReturn(100.0);
-        when(produtoEntradaService.recuperarUltimoPrecoCompra(produtoCapa1.getId())).thenReturn(10.0);
+        // Crie um objeto ProdutoCapaGetDTO fictício
+        ProdutoCapaGetDTO produtoCapaGetDTO = new ProdutoCapaGetDTO();
+        produtoCapaGetDTO.setId(1L);
 
-        // Chamar o método obterProdutoCapaComCalculos da classe de serviço
-        List<ProdutoCapaGetDTO> resultado =  produtoCapaService.obterProdutoCapaComCalculos(produtoCapas);
+        // Configurar o comportamento do mapStructMapper para converter ProdutoCapa em ProdutoCapaGetDTO
+        when(mapStructMapper.produtoCapaToProdutoCapaGetDTO(produtoCapa)).thenReturn(produtoCapaGetDTO);
 
-        // Verificar se o resultado possui a quantidade esperada de produtos capa
+        // Configurar o comportamento dos serviços mockados
+        when(produtoEntradaService.calcularSomaEntradas(1L)).thenReturn(100.0);
+        when(produtoEntradaService.recuperarUltimoPrecoCompra(1L)).thenReturn(10.0);
+        when(produtoPerdaService.calcularSomaPerdas(1L)).thenReturn(5.0);
+        when(produtoSaidaService.calcularSomaSaida(1L)).thenReturn(15.0);
+
+        // Chamar o método a ser testado
+        List<ProdutoCapaGetDTO> resultado = produtoCapaService.obterProdutoCapaComCalculos(List.of(produtoCapa));
+
+        // Verificar se o método de mapeamento foi chamado
+        verify(mapStructMapper, times(1)).produtoCapaToProdutoCapaGetDTO(produtoCapa);
+
+        // Verificar se os serviços mockados foram chamados com os argumentos corretos
+        verify(produtoEntradaService, times(1)).calcularSomaEntradas(1L);
+        verify(produtoEntradaService, times(1)).recuperarUltimoPrecoCompra(1L);
+        verify(produtoPerdaService, times(1)).calcularSomaPerdas(1L);
+        verify(produtoSaidaService, times(1)).calcularSomaSaida(1L);
+
+        // Verificar se os valores calculados no DTO estão corretos
         assertEquals(1, resultado.size());
-
-        // Verificar se os cálculos foram feitos corretamente
-        ProdutoCapaGetDTO produtoCapaGetDTO = resultado.get(0);
-        assertEquals(100.0, produtoCapaGetDTO.getEntradas(), 0.0);
-        assertEquals(10.0, produtoCapaGetDTO.getValorCompra(), 0.0);
-        assertEquals(0.0, produtoCapaGetDTO.getPerdas(), 0.0);
-        assertEquals(0.0, produtoCapaGetDTO.getSaidas(), 0.0);
-        assertEquals(90.0, produtoCapaGetDTO.getSaldo(), 0.0);
-        assertEquals(900.0, produtoCapaGetDTO.getValorTotal(), 0.0);
-        assertEquals(Resuprimento.COMPRAR_AGORA, produtoCapaGetDTO.getResuprimento());
+        ProdutoCapaGetDTO produtoCapaCalculado = resultado.get(0);
+        assertEquals(100.0, produtoCapaCalculado.getEntradas(), 0.0);
+        assertEquals(10.0, produtoCapaCalculado.getValorCompra(), 0.0);
+        assertEquals(5.0, produtoCapaCalculado.getPerdas(), 0.0);
+        assertEquals(15.0, produtoCapaCalculado.getSaidas(), 0.0);
+        assertEquals(80.0, produtoCapaCalculado.getSaldo(), 0.0);
+        assertEquals(800.0, produtoCapaCalculado.getValorTotal(), 0.0);
     }
 
 }

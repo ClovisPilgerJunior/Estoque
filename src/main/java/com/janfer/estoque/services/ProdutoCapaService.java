@@ -122,7 +122,11 @@ public class ProdutoCapaService {
       produtoCapaGetDTO.setSaldo(saldo);
       produtoCapaGetDTO.setValorTotal(totalGeral);
 
-      Resuprimento resuprimento = calcularResuprimento(produtoCapaGetDTO.getSaldo(), produtoCapaGetDTO.getMinimo(), produtoCapaGetDTO.getMaximo());
+      long minimo = produtoCapaGetDTO.getMinimo() != null ? produtoCapaGetDTO.getMinimo() : 0L;
+      long maximo = produtoCapaGetDTO.getMaximo() != null ? produtoCapaGetDTO.getMaximo() : 0L;
+
+      Resuprimento resuprimento = calcularResuprimento(produtoCapaGetDTO.getSaldo(), minimo, maximo);
+
       produtoCapaGetDTO.setResuprimento(resuprimento);
 
       produtoCapaGetDTOs.add(produtoCapaGetDTO);

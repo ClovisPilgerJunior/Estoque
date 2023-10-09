@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,5 @@ public class StandardError implements Serializable {
   private String error;
   private String message;
   private String path;
+
 }

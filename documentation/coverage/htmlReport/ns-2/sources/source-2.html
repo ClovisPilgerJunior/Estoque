@@ -1,0 +1,235 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ProdutoCapaController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.janfer.estoque.controllers</a>
+</div>
+
+<h1>Coverage Summary for Class: ProdutoCapaController (com.janfer.estoque.controllers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProdutoCapaController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70%
+  </span>
+  <span class="absValue">
+    (7/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65,5%
+  </span>
+  <span class="absValue">
+    (19/29)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.controllers;
+&nbsp;
+&nbsp;import com.janfer.estoque.domain.entities.ProdutoCapa;
+&nbsp;import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+&nbsp;import com.janfer.estoque.domain.dtos.ProdutoCapaPostDTO;
+&nbsp;import com.janfer.estoque.domain.mappers.MapStructMapper;
+&nbsp;import com.janfer.estoque.services.ProdutoCapaService;
+&nbsp;import com.janfer.estoque.services.ProdutoEntradaService;
+&nbsp;import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
+&nbsp;import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
+&nbsp;import com.janfer.estoque.services.exceptions.ProductDisableException;
+&nbsp;import io.swagger.v3.oas.annotations.Operation;
+&nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
+&nbsp;import io.swagger.v3.oas.annotations.servers.Server;
+&nbsp;import io.swagger.v3.oas.annotations.tags.Tag;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import org.springframework.beans.BeanUtils;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+<b class="fc">&nbsp;@AllArgsConstructor</b>
+&nbsp;@Tag(name = &quot;ProdutoCapa&quot;, description = &quot;Endpoint do ProdutoCapa&quot;)
+&nbsp;@Server(url = &quot;http://localhost:8080&quot;, description = &quot;Servidor local de desenvolvimento&quot;)
+&nbsp;@Server(url = &quot;http://estoque-production.up.railway.app&quot;, description = &quot;Servidor de produção&quot;)
+&nbsp;@RestController
+&nbsp;@RequestMapping(value = &quot;/api/produtoCapa&quot;)
+&nbsp;public class ProdutoCapaController {
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  MapStructMapper mapStructMapper;
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  ProdutoCapaService produtoCapaService;
+&nbsp;
+&nbsp;
+&nbsp;  @PostMapping(&quot;/cadastrar&quot;)
+&nbsp;  @Operation(summary = &quot;Cadastrar um novo produto&quot;, description = &quot;Cadastra um novo produto com base nos dados fornecidos.&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Produto cadastrado com sucesso&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violação na integridade dos dados&quot;)
+&nbsp;  public ResponseEntity&lt;Object&gt; create(@Valid @RequestBody ProdutoCapaPostDTO produtoCapaDTO) {
+&nbsp;
+<b class="pc">&nbsp;    if(produtoCapaService.existByDesc(produtoCapaDTO.getDesc())){</b>
+<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Produto já cadastrado&quot;);</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    produtoCapaService.save(mapStructMapper.produtoCapaToProdutoCapaDTO(produtoCapaDTO));</b>
+<b class="nc">&nbsp;    return ResponseEntity.status(HttpStatus.CREATED).body(&quot;Produto cadastrado com sucesso&quot;);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @PutMapping(&quot;/atualizar/{id}&quot;)
+&nbsp;  @Operation(summary = &quot;Atualizar um produto&quot;, description = &quot;Atualiza um produto existente com base nos dados fornecidos.&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Produto atualizado com sucesso&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto não encontrado&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violação na integridade dos dados&quot;)
+&nbsp;  public ResponseEntity&lt;Object&gt; update(@PathVariable(value = &quot;id&quot;) Long id, @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO){
+<b class="fc">&nbsp;    Optional&lt;ProdutoCapa&gt; produtoCapaOptional = produtoCapaService.findById(id);</b>
+<b class="fc">&nbsp;    if(produtoCapaOptional.isEmpty()) {</b>
+<b class="fc">&nbsp;      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto não encontrado&quot;);</b>
+&nbsp;    }
+&nbsp;
+<b class="pc">&nbsp;    if(produtoCapaService.existByDescAndIdNot(produtoCapaPostDTO.getDesc(), id)){</b>
+<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Já existe um produto com esse nome cadastrado&quot;);</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    var produtoCapa = new ProdutoCapa();</b>
+<b class="nc">&nbsp;    BeanUtils.copyProperties(produtoCapaPostDTO, produtoCapa);</b>
+<b class="nc">&nbsp;    produtoCapa.setId(produtoCapaOptional.get().getId());</b>
+<b class="nc">&nbsp;    return ResponseEntity.status(HttpStatus.OK).body(produtoCapaService.save(produtoCapa));</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @DeleteMapping(&quot;/deletar/{id}&quot;)
+&nbsp;  @Operation(summary = &quot;Excluir um produto&quot;, description = &quot;Exclui um produto existente com base no ID fornecido.&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Produto excluído com sucesso&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto não encontrado&quot;)
+&nbsp;  public ResponseEntity&lt;Object&gt; delete(@PathVariable(value = &quot;id&quot;) Long id) {
+<b class="fc">&nbsp;    Optional&lt;ProdutoCapa&gt; produtoCapaOptional = produtoCapaService.findById(id);</b>
+<b class="fc">&nbsp;    if (produtoCapaOptional.isEmpty()) {</b>
+<b class="fc">&nbsp;      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto não encontrado&quot;);</b>
+&nbsp;    }
+<b class="fc">&nbsp;    produtoCapaService.delete(produtoCapaOptional.get());</b>
+<b class="fc">&nbsp;    return ResponseEntity.status(HttpStatus.OK).body(&quot;Produto &quot; + id + &quot; excluído com sucesso&quot;);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping
+&nbsp;  @Operation(summary = &quot;Listar todos os produtos&quot;, description = &quot;Recupera a lista de todos os produtos cadastrados.&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista de produtos encontrada com sucesso&quot;)
+&nbsp;  public ResponseEntity&lt;List&lt;ProdutoCapaGetDTO&gt;&gt; findAll() {
+<b class="fc">&nbsp;    List&lt;ProdutoCapa&gt; produtoCapas = produtoCapaService.findAll();</b>
+<b class="fc">&nbsp;    List&lt;ProdutoCapaGetDTO&gt; produtoCapaGetDTOs = produtoCapaService.obterProdutoCapaComCalculos(produtoCapas);</b>
+<b class="fc">&nbsp;    return new ResponseEntity&lt;&gt;(produtoCapaGetDTOs, HttpStatus.OK);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @GetMapping(&quot;/{id}&quot;)
+&nbsp;  @Operation(summary = &quot;Buscar produto por ID&quot;, description = &quot;Recupera um produto pelo seu ID.&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Produto encontrado com sucesso&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto não encontrado&quot;)
+&nbsp;  public ResponseEntity&lt;ProdutoCapaGetDTO&gt; findById(@PathVariable(value = &quot;id&quot;) Long id) {
+<b class="fc">&nbsp;    Optional&lt;ProdutoCapa&gt; produtoCapaOptional = produtoCapaService.findById(id);</b>
+<b class="pc">&nbsp;    if (produtoCapaOptional.isEmpty()) {</b>
+<b class="fc">&nbsp;      throw new ObjectNotFoundException(&quot;Produto não encontrado!&quot;);</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    List&lt;ProdutoCapa&gt; produtoCapas = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;    produtoCapas.add(produtoCapaOptional.get());</b>
+<b class="nc">&nbsp;    List&lt;ProdutoCapaGetDTO&gt; produtoCapaGetDTOs = produtoCapaService.obterProdutoCapaComCalculos(produtoCapas);</b>
+&nbsp;
+<b class="nc">&nbsp;    return new ResponseEntity&lt;&gt;(produtoCapaGetDTOs.get(0), HttpStatus.OK);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;
+&nbsp;}
+&nbsp;
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-09 20:24</div>
+</div>
+</body>
+</html>

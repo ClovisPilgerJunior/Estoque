@@ -1,0 +1,294 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ProdutoCapaService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.janfer.estoque.services</a>
+</div>
+
+<h1>Coverage Summary for Class: ProdutoCapaService (com.janfer.estoque.services)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ProdutoCapaService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65,9%
+  </span>
+  <span class="absValue">
+    (29/44)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94,3%
+  </span>
+  <span class="absValue">
+    (50/53)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ProdutoCapaService$$SpringCGLIB$$0</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (11/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65,9%
+  </span>
+  <span class="absValue">
+    (29/44)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    94,3%
+  </span>
+  <span class="absValue">
+    (50/53)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.services;
+&nbsp;
+&nbsp;import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+&nbsp;import com.janfer.estoque.domain.entities.ProdutoCapa;
+&nbsp;import com.janfer.estoque.domain.enums.Resuprimento;
+&nbsp;import com.janfer.estoque.domain.mappers.MapStructMapper;
+&nbsp;import com.janfer.estoque.repositories.*;
+&nbsp;import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
+&nbsp;import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
+&nbsp;import jakarta.transaction.Transactional;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class ProdutoCapaService {</b>
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  ProdutoCapaRepository produtoCapaRepository;
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  ProdutoEntradaRepository produtoEntradaRepository;
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  FornecedorRepository fornecedorRepository;
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  ProdutoEntradaService produtoEntradaService;
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  ProdutoPerdaService produtoPerdaService;
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  ProdutoSaidaService produtoSaidaService;
+&nbsp;
+&nbsp;  @Autowired
+&nbsp;  MapStructMapper mapStructMapper;
+&nbsp;
+&nbsp;
+&nbsp;  @Transactional
+&nbsp;  public List&lt;ProdutoCapa&gt; findAll() {
+<b class="fc">&nbsp;    return produtoCapaRepository.findAllAtivos();</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Transactional
+&nbsp;  public ProdutoCapa save(ProdutoCapa produtoCapa) {
+&nbsp;
+<b class="pc">&nbsp;    if (produtoCapa.getFornecedor() != null &amp;&amp; produtoCapa.getFornecedor().getId() != null) {</b>
+<b class="fc">&nbsp;      Long fornecedorId = produtoCapa.getFornecedor().getId();</b>
+<b class="fc">&nbsp;      if (!fornecedorRepository.existsById(fornecedorId)) {</b>
+<b class="fc">&nbsp;        throw new ObjectNotFoundException(&quot;Fornecedor não encontrado&quot;);</b>
+&nbsp;      }
+&nbsp;    }
+&nbsp;
+<b class="pc">&nbsp;    if(produtoCapa.getResuprimento() == null){</b>
+<b class="nc">&nbsp;      produtoCapa.setResuprimento(Resuprimento.SALDO_ZERADO);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // Salve o produtoCapa
+<b class="fc">&nbsp;    produtoCapaRepository.save(produtoCapa);</b>
+&nbsp;
+<b class="fc">&nbsp;    Long produtoCapaId = produtoCapa.getId();</b>
+<b class="pc">&nbsp;    if (Boolean.FALSE.equals(produtoCapaRepository.isProdutoAtivoById(produtoCapaId))) {</b>
+<b class="nc">&nbsp;      produtoCapa.setAtivo(false);</b>
+<b class="nc">&nbsp;      produtoCapaRepository.save(produtoCapa);</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    return produtoCapa;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;
+&nbsp;  @Transactional
+&nbsp;  public void delete(ProdutoCapa produtoCapa) {
+<b class="fc">&nbsp;    if (produtoEntradaRepository.existsById(produtoCapa.getId())) {</b>
+<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Não é possível excluir um produto com entrada existente&quot;);</b>
+&nbsp;    }
+<b class="fc">&nbsp;    produtoCapaRepository.delete(produtoCapa);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  @Transactional
+&nbsp;  public Optional&lt;ProdutoCapa&gt; findById(Long id) {
+<b class="fc">&nbsp;    return produtoCapaRepository.findById(id);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public boolean existById(Long id) {
+<b class="fc">&nbsp;    return produtoCapaRepository.existsById(id);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public boolean isProdutoAtivoById(Long id) {
+<b class="fc">&nbsp;    return produtoCapaRepository.isProdutoAtivoById(id);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public List&lt;ProdutoCapaGetDTO&gt; obterProdutoCapaComCalculos(List&lt;ProdutoCapa&gt; produtoCapas) {
+<b class="fc">&nbsp;    List&lt;ProdutoCapaGetDTO&gt; produtoCapaGetDTOs = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;    for (ProdutoCapa produtoCapa : produtoCapas) {</b>
+<b class="fc">&nbsp;      ProdutoCapaGetDTO produtoCapaGetDTO = mapStructMapper.produtoCapaToProdutoCapaGetDTO(produtoCapa);</b>
+&nbsp;
+&nbsp;      // Calculo de produtoEntrada
+&nbsp;
+<b class="fc">&nbsp;      Double somaEntradas = produtoEntradaService.calcularSomaEntradas(produtoCapa.getId());</b>
+<b class="fc">&nbsp;      Double ultimoPrecoCompra = produtoEntradaService.recuperarUltimoPrecoCompra(produtoCapa.getId());</b>
+&nbsp;
+&nbsp;      // Calculo de produtoPerda
+<b class="fc">&nbsp;      Double somaPerdas = produtoPerdaService.calcularSomaPerdas(produtoCapa.getId());</b>
+&nbsp;
+&nbsp;      // Calculo do ProdutoSaida
+<b class="fc">&nbsp;      Double somaSaida = produtoSaidaService.calcularSomaSaida(produtoCapa.getId());</b>
+&nbsp;
+&nbsp;
+<b class="pc">&nbsp;      produtoCapaGetDTO.setEntradas(somaEntradas != null ? somaEntradas : 0.0);</b>
+<b class="pc">&nbsp;      produtoCapaGetDTO.setValorCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);</b>
+<b class="pc">&nbsp;      produtoCapaGetDTO.setPerdas(somaPerdas != null ? somaPerdas : 0.0);</b>
+<b class="pc">&nbsp;      produtoCapaGetDTO.setSaidas(somaSaida != null ? somaSaida : 0.0);</b>
+<b class="pc">&nbsp;      double saldo = ((somaEntradas != null ? somaEntradas : 0.0) - (somaPerdas != null ? somaPerdas : 0.0) - (somaSaida != null ? somaSaida : 0.0));</b>
+&nbsp;
+<b class="pc">&nbsp;      double totalGeral = (saldo * (ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0));</b>
+&nbsp;
+<b class="fc">&nbsp;      produtoCapaGetDTO.setSaldo(saldo);</b>
+<b class="fc">&nbsp;      produtoCapaGetDTO.setValorTotal(totalGeral);</b>
+&nbsp;
+<b class="pc">&nbsp;      long minimo = produtoCapaGetDTO.getMinimo() != null ? produtoCapaGetDTO.getMinimo() : 0L;</b>
+<b class="pc">&nbsp;      long maximo = produtoCapaGetDTO.getMaximo() != null ? produtoCapaGetDTO.getMaximo() : 0L;</b>
+&nbsp;
+<b class="fc">&nbsp;      Resuprimento resuprimento = calcularResuprimento(produtoCapaGetDTO.getSaldo(), minimo, maximo);</b>
+&nbsp;
+<b class="fc">&nbsp;      produtoCapaGetDTO.setResuprimento(resuprimento);</b>
+&nbsp;
+<b class="fc">&nbsp;      produtoCapaGetDTOs.add(produtoCapaGetDTO);</b>
+<b class="fc">&nbsp;    }</b>
+&nbsp;
+<b class="fc">&nbsp;    return produtoCapaGetDTOs;</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public Resuprimento calcularResuprimento(Double saldo, Long minimo, Long maximo) {
+<b class="fc">&nbsp;    if (saldo &lt; 0) {</b>
+<b class="fc">&nbsp;      return Resuprimento.ESTOQUE_NEGATIVO;</b>
+<b class="fc">&nbsp;    } else if (saldo == 0) {</b>
+<b class="fc">&nbsp;      return Resuprimento.SALDO_ZERADO;</b>
+<b class="fc">&nbsp;    } else if (saldo &gt; maximo) {</b>
+<b class="fc">&nbsp;      return Resuprimento.PRODUTO_EXCESSO;</b>
+<b class="pc">&nbsp;    } else if (saldo &gt;= minimo &amp;&amp; saldo &lt;= maximo) {</b>
+<b class="fc">&nbsp;      return Resuprimento.QUANTIDADE_IDEAL;</b>
+&nbsp;    } else {
+<b class="fc">&nbsp;      return Resuprimento.COMPRAR_AGORA;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;  }
+&nbsp;
+&nbsp;  public boolean existByDesc(String desc){
+<b class="fc">&nbsp;    return produtoCapaRepository.existsByDesc(desc);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;  public boolean existByDescAndIdNot(String desc, Long id){
+<b class="fc">&nbsp;    return produtoCapaRepository.existsByDescAndIdNot(desc, id);</b>
+&nbsp;  }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-10-09 20:24</div>
+</div>
+</body>
+</html>

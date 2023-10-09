@@ -18,14 +18,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 @ContextConfiguration
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
