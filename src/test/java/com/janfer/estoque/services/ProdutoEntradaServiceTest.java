@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,9 +24,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ProdutoEntradaServiceTest {
 
     @InjectMocks
@@ -40,6 +42,46 @@ public class ProdutoEntradaServiceTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+    }
+
+
+    @Test(expected = ProductDisableException.class)
+    public void testSaveWithInactiveProduct() {
+        // Criar uma entrada de produto fictícia com um produto inativo para o teste
+        ProdutoCapa produtoCapa = new ProdutoCapa(1L, "Produto 1", TipoProduto.toEnum(1), MedidaUnidade.UNIDADE, null, 10L, 20L, Resuprimento.SALDO_ZERADO, false);
+        ProdutoEntrada produtoEntrada = new ProdutoEntrada(1L, 123456L, null, null, 10.0, 100L, "Observação 1", produtoCapa);
+
+        // Configurar o comportamento do mock do produtoCapaRepository
+        when(produtoCapaRepository.isProdutoAtivoById(1L)).thenReturn(false);
+
+        // Chamar o método save da classe de serviço
+        produtoEntradaService.save(produtoEntrada);
+
+        // Verificar se uma exceção ProductDisableException é lançada
+    }
+
+    @Test
+    public void testRecuperarUltimoPrecoCompraWithValidProduct() {
+        // Configurar o comportamento do mock do produtoEntradaRepository
+        when(produtoEntradaRepository.recuperarUltimoPrecoCompra(1L)).thenReturn(10.0);
+
+        // Chamar o método recuperarUltimoPrecoCompra da classe de serviço
+        Double resultado = produtoEntradaService.recuperarUltimoPrecoCompra(1L);
+
+        // Verificar se o resultado é igual ao valor esperado
+        assertEquals(10.0, resultado, 0.0);
+    }
+
+    @Test
+    public void testRecuperarUltimoPrecoCompraWithInvalidProduct() {
+        // Configurar o comportamento do mock do produtoEntradaRepository para um produto inexistente
+        when(produtoEntradaRepository.recuperarUltimoPrecoCompra(2L)).thenReturn(null);
+
+        // Chamar o método recuperarUltimoPrecoCompra da classe de serviço para um produto inexistente
+        Double resultado = produtoEntradaService.recuperarUltimoPrecoCompra(2L);
+
+        // Verificar se o resultado é nulo (produto inexistente)
+        assertNull(resultado);
     }
 
     @Test
@@ -59,17 +101,6 @@ public class ProdutoEntradaServiceTest {
         assertEquals(1, resultado.size());
     }
 
-    @Test(expected = ProductDisableException.class)
-    public void testSaveWithInactiveProduct() {
-        // Criar uma entrada de produto fictícia para o teste
-        ProdutoEntrada produtoEntrada = new ProdutoEntrada(1L, 123456L, null, null, 10.0, 100L, "Observação 1", new ProdutoCapa());
-
-        // Configurar o comportamento do mock do produtoCapaRepository
-        when(produtoCapaRepository.isProdutoAtivoById(1L)).thenReturn(false);
-
-        // Chamar o método save da classe de serviço (deve lançar uma exceção)
-        produtoEntradaService.save(produtoEntrada);
-    }
 
     @Test
     public void testDelete() {

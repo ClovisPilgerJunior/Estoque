@@ -12,7 +12,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -24,7 +26,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class FornecedorServiceTest {
 
     @InjectMocks
@@ -146,5 +148,68 @@ public class FornecedorServiceTest {
         assertTrue(resultado);
     }
 
+    @Test
+    public void testDeleteWithNonExistingProduct() {
+        // Criar um fornecedor fictício para o teste
+        Fornecedor fornecedor = new Fornecedor(1L, "Empresa 1", "Nome 1", TipoEmpresa.CLIENTE, "email1@example.com", "123456789", "Endereço 1", true);
+
+        // Configurar o comportamento do mock do produtoCapaRepository.existsById para retornar false
+        when(produtoCapaRepository.existsById(fornecedor.getId())).thenReturn(false);
+
+        // Chamar o método delete da classe de serviço
+        fornecedorService.delete(fornecedor);
+
+        // Verificar se o método delete do repositório foi chamado com o fornecedor correto
+        verify(fornecedorRepository).delete(fornecedor);
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void testDeleteWithExistingProductFornecedor() {
+        // Criar um fornecedor fictício para o teste
+        Fornecedor fornecedor = new Fornecedor(1L, "Empresa 1", "Nome 1", TipoEmpresa.CLIENTE, "email1@example.com", "123456789", "Endereço 1", true);
+
+        // Configurar o comportamento do mock do produtoCapaRepository.existsById para retornar true
+        when(produtoCapaRepository.existsById(fornecedor.getId())).thenReturn(true);
+
+        // Chamar o método delete da classe de serviço
+        fornecedorService.delete(fornecedor);
+    }
+
+    @Test
+    public void testDeleteWithoutProducts() {
+        // Criar um fornecedor fictício para o teste
+        Fornecedor fornecedor = new Fornecedor(1L, "Empresa 1", "Nome 1", TipoEmpresa.CLIENTE, "email1@example.com", "123456789", "Endereço 1", true);
+
+        // Configurar o comportamento do mock do produtoCapaRepository.existsById para retornar false
+        when(produtoCapaRepository.existsById(fornecedor.getId())).thenReturn(false);
+
+        // Chamar o método delete da classe de serviço
+        fornecedorService.delete(fornecedor);
+
+        // Verificar se o método delete do repositório foi chamado com o fornecedor correto
+        verify(fornecedorRepository).delete(fornecedor);
+    }
+
+    @Test
+    public void testDeleteFornecedorWithExistingProduct() {
+        // Simule um cenário onde o produto existe
+        Long fornecedorId = 1L;
+        Mockito.when(produtoCapaRepository.existsById(fornecedorId)).thenReturn(true);
+
+        // Verifique se uma exceção é lançada
+        try {
+            Fornecedor fornecedor = new Fornecedor();
+            fornecedor.setId(fornecedorId);
+
+            fornecedorService.delete(fornecedor);
+        } catch (DataIntegrityViolationException e) {
+            // Verifique se a exceção esperada é lançada
+            // Você pode adicionar mais verificações aqui, se necessário
+            assert (e.getMessage().equals("Não é possível excluir um fornecedor com produto existente"));
+        }
+
+        // Verifique se o método fornecedorRepository.delete(fornecedor) nunca é chamado
+        Mockito.verify(fornecedorRepository, Mockito.never()).delete(Mockito.any());
+    }
 
 }

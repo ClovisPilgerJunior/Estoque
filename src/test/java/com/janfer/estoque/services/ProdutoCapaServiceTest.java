@@ -1,11 +1,13 @@
 package com.janfer.estoque.services;
 
+import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.MedidaUnidade;
 import com.janfer.estoque.domain.enums.Resuprimento;
 import com.janfer.estoque.domain.enums.TipoEmpresa;
 import com.janfer.estoque.domain.enums.TipoProduto;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.FornecedorRepository;
 import com.janfer.estoque.repositories.ProdutoCapaRepository;
 import com.janfer.estoque.repositories.ProdutoEntradaRepository;
@@ -17,22 +19,31 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.context.annotation.ComponentScan;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@RunWith(MockitoJUnitRunner.class)
+@ComponentScan(basePackages = "com.janfer.estoque.domain.mappers")
 public class ProdutoCapaServiceTest {
 
     @InjectMocks
     private ProdutoCapaService produtoCapaService;
+
+    @Mock
+    private MapStructMapper mapStructMapper;
+
+    @InjectMocks
+    private ProdutoEntradaService produtoEntradaService;
 
     @Mock
     private ProdutoCapaRepository produtoCapaRepository;
@@ -42,15 +53,6 @@ public class ProdutoCapaServiceTest {
 
     @Mock
     private ProdutoEntradaRepository produtoEntradaRepository;
-
-    @Mock
-    private ProdutoEntradaService produtoEntradaService;
-
-    @Mock
-    private ProdutoPerdaService produtoPerdaService;
-
-    @Mock
-    private ProdutoSaidaService produtoSaidaService;
 
     @Before
     public void setUp() {
@@ -168,6 +170,99 @@ public class ProdutoCapaServiceTest {
         assertEquals(Resuprimento.PRODUTO_EXCESSO, produtoCapaService.calcularResuprimento(30.0, 10L, 20L));
         assertEquals(Resuprimento.QUANTIDADE_IDEAL, produtoCapaService.calcularResuprimento(15.0, 10L, 20L));
         assertEquals(Resuprimento.COMPRAR_AGORA, produtoCapaService.calcularResuprimento(5.0, 10L, 20L));
+    }
+
+    @Test
+    public void testFindAll() {
+        // Criar uma lista fictícia de produtos capa para o teste
+        List<ProdutoCapa> produtoCapas = new ArrayList<>();
+        ProdutoCapa produtoCapa1 = new ProdutoCapa(1L, "Produto 1", TipoProduto.toEnum(1), MedidaUnidade.UNIDADE, null, 10L, 20L, Resuprimento.SALDO_ZERADO, true);
+        produtoCapas.add(produtoCapa1);
+
+        // Configurar o comportamento do mock do produtoCapaRepository
+        when(produtoCapaRepository.findAllAtivos()).thenReturn(produtoCapas);
+
+        // Chamar o método findAll da classe de serviço
+        List<ProdutoCapa> resultado = produtoCapaService.findAll();
+
+        // Verificar se o resultado possui a quantidade esperada de produtos capa
+        assertEquals(1, resultado.size());
+    }
+
+    @Test
+    public void testExistByDesc() {
+        // Configurar o comportamento do mock do produtoCapaRepository
+        when(produtoCapaRepository.existsByDesc("Produto 1")).thenReturn(true);
+
+        // Chamar o método existByDesc da classe de serviço
+        boolean resultado = produtoCapaService.existByDesc("Produto 1");
+
+        // Verificar se o resultado é true
+        assertTrue(resultado);
+    }
+
+    @Test
+    public void testExistByDescAndIdNot() {
+        // Configurar o comportamento do mock do produtoCapaRepository
+        when(produtoCapaRepository.existsByDescAndIdNot("Produto 1", 1L)).thenReturn(true);
+
+        // Chamar o método existByDescAndIdNot da classe de serviço
+        boolean resultado = produtoCapaService.existByDescAndIdNot("Produto 1", 1L);
+
+        // Verificar se o resultado é true
+        assertTrue(resultado);
+    }
+
+    @Test
+    public void testRecuperarUltimoPrecoCompraWithValidProduct() {
+        // Configurar o comportamento do mock do produtoEntradaService
+        when(produtoEntradaService.recuperarUltimoPrecoCompra(1L)).thenReturn(10.0);
+
+        // Chamar o método recuperarUltimoPrecoCompra da classe de serviço
+        Double resultado = produtoEntradaService.recuperarUltimoPrecoCompra(1L);
+
+        // Verificar se o resultado é igual ao valor esperado
+        assertEquals(10.0, resultado, 0.0);
+    }
+
+    @Test
+    public void testRecuperarUltimoPrecoCompraWithInvalidProduct() {
+        // Configurar o comportamento do mock do produtoEntradaService para um produto inexistente
+        when(produtoEntradaService.recuperarUltimoPrecoCompra(2L)).thenReturn(null);
+
+        // Chamar o método recuperarUltimoPrecoCompra da classe de serviço para um produto inexistente
+        Double resultado = produtoEntradaService.recuperarUltimoPrecoCompra(2L);
+
+        // Verificar se o resultado é nulo (produto inexistente)
+        assertNull(resultado);
+    }
+
+    @Test
+    public void testObterProdutoCapaComCalculos() {
+        // Criar uma lista fictícia de produtos capa para o teste
+        List<ProdutoCapa> produtoCapas = new ArrayList<>();
+        ProdutoCapa produtoCapa1 = new ProdutoCapa(1L, "Produto 1", TipoProduto.toEnum(1), MedidaUnidade.UNIDADE, null, 10L, 20L, Resuprimento.SALDO_ZERADO, true);
+        produtoCapas.add(produtoCapa1);
+
+        // Configurar o comportamento do mock do produtoEntradaService
+        when(produtoEntradaService.calcularSomaEntradas(produtoCapa1.getId())).thenReturn(100.0);
+        when(produtoEntradaService.recuperarUltimoPrecoCompra(produtoCapa1.getId())).thenReturn(10.0);
+
+        // Chamar o método obterProdutoCapaComCalculos da classe de serviço
+        List<ProdutoCapaGetDTO> resultado =  produtoCapaService.obterProdutoCapaComCalculos(produtoCapas);
+
+        // Verificar se o resultado possui a quantidade esperada de produtos capa
+        assertEquals(1, resultado.size());
+
+        // Verificar se os cálculos foram feitos corretamente
+        ProdutoCapaGetDTO produtoCapaGetDTO = resultado.get(0);
+        assertEquals(100.0, produtoCapaGetDTO.getEntradas(), 0.0);
+        assertEquals(10.0, produtoCapaGetDTO.getValorCompra(), 0.0);
+        assertEquals(0.0, produtoCapaGetDTO.getPerdas(), 0.0);
+        assertEquals(0.0, produtoCapaGetDTO.getSaidas(), 0.0);
+        assertEquals(90.0, produtoCapaGetDTO.getSaldo(), 0.0);
+        assertEquals(900.0, produtoCapaGetDTO.getValorTotal(), 0.0);
+        assertEquals(Resuprimento.COMPRAR_AGORA, produtoCapaGetDTO.getResuprimento());
     }
 
 }

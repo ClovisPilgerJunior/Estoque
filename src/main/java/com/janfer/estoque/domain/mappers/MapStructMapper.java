@@ -21,8 +21,15 @@ public interface MapStructMapper {
    @Mapping(target = "medidaUnidade", source = "medidaUnidade")
    @Mapping(target = "fornecedor", source = "fornecedor")
    @Mapping(target = "resuprimento", ignore = true)
+   @Mapping(target = "id", ignore = true)
    ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaDTO);
 
+   @Mapping(target = "entradas", ignore = true)
+   @Mapping(target = "saidas", ignore = true)
+   @Mapping(target = "perdas", ignore = true)
+   @Mapping(target = "saldo", ignore = true)
+   @Mapping(target = "valorCompra", ignore = true)
+   @Mapping(target = "valorTotal", ignore = true)
    ProdutoCapaGetDTO produtoCapaToProdutoCapaGetDTO(ProdutoCapa produtoCapa);
 
    // mapeamento do Fornecedor
@@ -31,12 +38,14 @@ public interface MapStructMapper {
    @Mapping(target = "tipoEmpresa", source = "tipoEmpresa")
    Fornecedor fornecedorToFornecedorDTO(FornecedorDTO fornecedorDTO);
 
+   @Mapping(target = "id", source = "id")
    @Mapping(target = "empresa", source = "tipoEmpresa")
    FornecedorGetDTO fornecedorGetDTOToFornecedor(Fornecedor fornecedor);
 
    // Mapeamento de ProdutoEntrada
    List<ProdutoEntradaGetDTO> produtoEntradaGetAllToProdutoEntrada(List<ProdutoEntrada> produtoEntradas);
 
+   @Mapping(target = "id", ignore = true)
    ProdutoEntrada produtoEntradaToProdutoEntradaDTO(ProdutoEntradaPostDTO produtoEntradaDTO);
 
    ProdutoEntradaGetDTO produtoEntradaToProdutoEntradaGetDTO(ProdutoEntrada produtoEntrada);
@@ -44,6 +53,7 @@ public interface MapStructMapper {
    // Mapeamento de ProdutoSaida
    List<ProdutoSaidaGetDTO> produtoSaidaGetDTOAllToProdutoSaida(List<ProdutoSaida> produtoSaidas);
 
+   @Mapping(target = "id", ignore = true)
    ProdutoSaida produtoSaidaToProdutoSaidaDTO(ProdutoSaidaPostDTO produtoSaidaDTO);
 
    ProdutoSaidaGetDTO produtoSaidaGetDTOToProdutoSaida(ProdutoSaida produtoSaida);
@@ -52,6 +62,7 @@ public interface MapStructMapper {
 
    List<ProdutoPerdaGetDTO> produtoPerdaGetDTOAllToProdutoPerda(List<ProdutoPerda> produtoPerdas);
 
+   @Mapping(target = "id", ignore = true)
    ProdutoPerda produtoPerdaToProdutoPerdaDTO(ProdutoPerdaPostDTO produtoPerdaDTO);
 
    ProdutoPerdaGetDTO produtoPerdaGetDTOToProdutoPerda(ProdutoPerda produtoPerda);
