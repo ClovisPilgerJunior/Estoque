@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI(){
         return new OpenAPI().components(new Components())
                 .addServersItem(new Server().url("http://localhost:8080").description("Servidor local de desenvolvimento"))
-                .addServersItem(new Server().url("http://estoque-production-end.up.railway.app").description("Servidor de produção"))
+                .addServersItem(new Server().url("https://estoque-production-end.up.railway.app").description("Servidor de produção"))
                 .info(new Info()
                         .title("Gerenciamento de Estoque")
                         .description("API restful criado para facilitar o estoque de produtos.")
