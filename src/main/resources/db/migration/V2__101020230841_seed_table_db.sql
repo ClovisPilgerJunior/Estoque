@@ -11,23 +11,23 @@ INSERT INTO fornecedor (empresa, nome, tipo_empresa, email, telefone, endereco, 
 VALUES ('XYZ Ltda', 'Carlos', 1, 'carlos@xyz.com', '(987) 654-3210', 'Rua da Indústria', true);
 
 -- Produto Capa 1
-INSERT INTO produto_capa (desc, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
+INSERT INTO produto_capa (description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
 VALUES ('Produto Capa 1', 0, 1, 1, 10, 100, 1, true);
 
 -- Produto Capa 2
-INSERT INTO produto_capa (desc, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
+INSERT INTO produto_capa (description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
 VALUES ('Produto Capa 2', 0, 2, 2, 20, 200, 2, true);
 
 -- Produto Capa 3
-INSERT INTO produto_capa (desc, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
+INSERT INTO produto_capa (description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
 VALUES ('Produto Capa 3', 1, 3, 3, 30, 300, 0, true);
 
 -- Produto Capa 4
-INSERT INTO produto_capa (desc, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
+INSERT INTO produto_capa (description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
 VALUES ('Produto Capa 4', 2, 4, 2, 40, 400, 0, true);
 
 -- Produto Capa 5
-INSERT INTO produto_capa (desc, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
+INSERT INTO produto_capa (description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
 VALUES ('Produto Capa 5', 0, 5, 3, 50, 500, 1, true);
 
 -- Inserir um registro de ProdutoEntrada

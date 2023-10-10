@@ -5,10 +5,8 @@ import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.dtos.ProdutoCapaPostDTO;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.services.ProdutoCapaService;
-import com.janfer.estoque.services.ProdutoEntradaService;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
-import com.janfer.estoque.services.exceptions.ProductDisableException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
@@ -46,7 +44,7 @@ public class ProdutoCapaController {
   @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
   public ResponseEntity<Object> create(@Valid @RequestBody ProdutoCapaPostDTO produtoCapaDTO) {
 
-    if(produtoCapaService.existByDesc(produtoCapaDTO.getDesc())){
+    if(produtoCapaService.existByDesc(produtoCapaDTO.getDescription())){
       throw new DataIntegrityViolationException("Produto já cadastrado");
     }
 
@@ -65,7 +63,7 @@ public class ProdutoCapaController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
     }
 
-    if(produtoCapaService.existByDescAndIdNot(produtoCapaPostDTO.getDesc(), id)){
+    if(produtoCapaService.existByDescAndIdNot(produtoCapaPostDTO.getDescription(), id)){
       throw new DataIntegrityViolationException("Já existe um produto com esse nome cadastrado");
     }
 

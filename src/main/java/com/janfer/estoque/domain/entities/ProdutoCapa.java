@@ -21,7 +21,7 @@ public class ProdutoCapa {
   @Column(name = "id", nullable = false)
   private Long id;
   @Column(unique = true)
-  private String desc;
+  private String description;
   @Column(nullable = false)
   private TipoProduto tipoProduto;
   @Column(nullable = false)

@@ -16,7 +16,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ class ProdutoCapaControllerTest {
     @Test
     void testCreateProdutoCapaAlreadyExists() {
         ProdutoCapaPostDTO produtoCapaDTO = new ProdutoCapaPostDTO();
-        when(produtoCapaService.existByDesc(produtoCapaDTO.getDesc())).thenReturn(true);
+        when(produtoCapaService.existByDesc(produtoCapaDTO.getDescription())).thenReturn(true);
 
         assertThrows(DataIntegrityViolationException.class, () -> {
             produtoCapaController.create(produtoCapaDTO);
@@ -69,7 +68,7 @@ class ProdutoCapaControllerTest {
         ProdutoCapaPostDTO produtoCapaDTO = new ProdutoCapaPostDTO();
         Optional<ProdutoCapa> produtoCapaOptional = Optional.of(new ProdutoCapa());
         when(produtoCapaService.findById(id)).thenReturn(produtoCapaOptional);
-        when(produtoCapaService.existByDescAndIdNot(produtoCapaDTO.getDesc(), id)).thenReturn(true);
+        when(produtoCapaService.existByDescAndIdNot(produtoCapaDTO.getDescription(), id)).thenReturn(true);
 
         assertThrows(DataIntegrityViolationException.class, () -> {
             produtoCapaController.update(id, produtoCapaDTO);
