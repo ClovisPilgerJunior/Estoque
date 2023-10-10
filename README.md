@@ -1,25 +1,13 @@
 # Sumário
 
-1. [Introdução](#introdução)
+1. [Introdução](#projeto-estoque---documentação)
 2. [Diagrama de Classe](#diagrama-de-classe)
-3. [Classes Principais](#classes-principais)
-    - [Fornecedor](#fornecedor)
-    - [ProdutoCapa](#produtocapa)
-    - [ProdutoEntrada](#produtoentrada)
-    - [ProdutoPerda](#produtoperda)
-    - [ProdutoSaidaPostDTO](#produtosaidapostdto)
-4. [Requisitos Funcionais](#requisitos-funcionais)
-    - [RF1: Cadastro de Fornecedor](#rf1-cadastro-de-fornecedor)
-    - [RF2: Cadastro de Produto](#rf2-cadastro-de-produto)
-    - [RF3: Registro de Entrada de Produtos](#rf3-registro-de-entrada-de-produtos)
-    - [RF4: Registro de Perda de Produtos](#rf4-registro-de-perda-de-produtos)
-    - [RF5: Registro de Saída de Produtos](#rf5-registro-de-saída-de-produtos)
-5. [Requisitos Não Funcionais](#requisitos-não-funcionais)
-6. [Regras de Negócio](#regras-de-negócio)
-    - [RN1: Ativação de Fornecedor](#rn1-ativação-de-fornecedor)
-    - [RN2: Controle de Estoque](#rn2-controle-de-estoque)
-    - [RN3: Registro de Saída](#rn3-registro-de-saída)
-    - [RN4: Histórico de Transações](#rn4-histórico-de-transações)
+3. [Cobertura de Código](#cobertura-de-código)
+4. [Classes Principais](#classes-principais)
+5. [ProdutoSaidaPostDTO](#produtosaida)
+6. [Requisitos Funcionais](#requisitos-funcionais)
+7. [Requisitos Não Funcionais](#requisitos-não-funcionais)
+8. [Regras de Negócio](#regras-de-negócio)
 
 
 # Projeto Estoque - Documentação
@@ -28,9 +16,13 @@ Este é um projeto estoque que lida com produtos. Abaixo estão algumas das clas
 ## Diagrama de classe
 
 <p align="center">
-   <img alt="digrama-de-classes" src="documentation/Diagrama_Classe.png" 
+   <img alt="digrama-de-classes" src="src/main/resources/docs/Diagrama_Classe.png" 
   width="80%">
 </p>
+
+## Cobertura de Código
+
+[Cobertura de código Link](http://estoque-production-end.up.railway.app/coverage/htmlReport/index.html)
 
 ## Classes Principais
 ### Fornecedor
@@ -75,7 +67,7 @@ Esta classe representa a perda de um produto e possui os seguintes atributos:
 - motivo: Motivo da perda.
 - produtoCapa: Informações sobre a capa do produto.
 
-### ProdutoSaidaPostDTO
+### ProdutoSaida
 Esta classe representa a saída de um produto e possui os seguintes atributos:
 
 - dataSaida: Data da saída (padrão é a data atual).
