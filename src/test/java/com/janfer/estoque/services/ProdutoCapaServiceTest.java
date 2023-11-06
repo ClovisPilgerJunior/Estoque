@@ -1,6 +1,6 @@
 package com.janfer.estoque.services;
 
-import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoCapaCalculatedGetDTO;
 import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.MedidaUnidade;
@@ -250,11 +250,11 @@ public class ProdutoCapaServiceTest {
         produtoCapa.setMaximo(200L);
 
         // Crie um objeto ProdutoCapaGetDTO fictício
-        ProdutoCapaGetDTO produtoCapaGetDTO = new ProdutoCapaGetDTO();
-        produtoCapaGetDTO.setId(1L);
+        ProdutoCapaCalculatedGetDTO produtoCapaCalculatedGetDTO = new ProdutoCapaCalculatedGetDTO();
+        produtoCapaCalculatedGetDTO.setId(1L);
 
         // Configurar o comportamento do mapStructMapper para converter ProdutoCapa em ProdutoCapaGetDTO
-        when(mapStructMapper.produtoCapaToProdutoCapaGetDTO(produtoCapa)).thenReturn(produtoCapaGetDTO);
+        when(mapStructMapper.produtoCapaToProdutoCapaCalculatedGetDTO(produtoCapa)).thenReturn(produtoCapaCalculatedGetDTO);
 
         // Configurar o comportamento dos serviços mockados
         when(produtoEntradaService.calcularSomaEntradas(1L)).thenReturn(100.0);
@@ -263,10 +263,10 @@ public class ProdutoCapaServiceTest {
         when(produtoSaidaService.calcularSomaSaida(1L)).thenReturn(15.0);
 
         // Chamar o método a ser testado
-        List<ProdutoCapaGetDTO> resultado = produtoCapaService.obterProdutoCapaComCalculos(List.of(produtoCapa));
+        List<ProdutoCapaCalculatedGetDTO> resultado = produtoCapaService.obterProdutoCapaComCalculos(List.of(produtoCapa));
 
         // Verificar se o método de mapeamento foi chamado
-        verify(mapStructMapper, times(1)).produtoCapaToProdutoCapaGetDTO(produtoCapa);
+        verify(mapStructMapper, times(1)).produtoCapaToProdutoCapaCalculatedGetDTO(produtoCapa);
 
         // Verificar se os serviços mockados foram chamados com os argumentos corretos
         verify(produtoEntradaService, times(1)).calcularSomaEntradas(1L);
@@ -276,7 +276,7 @@ public class ProdutoCapaServiceTest {
 
         // Verificar se os valores calculados no DTO estão corretos
         assertEquals(1, resultado.size());
-        ProdutoCapaGetDTO produtoCapaCalculado = resultado.get(0);
+        ProdutoCapaCalculatedGetDTO produtoCapaCalculado = resultado.get(0);
         assertEquals(100.0, produtoCapaCalculado.getEntradas(), 0.0);
         assertEquals(10.0, produtoCapaCalculado.getValorCompra(), 0.0);
         assertEquals(5.0, produtoCapaCalculado.getPerdas(), 0.0);

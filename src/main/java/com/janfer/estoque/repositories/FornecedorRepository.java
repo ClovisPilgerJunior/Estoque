@@ -8,10 +8,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {
 
-    @Query("select (count(f) > 0) from Fornecedor f where f.empresa = ?1 and f.id <> ?2")
-    boolean existsByEmpresaAndIdNot(String empresa, Long id);
+  @Query("select (count(f) > 0) from Fornecedor f where f.empresa = ?1 and f.id <> ?2")
+  boolean existsByEmpresaAndIdNot(String empresa, Long id);
 
-    @Query("select (count(f) > 0) from Fornecedor f where f.empresa = ?1")
-    boolean existsByEmpresa(String empresa);
+  @Query("select (count(f) > 0) from Fornecedor f where f.empresa = ?1")
+  boolean existsByEmpresa(String empresa);
+
+  boolean existsByEmail(String email);
+
+  @Query("select (count(f) > 0) from Fornecedor f where f.email = ?1 and f.id <> ?2")
+  boolean existsByEmailAndIdNot(String email, Long id);
 
 }

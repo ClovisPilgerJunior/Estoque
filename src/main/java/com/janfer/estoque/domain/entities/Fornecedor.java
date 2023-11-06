@@ -2,17 +2,25 @@ package com.janfer.estoque.domain.entities;
 
 import com.janfer.estoque.domain.enums.TipoEmpresa;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Fornecedor {
+public class Fornecedor implements Serializable {
+
+  @Serial
+  private static final long serialVersionUID = 1L;
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
@@ -21,6 +29,7 @@ public class Fornecedor {
   private String empresa;
   private String nome;
   private TipoEmpresa tipoEmpresa;
+  @Column(unique = true)
   private String email;
   private String telefone;
   private String endereco;

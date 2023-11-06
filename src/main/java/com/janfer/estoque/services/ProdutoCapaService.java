@@ -1,6 +1,6 @@
 package com.janfer.estoque.services;
 
-import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoCapaCalculatedGetDTO;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.Resuprimento;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
@@ -8,6 +8,8 @@ import com.janfer.estoque.repositories.*;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -73,11 +75,12 @@ public class ProdutoCapaService {
 
 
   @Transactional
-  public void delete(ProdutoCapa produtoCapa) {
-    if (produtoEntradaRepository.existsById(produtoCapa.getId())) {
+  public void delete(@Positive @NotNull Long id) {
+    if (produtoEntradaRepository.existsById(id)) {
       throw new DataIntegrityViolationException("Não é possível excluir um produto com entrada existente");
     }
-    produtoCapaRepository.delete(produtoCapa);
+    produtoCapaRepository.delete(produtoCapaRepository.findById(id)
+        .orElseThrow(() -> new ObjectNotFoundException("produto capa não Encontrado!")));
   }
 
   @Transactional
@@ -93,11 +96,11 @@ public class ProdutoCapaService {
     return produtoCapaRepository.isProdutoAtivoById(id);
   }
 
-  public List<ProdutoCapaGetDTO> obterProdutoCapaComCalculos(List<ProdutoCapa> produtoCapas) {
-    List<ProdutoCapaGetDTO> produtoCapaGetDTOs = new ArrayList<>();
+  public List<ProdutoCapaCalculatedGetDTO> obterProdutoCapaComCalculos(List<ProdutoCapa> produtoCapas) {
+    List<ProdutoCapaCalculatedGetDTO> produtoCapaGetDTOs = new ArrayList<>();
 
     for (ProdutoCapa produtoCapa : produtoCapas) {
-      ProdutoCapaGetDTO produtoCapaGetDTO = mapStructMapper.produtoCapaToProdutoCapaGetDTO(produtoCapa);
+      ProdutoCapaCalculatedGetDTO produtoCapaCalculatedGetDTO = mapStructMapper.produtoCapaToProdutoCapaCalculatedGetDTO(produtoCapa);
 
       // Calculo de produtoEntrada
 
@@ -111,25 +114,25 @@ public class ProdutoCapaService {
       Double somaSaida = produtoSaidaService.calcularSomaSaida(produtoCapa.getId());
 
 
-      produtoCapaGetDTO.setEntradas(somaEntradas != null ? somaEntradas : 0.0);
-      produtoCapaGetDTO.setValorCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
-      produtoCapaGetDTO.setPerdas(somaPerdas != null ? somaPerdas : 0.0);
-      produtoCapaGetDTO.setSaidas(somaSaida != null ? somaSaida : 0.0);
+      produtoCapaCalculatedGetDTO.setEntradas(somaEntradas != null ? somaEntradas : 0.0);
+      produtoCapaCalculatedGetDTO.setValorCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
+      produtoCapaCalculatedGetDTO.setPerdas(somaPerdas != null ? somaPerdas : 0.0);
+      produtoCapaCalculatedGetDTO.setSaidas(somaSaida != null ? somaSaida : 0.0);
       double saldo = ((somaEntradas != null ? somaEntradas : 0.0) - (somaPerdas != null ? somaPerdas : 0.0) - (somaSaida != null ? somaSaida : 0.0));
 
       double totalGeral = (saldo * (ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0));
 
-      produtoCapaGetDTO.setSaldo(saldo);
-      produtoCapaGetDTO.setValorTotal(totalGeral);
+      produtoCapaCalculatedGetDTO.setSaldo(saldo);
+      produtoCapaCalculatedGetDTO.setValorTotal(totalGeral);
 
-      long minimo = produtoCapaGetDTO.getMinimo() != null ? produtoCapaGetDTO.getMinimo() : 0L;
-      long maximo = produtoCapaGetDTO.getMaximo() != null ? produtoCapaGetDTO.getMaximo() : 0L;
+      long minimo = produtoCapaCalculatedGetDTO.getMinimo() != null ? produtoCapaCalculatedGetDTO.getMinimo() : 0L;
+      long maximo = produtoCapaCalculatedGetDTO.getMaximo() != null ? produtoCapaCalculatedGetDTO.getMaximo() : 0L;
 
-      Resuprimento resuprimento = calcularResuprimento(produtoCapaGetDTO.getSaldo(), minimo, maximo);
+      Resuprimento resuprimento = calcularResuprimento(produtoCapaCalculatedGetDTO.getSaldo(), minimo, maximo);
 
-      produtoCapaGetDTO.setResuprimento(resuprimento);
+      produtoCapaCalculatedGetDTO.setResuprimento(resuprimento);
 
-      produtoCapaGetDTOs.add(produtoCapaGetDTO);
+      produtoCapaGetDTOs.add(produtoCapaCalculatedGetDTO);
     }
 
     return produtoCapaGetDTOs;

@@ -10,12 +10,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,82 +36,86 @@ import static com.janfer.estoque.controllers.messages.FornecedorMessage.NOT_FOUN
 @RequestMapping(value = "/api/fornecedor")
 public class FornecedorController {
 
-    @Autowired
-    MapStructMapper mapStructMapper;
+  @Autowired
+  MapStructMapper mapStructMapper;
 
-    @Autowired
-    FornecedorService fornecedorService;
+  @Autowired
+  FornecedorService fornecedorService;
 
-    @PostMapping("/cadastrar")
-    @Operation(summary = "Cadastrar um novo fornecedor", description = "Cadastra um novo fornecedor com base nos dados fornecidos.")
-    @ApiResponse(responseCode = "201", description = "Fornecedor cadastrado com sucesso!")
-    @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
-    public ResponseEntity<Object> create(@Valid @RequestBody FornecedorDTO fornecedorDTO){
+  @PostMapping("/cadastrar")
+  @Operation(summary = "Cadastrar um novo fornecedor", description = "Cadastra um novo fornecedor com base nos dados fornecidos.")
+  @ApiResponse(responseCode = "201", description = "Fornecedor cadastrado com sucesso!")
+  @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
+  public ResponseEntity<FornecedorDTO> create(@Valid @RequestBody FornecedorDTO fornecedorDTO) {
 
-        if (fornecedorService.existByEmpresa(fornecedorDTO.getEmpresa())) {
-            throw new DataIntegrityViolationException("Violação na integridade dos dados");
-        }
-
-        fornecedorService.save(mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).body("Fornecedor cadastrado com sucesso!");
+    if (fornecedorService.existByEmpresa(fornecedorDTO.getEmpresa())) {
+      throw new DataIntegrityViolationException("Empresa já cadastrada");
     }
 
-    @GetMapping
-    @Operation(summary = "Listar todos os fornecedores", description = "Recupera a lista de todos os fornecedores cadastrados.")
-    @ApiResponse(responseCode = "200", description = "Lista de fornecedores encontrada com sucesso!")
-    public ResponseEntity<List<FornecedorDTO>> getAll(){
-        return new ResponseEntity<>(mapStructMapper.fornecedorAllToFornecedorDTO(fornecedorService.findAll()), HttpStatus.OK);
+    if (fornecedorService.existByEmail(fornecedorDTO.getEmail())) {
+      throw new DataIntegrityViolationException("Email já cadastrado");
     }
 
-    @GetMapping("/{id}")
-    @Operation(summary = "Buscar fornecedor por ID", description = "Recupera um fornecedor pelo ID fornecido.")
-    @ApiResponse(responseCode = "200", description = "Fornecedor encontrado com sucesso.")
-    @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
-    public ResponseEntity<Object> findById(@PathVariable(value = "id")Long id){
-        Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
-        return fornecedorOptional.<ResponseEntity<Object>>map(fornecedor -> ResponseEntity
-                .status(HttpStatus.OK)
-                .body(fornecedor))
-                .orElseGet(() -> ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .body(NOT_FOUND)
-                );
+    fornecedorService.save(mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO));
+    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(fornecedorDTO.getId()).toUri();
+    return ResponseEntity.created(uri).body(fornecedorDTO);
+  }
+
+  @GetMapping
+  @Operation(summary = "Listar todos os fornecedores", description = "Recupera a lista de todos os fornecedores cadastrados.")
+  @ApiResponse(responseCode = "200", description = "Lista de fornecedores encontrada com sucesso!")
+  public ResponseEntity<List<FornecedorDTO>> getAll() {
+    return new ResponseEntity<>(mapStructMapper.fornecedorAllToFornecedorDTO(fornecedorService.findAll()), HttpStatus.OK);
+  }
+
+  @GetMapping("/{id}")
+  @Operation(summary = "Buscar fornecedor por ID", description = "Recupera um fornecedor pelo ID fornecido.")
+  @ApiResponse(responseCode = "200", description = "Fornecedor encontrado com sucesso.")
+  @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
+  public ResponseEntity<Object> findById(@PathVariable(value = "id") Long id) {
+    Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
+    return fornecedorOptional.<ResponseEntity<Object>>map(fornecedor -> ResponseEntity
+            .status(HttpStatus.OK)
+            .body(fornecedor))
+        .orElseGet(() -> ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(NOT_FOUND)
+        );
+  }
+
+  @PutMapping("/atualizar/{id}")
+  @Operation(summary = "Atualizar fornecedor por ID", description = "Atualiza um fornecedor pelo ID fornecido.")
+  @ApiResponse(responseCode = "200", description = "Fornecedor atualizado com sucesso.")
+  @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
+  @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
+  public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid FornecedorDTO fornecedorDTO) {
+    Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
+    if (fornecedorOptional.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND);
     }
 
-    @PutMapping("/atualizar/{id}")
-    @Operation(summary = "Atualizar fornecedor por ID", description = "Atualiza um fornecedor pelo ID fornecido.")
-    @ApiResponse(responseCode = "200", description = "Fornecedor atualizado com sucesso.")
-    @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
-    @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid FornecedorDTO fornecedorDTO){
-        Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
-        if(fornecedorOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND);
-        }
+    Fornecedor fornecedor = mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO);
+    fornecedor.setId(fornecedorOptional.get().getId());
 
-        Fornecedor fornecedor = mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO);
-        fornecedor.setId(fornecedorOptional.get().getId());
-
-        if(fornecedorService.existByEmpresaAndIdNot(fornecedorDTO.getEmpresa(), id)){
-            throw new DataIntegrityViolationException("Já existe um fornecedor com esse nome cadastrado");
-        }
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.save(fornecedor));
+    if (fornecedorService.existByEmpresaAndIdNot(fornecedorDTO.getEmpresa(), id)) {
+      throw new DataIntegrityViolationException("Já existe um fornecedor com esse nome cadastrado");
     }
 
-    @DeleteMapping("/deletar/{id}")
-    @Operation(summary = "Deletar fornecedor por ID", description = "Exclui um fornecedor pelo ID fornecido.")
-    @ApiResponse(responseCode = "200", description = "Fornecedor excluído com sucesso!")
-    @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
-    public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id){
-        Optional<Fornecedor> fornecedorOptional = fornecedorService.findById(id);
-        if(fornecedorOptional.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(NOT_FOUND);
-        }
-        fornecedorService.delete(fornecedorOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Fornecedor " + id + " excluído com sucesso!");
+    if (fornecedorService.existByEmailAndIdNot(fornecedorDTO.getEmail(), id)) {
+      throw new DataIntegrityViolationException("Email já cadastrado");
     }
 
+
+    return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.save(fornecedor));
+  }
+
+  @DeleteMapping("/deletar/{id}")
+  @Operation(summary = "Deletar fornecedor por ID", description = "Exclui um fornecedor pelo ID fornecido.")
+  @ApiResponse(responseCode = "200", description = "Fornecedor excluído com sucesso!")
+  @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
+  @ResponseStatus(code = HttpStatus.NO_CONTENT)
+  public void delete(@PathVariable @Positive @NotNull Long id) {
+    fornecedorService.delete(id);
+  }
 
 }

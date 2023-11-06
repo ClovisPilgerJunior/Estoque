@@ -23,4 +23,9 @@ public interface ProdutoCapaRepository extends JpaRepository<ProdutoCapa, Long> 
     @Query("SELECT p FROM ProdutoCapa p WHERE p.ativo = true")
     List<ProdutoCapa> findAllAtivos();
 
+    @Query("select (count(p) > 0) from ProdutoCapa p where p.fornecedor.id = ?1")
+    boolean existsByFornecedor(Long id);
+
+
+
 }

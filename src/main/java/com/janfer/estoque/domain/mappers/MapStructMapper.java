@@ -30,7 +30,7 @@ public interface MapStructMapper {
    @Mapping(target = "saldo", ignore = true)
    @Mapping(target = "valorCompra", ignore = true)
    @Mapping(target = "valorTotal", ignore = true)
-   ProdutoCapaGetDTO produtoCapaToProdutoCapaGetDTO(ProdutoCapa produtoCapa);
+   ProdutoCapaCalculatedGetDTO produtoCapaToProdutoCapaCalculatedGetDTO(ProdutoCapa produtoCapa);
 
    // mapeamento do Fornecedor
    List<FornecedorDTO> fornecedorAllToFornecedorDTO(List<Fornecedor> fornecedor);
@@ -39,7 +39,7 @@ public interface MapStructMapper {
    Fornecedor fornecedorToFornecedorDTO(FornecedorDTO fornecedorDTO);
 
    @Mapping(target = "id", source = "id")
-   @Mapping(target = "empresa", source = "tipoEmpresa")
+   @Mapping(target = "empresa", source = "empresa")
    FornecedorGetDTO fornecedorGetDTOToFornecedor(Fornecedor fornecedor);
 
    // Mapeamento de ProdutoEntrada

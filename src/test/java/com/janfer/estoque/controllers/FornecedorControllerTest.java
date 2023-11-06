@@ -57,7 +57,7 @@ public class FornecedorControllerTest {
         when(mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO)).thenReturn(new Fornecedor());
 
         // Chame o método create do fornecedorController
-        ResponseEntity<Object> responseEntity = fornecedorController.create(fornecedorDTO);
+        ResponseEntity<FornecedorDTO> responseEntity = fornecedorController.create(fornecedorDTO);
 
         // Verifique se a resposta tem status HTTP 201 (CREATED)
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
