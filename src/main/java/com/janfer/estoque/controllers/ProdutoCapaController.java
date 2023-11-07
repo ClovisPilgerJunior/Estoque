@@ -23,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,14 +51,15 @@ public class ProdutoCapaController {
   @Operation(summary = "Cadastrar um novo produto", description = "Cadastra um novo produto com base nos dados fornecidos.")
   @ApiResponse(responseCode = "201", description = "Produto cadastrado com sucesso")
   @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
-  public ResponseEntity<Object> create(@Valid @RequestBody ProdutoCapaPostDTO produtoCapaDTO) {
+  public ResponseEntity<ProdutoCapaPostDTO> create(@Valid @RequestBody ProdutoCapaPostDTO produtoCapaPostDTO) {
 
-    if(produtoCapaService.existByDesc(produtoCapaDTO.getDescription())){
+    if(produtoCapaService.existByDesc(produtoCapaPostDTO.getDescription())){
       throw new DataIntegrityViolationException("Produto já cadastrado");
     }
 
-    produtoCapaService.save(mapStructMapper.produtoCapaToProdutoCapaDTO(produtoCapaDTO));
-    return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
+    produtoCapaService.save(mapStructMapper.produtoCapaToProdutoCapaDTO(produtoCapaPostDTO));
+    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(produtoCapaPostDTO.getId()).toUri();
+    return ResponseEntity.created(uri).body(produtoCapaPostDTO);
   }
 
   @PutMapping("/atualizar/{id}")

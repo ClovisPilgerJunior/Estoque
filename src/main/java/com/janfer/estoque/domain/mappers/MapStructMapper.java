@@ -17,12 +17,7 @@ public interface MapStructMapper {
    List<ProdutoCapaGetDTO> produtoCapaAllToProdutoCapaDTO(List<ProdutoCapa> produtoCapa);
 
 
-   @Mapping(target = "tipoProduto", source = "tipoProduto")
-   @Mapping(target = "medidaUnidade", source = "medidaUnidade")
-   @Mapping(target = "fornecedor", source = "fornecedor")
-   @Mapping(target = "resuprimento", ignore = true)
-   @Mapping(target = "id", ignore = true)
-   ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaDTO);
+   ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaPostDTO);
 
    @Mapping(target = "entradas", ignore = true)
    @Mapping(target = "saidas", ignore = true)

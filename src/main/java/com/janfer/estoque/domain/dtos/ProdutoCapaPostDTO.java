@@ -15,6 +15,7 @@ public class ProdutoCapaPostDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
+  private Long id;
   @NotBlank(message = "A descrição não pode estar vazio!")
   private String description;
   @NotNull(message = "O tipo de produto não pode estar vazio!")
@@ -22,7 +23,7 @@ public class ProdutoCapaPostDTO implements Serializable {
   @NotNull(message = "A unidade de medida não pode estar vazio!")
   private MedidaUnidade medidaUnidade;
   @NotNull(message = "O fornecedor não pode estar vazio!")
-  private transient Fornecedor fornecedor;
+  private Integer fornecedor;
   private Long minimo;
   private Long maximo;
   private boolean ativo;

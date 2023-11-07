@@ -17,7 +17,7 @@ public class ProdutoCapaGetDTO implements Serializable {
   private String description;
   private TipoProduto tipoProduto;
   private MedidaUnidade medidaUnidade;
-  private FornecedorGetDTO fornecedor;
+  private Integer fornecedor;
   private Long minimo;
   private Long maximo;
   private Resuprimento resuprimento;
