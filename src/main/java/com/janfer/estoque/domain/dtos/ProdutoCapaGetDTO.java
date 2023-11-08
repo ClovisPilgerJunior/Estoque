@@ -15,12 +15,12 @@ public class ProdutoCapaGetDTO implements Serializable {
   private static final long serialVersionUID = 1L;
   private Long id;
   private String description;
-  private TipoProduto tipoProduto;
-  private MedidaUnidade medidaUnidade;
-  private Long fornecedor;
+  private String tipoProduto;
+  private String medidaUnidade;
+  private String fornecedor;
   private Long minimo;
   private Long maximo;
-  private Resuprimento resuprimento;
+  private String resuprimento;
   private boolean ativo;
 
 }

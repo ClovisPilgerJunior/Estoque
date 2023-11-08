@@ -2,6 +2,8 @@ package com.janfer.estoque.domain.mappers;
 
 import com.janfer.estoque.domain.dtos.*;
 import com.janfer.estoque.domain.entities.*;
+import com.janfer.estoque.domain.enums.MedidaUnidade;
+import com.janfer.estoque.domain.enums.TipoProduto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -17,16 +19,33 @@ public interface MapStructMapper {
    // mapeamento do produtoCapa
    List<ProdutoCapaGetDTO> produtoCapaAllToProdutoCapaDTO(List<ProdutoCapa> produtoCapa);
 
-   @Mapping(source = "fornecedor.id", target = "fornecedor")
+   @Mapping(source = "fornecedor.empresa", target = "fornecedor")
+   @Mapping(source = "tipoProduto.desc", target = "tipoProduto")
+   @Mapping(source = "resuprimento.desc", target = "resuprimento")
    @Default
    ProdutoCapaGetDTO produtoCapaGetDTOToProdutoCapa(ProdutoCapa produtoCapa);
 
 
+
+
    @Mapping(source = "fornecedor", target = "fornecedor.id")
+   @Mapping(target = "tipoProduto", source = "tipoProduto")
+   @Mapping(target = "medidaUnidade", source = "medidaUnidade")
    @Mapping(target = "resuprimento", ignore = true)
    ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaPostDTO);
 
+
+   default TipoProduto mapTipoProduto(Integer tipoProdutoCod) {
+      return TipoProduto.toEnum(tipoProdutoCod);
+   }
+
+   default MedidaUnidade mapMedidaUnidade(Integer medidaUnidadeCod) {
+      return MedidaUnidade.toEnum(medidaUnidadeCod);
+   }
+
    @Mapping(source = "fornecedor.id", target = "fornecedor")
+   @Mapping(source = "tipoProduto.cod", target = "tipoProduto")
+   @Mapping(source = "medidaUnidade.cod", target = "medidaUnidade" )
    ProdutoCapaPostDTO produtoCapaDTOToProdutoCapa(ProdutoCapa produtoCapa);
 
 

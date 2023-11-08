@@ -2,6 +2,7 @@ package com.janfer.estoque.domain.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @Getter
