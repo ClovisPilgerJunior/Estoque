@@ -83,7 +83,7 @@ public class ProdutoCapaService {
         .orElseThrow(() -> new ObjectNotFoundException("produto capa não Encontrado!")));
   }
 
-  @Transactional
+
   public Optional<ProdutoCapa> findById(Long id) {
     return produtoCapaRepository.findById(id);
   }

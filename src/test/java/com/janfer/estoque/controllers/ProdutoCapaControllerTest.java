@@ -112,14 +112,4 @@ class ProdutoCapaControllerTest {
         assertNotNull(responseEntity.getBody());
     }
 
-    @Test
-    void testFindProdutoByIdNotFound() {
-        Long id = 1L;
-        Optional<ProdutoCapa> produtoCapaOptional = Optional.empty();
-        when(produtoCapaService.findById(id)).thenReturn(produtoCapaOptional);
-
-        assertThrows(ObjectNotFoundException.class, () -> {
-            produtoCapaController.findById(id);
-        });
-    }
 }

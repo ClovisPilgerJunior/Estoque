@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import javax.enterprise.inject.Default;
 import java.util.List;
 
 @Mapper(componentModel = "Spring")
@@ -16,8 +17,18 @@ public interface MapStructMapper {
    // mapeamento do produtoCapa
    List<ProdutoCapaGetDTO> produtoCapaAllToProdutoCapaDTO(List<ProdutoCapa> produtoCapa);
 
+   @Mapping(source = "fornecedor.id", target = "fornecedor")
+   @Default
+   ProdutoCapaGetDTO produtoCapaGetDTOToProdutoCapa(ProdutoCapa produtoCapa);
 
+
+   @Mapping(source = "fornecedor", target = "fornecedor.id")
+   @Mapping(target = "resuprimento", ignore = true)
    ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaPostDTO);
+
+   @Mapping(source = "fornecedor.id", target = "fornecedor")
+   ProdutoCapaPostDTO produtoCapaDTOToProdutoCapa(ProdutoCapa produtoCapa);
+
 
    @Mapping(target = "entradas", ignore = true)
    @Mapping(target = "saidas", ignore = true)
