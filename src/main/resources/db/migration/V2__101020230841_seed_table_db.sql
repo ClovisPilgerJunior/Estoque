@@ -12,7 +12,7 @@ VALUES ('XYZ Ltda', 'Carlos', 1, 'carlos@xyz.com', '(987) 654-3210', 'Rua da Ind
 
 -- Produto Capa 1
 INSERT INTO produto_capa (description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)
-VALUES ('Produto Capa 1', 0, 1, 1, 10, 100, 1, true);
+VALUES ('Produto Capa 1', 0, 1, 1, 10, 100, 1, false);
 
 -- Produto Capa 2
 INSERT INTO produto_capa (description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo)

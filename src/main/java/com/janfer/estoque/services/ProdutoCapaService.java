@@ -1,6 +1,7 @@
 package com.janfer.estoque.services;
 
 import com.janfer.estoque.domain.dtos.ProdutoCapaCalculatedGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.Resuprimento;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProdutoCapaService {
@@ -44,7 +44,7 @@ public class ProdutoCapaService {
 
   @Transactional
   public List<ProdutoCapa> findAll() {
-    return produtoCapaRepository.findAllAtivos();
+    return produtoCapaRepository.findAll();
   }
 
   @Transactional
@@ -84,8 +84,9 @@ public class ProdutoCapaService {
   }
 
 
-  public Optional<ProdutoCapa> findById(Long id) {
-    return produtoCapaRepository.findById(id);
+  public ProdutoCapaGetDTO findById(Long id) {
+    return produtoCapaRepository.findById(id).map(mapStructMapper::produtoCapaGetDTOToProdutoCapa)
+            .orElseThrow(() -> new ObjectNotFoundException("Produto Capa não encontrado"));
   }
 
   public boolean existById(Long id) {

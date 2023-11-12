@@ -1,8 +1,6 @@
 package com.janfer.estoque.controllers;
 
-import com.janfer.estoque.domain.dtos.FornecedorDTO;
 import com.janfer.estoque.domain.dtos.ProdutoCapaCalculatedGetDTO;
-import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.dtos.ProdutoCapaPostDTO;
@@ -18,19 +16,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.janfer.estoque.controllers.messages.FornecedorMessage.NOT_FOUND;
 
 @AllArgsConstructor
 @Tag(name = "ProdutoCapa", description = "Endpoint do ProdutoCapa")
@@ -57,7 +50,7 @@ public class ProdutoCapaController {
             throw new DataIntegrityViolationException("Produto já cadastrado");
         }
 
-        produtoCapaService.save(mapStructMapper.produtoCapaToProdutoCapaDTO(produtoCapaPostDTO));
+        produtoCapaService.save(mapStructMapper.produtoCapaToProdutoCapaPostDTO(produtoCapaPostDTO));
         //URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(produtoCapaPostDTO).toUri();
 //    return ResponseEntity.created(uri).body(produtoCapaPostDTO);
         return ResponseEntity.ok(produtoCapaPostDTO);
@@ -68,19 +61,16 @@ public class ProdutoCapaController {
     @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso")
     @ApiResponse(responseCode = "404", description = "Produto não encontrado")
     @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO) {
-        Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
-        if (produtoCapaOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
+    public ResponseEntity<ProdutoCapa> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO) {
+        System.out.println(produtoCapaPostDTO);
+        ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(id);
 
         if (produtoCapaService.existByDescAndIdNot(produtoCapaPostDTO.getDescription(), id)) {
             throw new DataIntegrityViolationException("Já existe um produto com esse nome cadastrado");
         }
 
-        var produtoCapa = new ProdutoCapa();
-        BeanUtils.copyProperties(produtoCapaPostDTO, produtoCapa);
-        produtoCapa.setId(produtoCapaOptional.get().getId());
+        ProdutoCapa produtoCapa = mapStructMapper.produtoCapaToProdutoCapaPostDTO(produtoCapaPostDTO);
+        produtoCapa.setId(produtoCapaGetDTO.getId());
         return ResponseEntity.status(HttpStatus.OK).body(produtoCapaService.save(produtoCapa));
     }
 
@@ -106,13 +96,10 @@ public class ProdutoCapaController {
     @ApiResponse(responseCode = "200", description = "Produto encontrado com sucesso")
     @ApiResponse(responseCode = "404", description = "Produto não encontrado")
     public ResponseEntity<ProdutoCapaCalculatedGetDTO> findByIdCalculated(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
-        if (produtoCapaOptional.isEmpty()) {
-            throw new ObjectNotFoundException("Produto não encontrado!");
-        }
+        ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(id);
 
         List<ProdutoCapa> produtoCapas = new ArrayList<>();
-        produtoCapas.add(produtoCapaOptional.get());
+        produtoCapas.add(new ProdutoCapa());
         List<ProdutoCapaCalculatedGetDTO> produtoCapaGetDTOs = produtoCapaService.obterProdutoCapaComCalculos(produtoCapas);
 
         return new ResponseEntity<>(produtoCapaGetDTOs.get(0), HttpStatus.OK);
@@ -130,14 +117,7 @@ public class ProdutoCapaController {
     @ApiResponse(responseCode = "200", description = "Produto Capa encontrado com sucesso.")
     @ApiResponse(responseCode = "404", description = "Produto não encontrado.")
     public ProdutoCapaGetDTO findById(@PathVariable Long id) {
-        Optional<ProdutoCapa> produtoCapaOptional = produtoCapaService.findById(id);
-
-        if (produtoCapaOptional.isEmpty()) {
-            throw new ObjectNotFoundException("Produto não encontrado!");
-        }
-
-            ProdutoCapa produtoCapa = produtoCapaOptional.get();
-            return mapStructMapper.produtoCapaGetDTOToProdutoCapa(produtoCapa);
+        return produtoCapaService.findById(id);
     }
 
 }

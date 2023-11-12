@@ -21,6 +21,7 @@ public interface MapStructMapper {
 
    @Mapping(source = "fornecedor.empresa", target = "fornecedor")
    @Mapping(source = "tipoProduto.desc", target = "tipoProduto")
+   @Mapping(source = "medidaUnidade.desc", target = "medidaUnidade")
    @Mapping(source = "resuprimento.desc", target = "resuprimento")
    @Default
    ProdutoCapaGetDTO produtoCapaGetDTOToProdutoCapa(ProdutoCapa produtoCapa);
@@ -28,11 +29,11 @@ public interface MapStructMapper {
 
 
 
-   @Mapping(source = "fornecedor", target = "fornecedor.id")
+   @Mapping(target = "fornecedor.id", source = "fornecedor")
    @Mapping(target = "tipoProduto", source = "tipoProduto")
    @Mapping(target = "medidaUnidade", source = "medidaUnidade")
    @Mapping(target = "resuprimento", ignore = true)
-   ProdutoCapa produtoCapaToProdutoCapaDTO(ProdutoCapaPostDTO produtoCapaPostDTO);
+   ProdutoCapa produtoCapaToProdutoCapaPostDTO(ProdutoCapaPostDTO produtoCapaPostDTO);
 
 
    default TipoProduto mapTipoProduto(Integer tipoProdutoCod) {
@@ -46,7 +47,7 @@ public interface MapStructMapper {
    @Mapping(source = "fornecedor.id", target = "fornecedor")
    @Mapping(source = "tipoProduto.cod", target = "tipoProduto")
    @Mapping(source = "medidaUnidade.cod", target = "medidaUnidade" )
-   ProdutoCapaPostDTO produtoCapaDTOToProdutoCapa(ProdutoCapa produtoCapa);
+   ProdutoCapaPostDTO produtoCapaPostDTOToProdutoCapa(ProdutoCapa produtoCapa);
 
 
    @Mapping(target = "entradas", ignore = true)
