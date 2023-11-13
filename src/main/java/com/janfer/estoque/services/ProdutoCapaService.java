@@ -131,7 +131,7 @@ public class ProdutoCapaService {
 
       Resuprimento resuprimento = calcularResuprimento(produtoCapaCalculatedGetDTO.getSaldo(), minimo, maximo);
 
-      produtoCapaCalculatedGetDTO.setResuprimento(resuprimento);
+      produtoCapaCalculatedGetDTO.setResuprimento(String.valueOf(resuprimento));
 
       produtoCapaGetDTOs.add(produtoCapaCalculatedGetDTO);
     }

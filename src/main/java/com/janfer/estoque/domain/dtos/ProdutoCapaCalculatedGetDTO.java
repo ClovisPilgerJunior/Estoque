@@ -15,9 +15,9 @@ public class ProdutoCapaCalculatedGetDTO implements Serializable {
   private static final long serialVersionUID = 1L;
   private Long id;
   private String description;
-  private TipoProduto tipoProduto;
-  private MedidaUnidade medidaUnidade;
-  private FornecedorGetDTO fornecedor;
+  private String tipoProduto;
+  private String medidaUnidade;
+  private String fornecedor;
   private Double entradas;
   private Double saidas;
   private Double perdas;
@@ -26,7 +26,7 @@ public class ProdutoCapaCalculatedGetDTO implements Serializable {
   private Double valorTotal;
   private Long minimo;
   private Long maximo;
-  private Resuprimento resuprimento;
+  private String resuprimento;
   private boolean ativo;
 
 }

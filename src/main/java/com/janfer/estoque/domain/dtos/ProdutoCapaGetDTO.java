@@ -14,6 +14,7 @@ public class ProdutoCapaGetDTO implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
   private Long id;
+  private int codSistema;
   private String description;
   private String tipoProduto;
   private String medidaUnidade;

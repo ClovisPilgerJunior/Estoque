@@ -56,6 +56,10 @@ public interface MapStructMapper {
    @Mapping(target = "saldo", ignore = true)
    @Mapping(target = "valorCompra", ignore = true)
    @Mapping(target = "valorTotal", ignore = true)
+   @Mapping(target = "fornecedor", source = "fornecedor.empresa")
+   @Mapping(target = "tipoProduto", source = "tipoProduto.desc")
+   @Mapping(target = "medidaUnidade", source = "medidaUnidade.desc")
+   @Mapping(target = "resuprimento", source = "resuprimento.desc")
    ProdutoCapaCalculatedGetDTO produtoCapaToProdutoCapaCalculatedGetDTO(ProdutoCapa produtoCapa);
 
    // mapeamento do Fornecedor

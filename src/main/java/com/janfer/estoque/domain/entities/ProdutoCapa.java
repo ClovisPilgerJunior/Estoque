@@ -23,6 +23,8 @@ public class ProdutoCapa {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
+  @Column
+  private Integer codSistema;
   @Column(unique = true)
   private String description;
   @Column(nullable = false)
