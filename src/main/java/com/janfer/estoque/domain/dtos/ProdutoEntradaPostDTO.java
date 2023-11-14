@@ -21,6 +21,6 @@ public class ProdutoEntradaPostDTO implements Serializable {
   private Double precoCompra;
   private Long quantidade;
   private String observacao;
-  private transient ProdutoCapa produtoCapa;
+  private Long produtoCapa;
 
 }

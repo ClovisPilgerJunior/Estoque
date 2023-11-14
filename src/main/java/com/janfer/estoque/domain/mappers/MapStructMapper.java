@@ -76,8 +76,10 @@ public interface MapStructMapper {
    List<ProdutoEntradaGetDTO> produtoEntradaGetAllToProdutoEntrada(List<ProdutoEntrada> produtoEntradas);
 
    @Mapping(target = "id", ignore = true)
+   @Mapping(target = "produtoCapa.id", source = "produtoCapa")
    ProdutoEntrada produtoEntradaToProdutoEntradaDTO(ProdutoEntradaPostDTO produtoEntradaDTO);
 
+   @Mapping(target = "produtoCapa", source = "produtoCapa.description")
    ProdutoEntradaGetDTO produtoEntradaToProdutoEntradaGetDTO(ProdutoEntrada produtoEntrada);
 
    // Mapeamento de ProdutoSaida

@@ -81,12 +81,12 @@ public class ProdutoEntradaController {
     @Schema( implementation = ProdutoEntradaPostDTO.class)
     public ResponseEntity<String> criarProdutoEntrada(@RequestBody ProdutoEntradaPostDTO produtoEntradaDTO) {
         // Verificar se o ProdutoCapa no DTO está nulo
-        if (produtoEntradaDTO.getProdutoCapa().getId() == null) {
+        if (produtoEntradaDTO.getProdutoCapa() == null) {
             return ResponseEntity.badRequest().body("ProdutoCapa não pode ser nulo.");
         }
 
         // Verificar se o ProdutoCapa existe
-        Long produtoCapaId = produtoEntradaDTO.getProdutoCapa().getId();
+        Long produtoCapaId = produtoEntradaDTO.getProdutoCapa();
         if (!produtoCapaService.existById(produtoCapaId)) {
             return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
         }
