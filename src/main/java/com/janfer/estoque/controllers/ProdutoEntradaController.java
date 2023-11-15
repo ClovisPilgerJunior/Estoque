@@ -64,13 +64,8 @@ public class ProdutoEntradaController {
     @Operation(summary = "Excluir uma entrada de produto", description = "Exclui uma entrada de produto existente com base no ID fornecido.")
     @ApiResponse(responseCode = "200", description = "Entrada de produto excluída com sucesso")
     @ApiResponse(responseCode = "404", description = "Entrada de produto não encontrada")
-    public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoEntrada> produtoEntradaOptional = produtoEntradaService.findById(id);
-        if (produtoEntradaOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
-        produtoEntradaService.delete(produtoEntradaOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Produto " + id + " excluído com sucesso");
+    public void delete(@PathVariable(value = "id") Long id) {
+        produtoEntradaService.delete(id);
     }
 
     @PostMapping("/cadastrar")
@@ -79,21 +74,17 @@ public class ProdutoEntradaController {
     @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
     @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
     @Schema( implementation = ProdutoEntradaPostDTO.class)
-    public ResponseEntity<String> criarProdutoEntrada(@RequestBody ProdutoEntradaPostDTO produtoEntradaDTO) {
-        // Verificar se o ProdutoCapa no DTO está nulo
-        if (produtoEntradaDTO.getProdutoCapa() == null) {
-            return ResponseEntity.badRequest().body("ProdutoCapa não pode ser nulo.");
-        }
+    public ResponseEntity<ProdutoEntradaPostDTO> criarProdutoEntrada(@Valid @RequestBody ProdutoEntradaPostDTO produtoEntradaDTO) {
 
         // Verificar se o ProdutoCapa existe
         Long produtoCapaId = produtoEntradaDTO.getProdutoCapa();
         if (!produtoCapaService.existById(produtoCapaId)) {
-            return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
+            throw new ObjectNotFoundException("Produto capa correspondente não cadastrado");
         }
 
         produtoEntradaService.save(mapStructMapper.produtoEntradaToProdutoEntradaDTO(produtoEntradaDTO));
 
-        return ResponseEntity.ok("ProdutoEntrada cadastrado com sucesso.");
+        return ResponseEntity.ok(produtoEntradaDTO);
     }
 
     @PutMapping("/atualizar/{id}")

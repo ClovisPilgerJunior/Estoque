@@ -46,11 +46,8 @@ public class ProdutoSaidaController {
     @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
     public ResponseEntity<Object> create(@RequestBody ProdutoSaidaPostDTO produtoSaidaDTO) {
 
-        if (produtoSaidaDTO.getProdutoCapa().getId() == null) {
-            return ResponseEntity.badRequest().body("ProdutoCapa não pode ser nulo.");
-        }
 
-        Long produtoCapaId = produtoSaidaDTO.getProdutoCapa().getId();
+        Long produtoCapaId = produtoSaidaDTO.getProdutoCapa();
 
         if (!produtoCapaService.existById(produtoCapaId)) {
             return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
@@ -85,13 +82,8 @@ public class ProdutoSaidaController {
     @Operation(summary = "Excluir uma saída de produto", description = "Exclui uma saída de produto existente com base no ID fornecido.")
     @ApiResponse(responseCode = "200", description = "Saída de produto excluída com sucesso")
     @ApiResponse(responseCode = "404", description = "Saída de produto não encontrada")
-    public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoSaida> produtoSaidaOptional = produtoSaidaService.findById(id);
-        if (produtoSaidaOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
-        produtoSaidaService.delete(produtoSaidaOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Produto " + id + " excluído com sucesso");
+    public void delete(@PathVariable(value = "id") Long id) {
+        produtoSaidaService.delete(id);
     }
 
     @PutMapping("/atualizar/{id}")

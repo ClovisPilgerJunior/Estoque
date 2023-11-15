@@ -3,8 +3,11 @@ package com.janfer.estoque.services;
 import com.janfer.estoque.domain.entities.ProdutoPerda;
 import com.janfer.estoque.repositories.ProdutoCapaRepository;
 import com.janfer.estoque.repositories.ProdutoPerdaRepository;
+import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import com.janfer.estoque.services.exceptions.ProductDisableException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +38,12 @@ public class ProdutoPerdaService {
     }
 
     @Transactional
-    public void delete(ProdutoPerda produtoPerda){
-        produtoPerdaRepository.delete(produtoPerda);
-    }
+    public void delete(@Positive @NotNull Long id){
 
+        produtoPerdaRepository.delete(produtoPerdaRepository.findById(id)
+            .orElseThrow(() -> new ObjectNotFoundException("Produto entrada não Encontrado!")));
+
+    }
     public Optional<ProdutoPerda> findById(Long id) {
         return produtoPerdaRepository.findById(id);
     }

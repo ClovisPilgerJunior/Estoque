@@ -62,7 +62,6 @@ public class ProdutoCapaController {
     @ApiResponse(responseCode = "404", description = "Produto não encontrado")
     @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
     public ResponseEntity<ProdutoCapa> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO) {
-        System.out.println(produtoCapaPostDTO);
         ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(id);
 
         if (produtoCapaService.existByDescAndIdNot(produtoCapaPostDTO.getDescription(), id)) {

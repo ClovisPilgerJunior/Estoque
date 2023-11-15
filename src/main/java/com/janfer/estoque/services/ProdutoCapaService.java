@@ -129,9 +129,9 @@ public class ProdutoCapaService {
       long minimo = produtoCapaCalculatedGetDTO.getMinimo() != null ? produtoCapaCalculatedGetDTO.getMinimo() : 0L;
       long maximo = produtoCapaCalculatedGetDTO.getMaximo() != null ? produtoCapaCalculatedGetDTO.getMaximo() : 0L;
 
-      Resuprimento resuprimento = calcularResuprimento(produtoCapaCalculatedGetDTO.getSaldo(), minimo, maximo);
+      String resuprimento = calcularResuprimento(produtoCapaCalculatedGetDTO.getSaldo(), minimo, maximo);
 
-      produtoCapaCalculatedGetDTO.setResuprimento(String.valueOf(resuprimento));
+      produtoCapaCalculatedGetDTO.setResuprimento(resuprimento);
 
       produtoCapaGetDTOs.add(produtoCapaCalculatedGetDTO);
     }
@@ -139,17 +139,18 @@ public class ProdutoCapaService {
     return produtoCapaGetDTOs;
   }
 
-  public Resuprimento calcularResuprimento(Double saldo, Long minimo, Long maximo) {
+  public String calcularResuprimento(Double saldo, Long minimo, Long maximo) {
+
     if (saldo < 0) {
-      return Resuprimento.ESTOQUE_NEGATIVO;
+      return "ESTOQUE NEGATIVO";
     } else if (saldo == 0) {
-      return Resuprimento.SALDO_ZERADO;
+      return "SEM SALDO";
     } else if (saldo > maximo) {
-      return Resuprimento.PRODUTO_EXCESSO;
+      return "COMPRAR AGORA";
     } else if (saldo >= minimo && saldo <= maximo) {
-      return Resuprimento.QUANTIDADE_IDEAL;
+      return "QUANTIDADE IDEAL";
     } else {
-      return Resuprimento.COMPRAR_AGORA;
+      return "PRODUTO EM EXCESSO";
     }
 
   }

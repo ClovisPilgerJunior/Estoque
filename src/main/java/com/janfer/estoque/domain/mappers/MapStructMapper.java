@@ -33,6 +33,7 @@ public interface MapStructMapper {
    @Mapping(target = "tipoProduto", source = "tipoProduto")
    @Mapping(target = "medidaUnidade", source = "medidaUnidade")
    @Mapping(target = "resuprimento", ignore = true)
+   @Mapping(target = "id", ignore = true)
    ProdutoCapa produtoCapaToProdutoCapaPostDTO(ProdutoCapaPostDTO produtoCapaPostDTO);
 
 
@@ -82,12 +83,20 @@ public interface MapStructMapper {
    @Mapping(target = "produtoCapa", source = "produtoCapa.description")
    ProdutoEntradaGetDTO produtoEntradaToProdutoEntradaGetDTO(ProdutoEntrada produtoEntrada);
 
+   @Mapping(source = "produtoCapa.id", target = "produtoCapa")
+   ProdutoEntradaPostDTO produtoEntradaPostDTOToProdutoEntrar(ProdutoEntrada produtoEntrada);
+
    // Mapeamento de ProdutoSaida
    List<ProdutoSaidaGetDTO> produtoSaidaGetDTOAllToProdutoSaida(List<ProdutoSaida> produtoSaidas);
 
    @Mapping(target = "id", ignore = true)
+   @Mapping(target = "produtoCapa.id", source = "produtoCapa")
    ProdutoSaida produtoSaidaToProdutoSaidaDTO(ProdutoSaidaPostDTO produtoSaidaDTO);
 
+   @Mapping(source = "produtoCapa.id", target = "produtoCapa")
+   ProdutoSaidaPostDTO produtoSaidaPostDTOToProdutoSaida(ProdutoSaida produtoSaida);
+
+   @Mapping(target = "produtoCapa", source = "produtoCapa.description")
    ProdutoSaidaGetDTO produtoSaidaGetDTOToProdutoSaida(ProdutoSaida produtoSaida);
 
    // Mapeamento de ProdutoPerda
@@ -95,7 +104,12 @@ public interface MapStructMapper {
    List<ProdutoPerdaGetDTO> produtoPerdaGetDTOAllToProdutoPerda(List<ProdutoPerda> produtoPerdas);
 
    @Mapping(target = "id", ignore = true)
+   @Mapping(target = "produtoCapa.id", source = "produtoCapa")
    ProdutoPerda produtoPerdaToProdutoPerdaDTO(ProdutoPerdaPostDTO produtoPerdaDTO);
 
+   @Mapping(target = "produtoCapa", source = "produtoCapa.id")
+   ProdutoPerdaPostDTO produtoPerdaPostDTOtoProdutoPerda(ProdutoPerda produtoPerda);
+
+   @Mapping(target = "produtoCapa", source = "produtoCapa.description")
    ProdutoPerdaGetDTO produtoPerdaGetDTOToProdutoPerda(ProdutoPerda produtoPerda);
 }

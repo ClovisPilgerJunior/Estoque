@@ -2,6 +2,7 @@ package com.janfer.estoque.domain.dtos;
 
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.Setor;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serial;
@@ -18,6 +19,7 @@ public class ProdutoSaidaPostDTO implements Serializable {
   private String retiradoPor;
   private Setor setor;
   private String observacao;
-  private transient ProdutoCapa produtoCapa;
+  @NotNull(message = "Produto capa não pode estar vazio")
+  private Long produtoCapa;
 
 }

@@ -21,7 +21,6 @@ public class ProdutoEntrada {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
-  @NotNull(message = "Número da nota não pode estar vazio")
   private Long numeroNota;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataPedido;

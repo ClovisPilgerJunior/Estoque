@@ -46,11 +46,7 @@ public class ProdutoPerdaController {
     @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
     public ResponseEntity<Object> create(@RequestBody ProdutoPerdaPostDTO produtoPerdaPostDTO) {
 
-        if (produtoPerdaPostDTO.getProdutoCapa().getId() == null) {
-            return ResponseEntity.badRequest().body("ProdutoCapa não pode ser nulo.");
-        }
-
-        Long produtoCapaId = produtoPerdaPostDTO.getProdutoCapa().getId();
+        Long produtoCapaId = produtoPerdaPostDTO.getProdutoCapa();
 
         if (!produtoCapaService.existById(produtoCapaId)) {
             return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
@@ -84,13 +80,8 @@ public class ProdutoPerdaController {
     @Operation(summary = "Excluir uma perda de produto", description = "Exclui uma perda de produto existente com base no ID fornecido.")
     @ApiResponse(responseCode = "200", description = "Perda de produto excluída com sucesso")
     @ApiResponse(responseCode = "404", description = "Perda de produto não encontrada")
-    public ResponseEntity<Object> delete(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoPerda> produtoPerdaOptional = produtoPerdaService.findById(id);
-        if (produtoPerdaOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
-        produtoPerdaService.delete(produtoPerdaOptional.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Produto " + id + " excluído com sucesso");
+    public void delete(@PathVariable(value = "id") Long id) {
+        produtoPerdaService.delete(id);
     }
 
     @PutMapping("/atualizar/{id}")
