@@ -86,7 +86,7 @@ public class ProdutoCapaService {
 
   public ProdutoCapaGetDTO findById(Long id) {
     return produtoCapaRepository.findById(id).map(mapStructMapper::produtoCapaGetDTOToProdutoCapa)
-            .orElseThrow(() -> new ObjectNotFoundException("Produto Capa não encontrado"));
+            .orElseThrow(() -> new ObjectNotFoundException("Produto entrada não encontrado"));
   }
 
   public boolean existById(Long id) {

@@ -1,6 +1,9 @@
 package com.janfer.estoque.services;
 
+import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoEntradaGetDTO;
 import com.janfer.estoque.domain.entities.ProdutoEntrada;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.FornecedorRepository;
 import com.janfer.estoque.repositories.ProdutoCapaRepository;
 import com.janfer.estoque.repositories.ProdutoEntradaRepository;
@@ -25,6 +28,9 @@ public class ProdutoEntradaService {
     @Autowired
     private FornecedorRepository fornecedorRepository;
 
+    @Autowired
+    MapStructMapper mapStructMapper;
+
     @Transactional
     public List<ProdutoEntrada> findAll(){
         return produtoEntradaRepository.findAll();
@@ -47,8 +53,9 @@ public class ProdutoEntradaService {
 
     }
 
-    public Optional<ProdutoEntrada> findById(Long id) {
-        return produtoEntradaRepository.findById(id);
+    public ProdutoEntradaGetDTO findById(Long id) {
+        return produtoEntradaRepository.findById(id).map(mapStructMapper::produtoEntradaGetDTOToProdutoEntrada)
+            .orElseThrow(() -> new ObjectNotFoundException("Produto Capa não encontrado"));
     }
 
     public Double calcularSomaEntradas(Long produtoCapaId) {

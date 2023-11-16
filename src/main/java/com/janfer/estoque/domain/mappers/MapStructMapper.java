@@ -27,8 +27,6 @@ public interface MapStructMapper {
    ProdutoCapaGetDTO produtoCapaGetDTOToProdutoCapa(ProdutoCapa produtoCapa);
 
 
-
-
    @Mapping(target = "fornecedor.id", source = "fornecedor")
    @Mapping(target = "tipoProduto", source = "tipoProduto")
    @Mapping(target = "medidaUnidade", source = "medidaUnidade")
@@ -80,11 +78,13 @@ public interface MapStructMapper {
    @Mapping(target = "produtoCapa.id", source = "produtoCapa")
    ProdutoEntrada produtoEntradaToProdutoEntradaDTO(ProdutoEntradaPostDTO produtoEntradaDTO);
 
-   @Mapping(target = "produtoCapa", source = "produtoCapa.description")
-   ProdutoEntradaGetDTO produtoEntradaToProdutoEntradaGetDTO(ProdutoEntrada produtoEntrada);
+   @Mapping(target = "produtoCapa", source = "produtoCapa.id")
+   @Mapping(target = "produtoCapaDesc", source = "produtoCapa.description")
+   @Default
+   ProdutoEntradaGetDTO produtoEntradaGetDTOToProdutoEntrada(ProdutoEntrada produtoEntrada);
 
    @Mapping(source = "produtoCapa.id", target = "produtoCapa")
-   ProdutoEntradaPostDTO produtoEntradaPostDTOToProdutoEntrar(ProdutoEntrada produtoEntrada);
+   ProdutoEntradaPostDTO produtoEntradaPostDTOToProdutoEntrada(ProdutoEntrada produtoEntrada);
 
    // Mapeamento de ProdutoSaida
    List<ProdutoSaidaGetDTO> produtoSaidaGetDTOAllToProdutoSaida(List<ProdutoSaida> produtoSaidas);

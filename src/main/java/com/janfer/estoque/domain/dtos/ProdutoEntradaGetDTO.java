@@ -13,7 +13,8 @@ public class ProdutoEntradaGetDTO implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
   private Long id;
-  private String produtoCapa;
+  private Long produtoCapa;
+  private String produtoCapaDesc;
   private Long numeroNota;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataPedido;

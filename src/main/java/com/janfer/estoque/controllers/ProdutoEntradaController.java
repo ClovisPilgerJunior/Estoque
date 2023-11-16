@@ -51,13 +51,8 @@ public class ProdutoEntradaController {
     @Operation(summary = "Buscar entrada de produto por ID", description = "Recupera uma entrada de produto pelo seu ID.")
     @ApiResponse(responseCode = "200", description = "Entrada de produto encontrada com sucesso")
     @ApiResponse(responseCode = "404", description = "Entrada de produto não encontrada")
-    public ResponseEntity<ProdutoEntradaGetDTO> findById(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoEntrada> produtoEntradaOptional = produtoEntradaService.findById(id);
-
-        return produtoEntradaOptional.map(produtoEntrada -> {
-            ProdutoEntradaGetDTO produtoEntradaGetDTO = mapStructMapper.produtoEntradaToProdutoEntradaGetDTO(produtoEntrada);
-            return ResponseEntity.status(HttpStatus.OK).body(produtoEntradaGetDTO);
-        }).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado com ID: " + id));
+    public ProdutoEntradaGetDTO findById(@PathVariable Long id) {
+       return produtoEntradaService.findById(id);
     }
 
     @DeleteMapping("/deletar/{id}")
@@ -92,14 +87,11 @@ public class ProdutoEntradaController {
     @ApiResponse(responseCode = "200", description = "Entrada de produto atualizada com sucesso")
     @ApiResponse(responseCode = "404", description = "Entrada de produto não encontrada")
     @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoEntradaPostDTO produtoEntradaDTO){
-        Optional<ProdutoEntrada> produtoEntradaOptional = produtoEntradaService.findById(id);
-        if(produtoEntradaOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
-        }
-        var produtoEntrada = new ProdutoEntrada();
-        BeanUtils.copyProperties(produtoEntradaDTO, produtoEntrada);
-        produtoEntrada.setId(produtoEntradaOptional.get().getId());
+    public ResponseEntity<ProdutoEntrada> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoEntradaPostDTO produtoEntradaPostDTO){
+        ProdutoEntradaGetDTO produtoEntradaGetDTO = produtoEntradaService.findById(id);
+
+        ProdutoEntrada produtoEntrada = mapStructMapper.produtoEntradaToProdutoEntradaDTO(produtoEntradaPostDTO);
+        produtoEntrada.setId(produtoEntradaGetDTO.getId());
         return ResponseEntity.status(HttpStatus.OK).body(produtoEntradaService.save(produtoEntrada));
     }
 
