@@ -24,7 +24,7 @@ public class ProdutoSaida {
   @Column(name = "id", nullable = false)
   private Long id;
   @JsonFormat(pattern = "dd/MM/yyyy")
-  private Date dataSaida = new Date();
+  private Date dataSaida;
   @Min(value = 0, message = "Quantidade não pode ser negativo")
   private Long quantidade;
   @NotBlank(message = "Por favor informar a pessoa que está retirando os produtos")

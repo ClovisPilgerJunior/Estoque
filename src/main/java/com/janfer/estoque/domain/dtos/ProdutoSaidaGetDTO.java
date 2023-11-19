@@ -14,10 +14,11 @@ public class ProdutoSaidaGetDTO implements Serializable {
   private static final long serialVersionUID = 1L;
   private Long id;
   private String produtoCapa;
-  private Date dataSaida = new Date();
+  private String produtoCapaDesc;
+  private Date dataSaida;
   private Long quantidade;
   private String retiradoPor;
-  private Setor setor;
+  private String setor;
   private String observacao;
 
 }

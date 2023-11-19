@@ -13,6 +13,7 @@ public class ProdutoPerdaGetDTO implements Serializable {
   private static final long serialVersionUID = 1L;
   private Long id;
   private String produtoCapa;
+  private String produtoCapaDesc;
   private Date data = new Date();
   private Long quantidade;
   private String motivo;

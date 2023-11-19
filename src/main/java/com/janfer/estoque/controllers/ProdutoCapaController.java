@@ -53,7 +53,7 @@ public class ProdutoCapaController {
         produtoCapaService.save(mapStructMapper.produtoCapaToProdutoCapaPostDTO(produtoCapaPostDTO));
         //URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(produtoCapaPostDTO).toUri();
 //    return ResponseEntity.created(uri).body(produtoCapaPostDTO);
-        return ResponseEntity.ok(produtoCapaPostDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoCapaPostDTO);
     }
 
     @PutMapping("/atualizar/{id}")

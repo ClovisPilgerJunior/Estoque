@@ -44,17 +44,17 @@ public class ProdutoSaidaController {
     @ApiResponse(responseCode = "201", description = "Saída de produto cadastrada com sucesso")
     @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
     @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
-    public ResponseEntity<Object> create(@RequestBody ProdutoSaidaPostDTO produtoSaidaDTO) {
+    public ResponseEntity<ProdutoSaidaPostDTO> create(@Valid @RequestBody ProdutoSaidaPostDTO produtoSaidaDTO) {
 
 
         Long produtoCapaId = produtoSaidaDTO.getProdutoCapa();
 
         if (!produtoCapaService.existById(produtoCapaId)) {
-            return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
+            throw new ObjectNotFoundException("Produto Capa correspondente não encontrado");
         }
 
         produtoSaidaService.save(mapStructMapper.produtoSaidaToProdutoSaidaDTO(produtoSaidaDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoSaidaDTO);
     }
 
     @GetMapping
@@ -69,13 +69,8 @@ public class ProdutoSaidaController {
     @Operation(summary = "Buscar saída de produto por ID", description = "Recupera uma saída de produto pelo seu ID.")
     @ApiResponse(responseCode = "200", description = "Saída de produto encontrada com sucesso")
     @ApiResponse(responseCode = "404", description = "Saída de produto não encontrada")
-    public ResponseEntity<ProdutoSaidaGetDTO> findById(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoSaida> produtoSaidaOptional = produtoSaidaService.findById(id);
-
-        return produtoSaidaOptional.map(produtoSaida -> {
-            ProdutoSaidaGetDTO produtoSaidaGetDTO = mapStructMapper.produtoSaidaGetDTOToProdutoSaida(produtoSaida);
-            return ResponseEntity.status(HttpStatus.OK).body(produtoSaidaGetDTO);
-        }).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado com ID: " + id));
+    public ProdutoSaidaGetDTO findById(@PathVariable(value = "id") Long id) {
+        return produtoSaidaService.findById(id);
     }
 
     @DeleteMapping("/deletar/{id}")
@@ -91,14 +86,11 @@ public class ProdutoSaidaController {
     @ApiResponse(responseCode = "200", description = "Saída de produto atualizada com sucesso")
     @ApiResponse(responseCode = "404", description = "Saída de produto não encontrada")
     @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoSaidaPostDTO produtoSaidaDTO){
-        Optional<ProdutoSaida> produtoSaidaOptional = produtoSaidaService.findById(id);
-        if(produtoSaidaOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não encontrado");
-        }
-        var produtoSaida = new ProdutoSaida();
-        BeanUtils.copyProperties(produtoSaidaDTO, produtoSaida);
-        produtoSaida.setId(produtoSaidaOptional.get().getId());
+    public ResponseEntity<ProdutoSaida> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoSaidaPostDTO produtoSaidaDTO){
+        ProdutoSaidaGetDTO produtoSaidaGetDTO = produtoSaidaService.findById(id);
+
+        ProdutoSaida produtoSaida = mapStructMapper.produtoSaidaToProdutoSaidaDTO(produtoSaidaDTO);
+        produtoSaida.setId(produtoSaidaGetDTO.getId());
         return ResponseEntity.status(HttpStatus.OK).body(produtoSaidaService.save(produtoSaida));
     }
 

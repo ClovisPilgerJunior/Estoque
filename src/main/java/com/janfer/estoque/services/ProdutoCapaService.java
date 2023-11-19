@@ -145,7 +145,7 @@ public class ProdutoCapaService {
       return "ESTOQUE NEGATIVO";
     } else if (saldo == 0) {
       return "SEM SALDO";
-    } else if (saldo > maximo) {
+    } else if (saldo < minimo) {
       return "COMPRAR AGORA";
     } else if (saldo >= minimo && saldo <= maximo) {
       return "QUANTIDADE IDEAL";

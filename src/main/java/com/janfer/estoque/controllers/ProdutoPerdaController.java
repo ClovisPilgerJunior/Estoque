@@ -1,8 +1,10 @@
 package com.janfer.estoque.controllers;
 
+import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.ProdutoPerda;
 import com.janfer.estoque.domain.dtos.ProdutoPerdaGetDTO;
 import com.janfer.estoque.domain.dtos.ProdutoPerdaPostDTO;
+import com.janfer.estoque.domain.entities.ProdutoSaida;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.services.ProdutoCapaService;
 import com.janfer.estoque.services.ProdutoPerdaService;
@@ -44,16 +46,16 @@ public class ProdutoPerdaController {
     @ApiResponse(responseCode = "201", description = "Perda de produto cadastrada com sucesso")
     @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
     @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
-    public ResponseEntity<Object> create(@RequestBody ProdutoPerdaPostDTO produtoPerdaPostDTO) {
+    public ResponseEntity<ProdutoPerdaPostDTO> create(@RequestBody ProdutoPerdaPostDTO produtoPerdaPostDTO) {
 
         Long produtoCapaId = produtoPerdaPostDTO.getProdutoCapa();
 
         if (!produtoCapaService.existById(produtoCapaId)) {
-            return ResponseEntity.badRequest().body("ProdutoCapa correspondente não encontrado.");
+            throw new ObjectNotFoundException("ProdutoCapa correspondente não encontrado.");
         }
 
         produtoPerdaService.save(mapStructMapper.produtoPerdaToProdutoPerdaDTO(produtoPerdaPostDTO));
-        return ResponseEntity.status(HttpStatus.CREATED).body("Produto cadastrado com sucesso");
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoPerdaPostDTO);
     }
 
     @GetMapping
@@ -67,13 +69,8 @@ public class ProdutoPerdaController {
     @Operation(summary = "Buscar perda de produto por ID", description = "Recupera uma perda de produto pelo seu ID.")
     @ApiResponse(responseCode = "200", description = "Perda de produto encontrada com sucesso")
     @ApiResponse(responseCode = "404", description = "Perda de produto não encontrada")
-    public ResponseEntity<ProdutoPerdaGetDTO> findById(@PathVariable(value = "id") Long id) {
-        Optional<ProdutoPerda> produtoPerdaOptional = produtoPerdaService.findById(id);
-
-        return produtoPerdaOptional.map(produtoPerda -> {
-            ProdutoPerdaGetDTO produtoPerdaGetDTO = mapStructMapper.produtoPerdaGetDTOToProdutoPerda(produtoPerda);
-            return ResponseEntity.status(HttpStatus.OK).body(produtoPerdaGetDTO);
-        }).orElseThrow(() -> new ObjectNotFoundException("Produto não encontrado com ID: " + id));
+    public ProdutoCapaGetDTO findById(@PathVariable(value = "id") Long id) {
+        return produtoCapaService.findById(id);
     }
 
     @DeleteMapping("/deletar/{id}")
@@ -89,14 +86,11 @@ public class ProdutoPerdaController {
     @ApiResponse(responseCode = "200", description = "Perda de produto atualizada com sucesso")
     @ApiResponse(responseCode = "404", description = "Perda de produto não encontrada")
     @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
-    public ResponseEntity<Object> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoPerdaPostDTO produtoPerdaDTO){
-        Optional<ProdutoPerda> produtoPerdaOptional = produtoPerdaService.findById(id);
-        if(produtoPerdaOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto Não encontrado");
-        }
-        var produtoPerda = new ProdutoPerda();
-        BeanUtils.copyProperties(produtoPerdaDTO, produtoPerda);
-        produtoPerda.setId(produtoPerdaOptional.get().getId());
+    public ResponseEntity<ProdutoPerda> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoPerdaPostDTO produtoPerdaPostDTO){
+        ProdutoPerdaGetDTO produtoPerdeGetDTO = produtoPerdaService.findById(id);
+
+        ProdutoPerda produtoPerda = mapStructMapper.produtoPerdaToProdutoPerdaDTO(produtoPerdaPostDTO);
+        produtoPerda.setId(produtoPerdeGetDTO.getId());
         return ResponseEntity.status(HttpStatus.OK).body(produtoPerdaService.save(produtoPerda));
     }
 

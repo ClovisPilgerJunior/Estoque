@@ -55,7 +55,7 @@ public class ProdutoEntradaService {
 
     public ProdutoEntradaGetDTO findById(Long id) {
         return produtoEntradaRepository.findById(id).map(mapStructMapper::produtoEntradaGetDTOToProdutoEntrada)
-            .orElseThrow(() -> new ObjectNotFoundException("Produto Capa não encontrado"));
+            .orElseThrow(() -> new ObjectNotFoundException("Produto capa não encontrado"));
     }
 
     public Double calcularSomaEntradas(Long produtoCapaId) {

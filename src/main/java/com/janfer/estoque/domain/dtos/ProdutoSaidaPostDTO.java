@@ -1,5 +1,6 @@
 package com.janfer.estoque.domain.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.Setor;
 import jakarta.validation.constraints.NotNull;
@@ -14,10 +15,11 @@ public class ProdutoSaidaPostDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-  private Date dataSaida = new Date();
+  @JsonFormat(pattern = "dd/MM/yyyy")
+  private Date dataSaida;
   private Long quantidade;
   private String retiradoPor;
-  private Setor setor;
+  private Integer setor;
   private String observacao;
   @NotNull(message = "Produto capa não pode estar vazio")
   private Long produtoCapa;

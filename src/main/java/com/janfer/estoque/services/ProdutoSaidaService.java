@@ -1,6 +1,9 @@
 package com.janfer.estoque.services;
 
+import com.janfer.estoque.domain.dtos.ProdutoEntradaGetDTO;
+import com.janfer.estoque.domain.dtos.ProdutoSaidaGetDTO;
 import com.janfer.estoque.domain.entities.ProdutoSaida;
+import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.ProdutoCapaRepository;
 import com.janfer.estoque.repositories.ProdutoSaidaRepository;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
@@ -22,6 +25,10 @@ public class ProdutoSaidaService {
 
     @Autowired
     ProdutoCapaRepository produtoCapaRepository;
+
+    @Autowired
+    MapStructMapper mapStructMapper;
+
 
     @Transactional
     public List<ProdutoSaida> findAll(){
@@ -45,8 +52,9 @@ public class ProdutoSaidaService {
 
     }
 
-    public Optional<ProdutoSaida> findById(Long id) {
-        return produtoSaidaRepository.findById(id);
+    public ProdutoSaidaGetDTO findById(Long id) {
+        return produtoSaidaRepository.findById(id).map(mapStructMapper::produtoSaidaGetDTOToProdutoSaida)
+                .orElseThrow(() -> new ObjectNotFoundException("Produto capa não encontrado"));
     }
 
     public Double calcularSomaSaida(Long produtoCapaId) {

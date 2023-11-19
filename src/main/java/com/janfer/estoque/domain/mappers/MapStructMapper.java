@@ -3,6 +3,7 @@ package com.janfer.estoque.domain.mappers;
 import com.janfer.estoque.domain.dtos.*;
 import com.janfer.estoque.domain.entities.*;
 import com.janfer.estoque.domain.enums.MedidaUnidade;
+import com.janfer.estoque.domain.enums.Setor;
 import com.janfer.estoque.domain.enums.TipoProduto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -94,9 +95,17 @@ public interface MapStructMapper {
    ProdutoSaida produtoSaidaToProdutoSaidaDTO(ProdutoSaidaPostDTO produtoSaidaDTO);
 
    @Mapping(source = "produtoCapa.id", target = "produtoCapa")
+   @Mapping(source = "setor.cod", target = "setor")
    ProdutoSaidaPostDTO produtoSaidaPostDTOToProdutoSaida(ProdutoSaida produtoSaida);
 
-   @Mapping(target = "produtoCapa", source = "produtoCapa.description")
+   default Setor mapSetor(Integer setorCod) {
+      return Setor.toEnum(setorCod);
+   }
+
+   @Mapping(target = "produtoCapa", source = "produtoCapa.id")
+   @Mapping(target = "produtoCapaDesc", source = "produtoCapa.description")
+   @Mapping(target = "setor", source = "setor.desc")
+   @Default
    ProdutoSaidaGetDTO produtoSaidaGetDTOToProdutoSaida(ProdutoSaida produtoSaida);
 
    // Mapeamento de ProdutoPerda
@@ -110,6 +119,8 @@ public interface MapStructMapper {
    @Mapping(target = "produtoCapa", source = "produtoCapa.id")
    ProdutoPerdaPostDTO produtoPerdaPostDTOtoProdutoPerda(ProdutoPerda produtoPerda);
 
-   @Mapping(target = "produtoCapa", source = "produtoCapa.description")
+   @Mapping(target = "produtoCapa", source = "produtoCapa.id")
+   @Mapping(target = "produtoCapaDesc", source = "produtoCapa.description")
+   @Default
    ProdutoPerdaGetDTO produtoPerdaGetDTOToProdutoPerda(ProdutoPerda produtoPerda);
 }
