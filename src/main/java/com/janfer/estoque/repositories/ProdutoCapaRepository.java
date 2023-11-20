@@ -20,10 +20,8 @@ public interface ProdutoCapaRepository extends JpaRepository<ProdutoCapa, Long> 
     @Query("SELECT p.ativo FROM ProdutoCapa p WHERE p.id = :id")
     Boolean isProdutoAtivoById(@Param("id") Long id);
 
-
     @Query("select (count(p) > 0) from ProdutoCapa p where p.fornecedor.id = ?1")
     boolean existsByFornecedor(Long id);
-
 
 
 }

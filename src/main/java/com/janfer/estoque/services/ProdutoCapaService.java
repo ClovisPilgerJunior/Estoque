@@ -101,39 +101,41 @@ public class ProdutoCapaService {
     List<ProdutoCapaCalculatedGetDTO> produtoCapaGetDTOs = new ArrayList<>();
 
     for (ProdutoCapa produtoCapa : produtoCapas) {
-      ProdutoCapaCalculatedGetDTO produtoCapaCalculatedGetDTO = mapStructMapper.produtoCapaToProdutoCapaCalculatedGetDTO(produtoCapa);
+      if(produtoCapaRepository.isProdutoAtivoById(produtoCapa.getId())) {
+        ProdutoCapaCalculatedGetDTO produtoCapaCalculatedGetDTO = mapStructMapper.produtoCapaToProdutoCapaCalculatedGetDTO(produtoCapa);
 
-      // Calculo de produtoEntrada
+        // Calculo de produtoEntrada
 
-      Double somaEntradas = produtoEntradaService.calcularSomaEntradas(produtoCapa.getId());
-      Double ultimoPrecoCompra = produtoEntradaService.recuperarUltimoPrecoCompra(produtoCapa.getId());
+        Double somaEntradas = produtoEntradaService.calcularSomaEntradas(produtoCapa.getId());
+        Double ultimoPrecoCompra = produtoEntradaService.recuperarUltimoPrecoCompra(produtoCapa.getId());
 
-      // Calculo de produtoPerda
-      Double somaPerdas = produtoPerdaService.calcularSomaPerdas(produtoCapa.getId());
+        // Calculo de produtoPerda
+        Double somaPerdas = produtoPerdaService.calcularSomaPerdas(produtoCapa.getId());
 
-      // Calculo do ProdutoSaida
-      Double somaSaida = produtoSaidaService.calcularSomaSaida(produtoCapa.getId());
+        // Calculo do ProdutoSaida
+        Double somaSaida = produtoSaidaService.calcularSomaSaida(produtoCapa.getId());
 
 
-      produtoCapaCalculatedGetDTO.setEntradas(somaEntradas != null ? somaEntradas : 0.0);
-      produtoCapaCalculatedGetDTO.setValorCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
-      produtoCapaCalculatedGetDTO.setPerdas(somaPerdas != null ? somaPerdas : 0.0);
-      produtoCapaCalculatedGetDTO.setSaidas(somaSaida != null ? somaSaida : 0.0);
-      double saldo = ((somaEntradas != null ? somaEntradas : 0.0) - (somaPerdas != null ? somaPerdas : 0.0) - (somaSaida != null ? somaSaida : 0.0));
+        produtoCapaCalculatedGetDTO.setEntradas(somaEntradas != null ? somaEntradas : 0.0);
+        produtoCapaCalculatedGetDTO.setValorCompra(ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0);
+        produtoCapaCalculatedGetDTO.setPerdas(somaPerdas != null ? somaPerdas : 0.0);
+        produtoCapaCalculatedGetDTO.setSaidas(somaSaida != null ? somaSaida : 0.0);
+        double saldo = ((somaEntradas != null ? somaEntradas : 0.0) - (somaPerdas != null ? somaPerdas : 0.0) - (somaSaida != null ? somaSaida : 0.0));
 
-      double totalGeral = (saldo * (ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0));
+        double totalGeral = (saldo * (ultimoPrecoCompra != null ? ultimoPrecoCompra : 0.0));
 
-      produtoCapaCalculatedGetDTO.setSaldo(saldo);
-      produtoCapaCalculatedGetDTO.setValorTotal(totalGeral);
+        produtoCapaCalculatedGetDTO.setSaldo(saldo);
+        produtoCapaCalculatedGetDTO.setValorTotal(totalGeral);
 
-      long minimo = produtoCapaCalculatedGetDTO.getMinimo() != null ? produtoCapaCalculatedGetDTO.getMinimo() : 0L;
-      long maximo = produtoCapaCalculatedGetDTO.getMaximo() != null ? produtoCapaCalculatedGetDTO.getMaximo() : 0L;
+        long minimo = produtoCapaCalculatedGetDTO.getMinimo() != null ? produtoCapaCalculatedGetDTO.getMinimo() : 0L;
+        long maximo = produtoCapaCalculatedGetDTO.getMaximo() != null ? produtoCapaCalculatedGetDTO.getMaximo() : 0L;
 
-      String resuprimento = calcularResuprimento(produtoCapaCalculatedGetDTO.getSaldo(), minimo, maximo);
+        String resuprimento = calcularResuprimento(produtoCapaCalculatedGetDTO.getSaldo(), minimo, maximo);
 
-      produtoCapaCalculatedGetDTO.setResuprimento(resuprimento);
+        produtoCapaCalculatedGetDTO.setResuprimento(resuprimento);
 
-      produtoCapaGetDTOs.add(produtoCapaCalculatedGetDTO);
+        produtoCapaGetDTOs.add(produtoCapaCalculatedGetDTO);
+      }
     }
 
     return produtoCapaGetDTOs;
