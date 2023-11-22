@@ -20,6 +20,7 @@ public class ProdutoSaidaPostDTO implements Serializable {
   private Long quantidade;
   private String retiradoPor;
   private Integer setor;
+  private Long unidadeProdutiva;
   private String observacao;
   @NotNull(message = "Produto capa não pode estar vazio")
   private Long produtoCapa;

@@ -46,10 +46,33 @@ VALUES ('2023-10-08', 5, 'Produto danificado', 1);
 INSERT INTO produto_perda (data, quantidade, motivo, produto_capa_id)
 VALUES ('2023-09-15', 2, 'Produto vencido', 2);
 
+
+INSERT
+INTO
+  unidade_produtiva
+  (nome, servico, ativo)
+VALUES
+  ('A', 'COSTURA', TRUE);
+
+INSERT
+INTO
+  unidade_produtiva
+  (nome, servico, ativo)
+VALUES
+  ('B', 'COSTURA', TRUE);
+
+INSERT
+INTO
+  unidade_produtiva
+  (nome, servico, ativo)
+VALUES
+  ('C', 'COSTURA', TRUE);
+
+
 -- Inserir um registro de ProdutoSaida
-INSERT INTO produto_saida (data_saida, quantidade, retirado_por, setor, observacao, produto_capa_id)
-VALUES ('2023-10-08', 3, 'João', 1, 'Produto retirado para uso interno', 1);
+INSERT INTO produto_saida (data_saida, quantidade, retirado_por, setor, unidade_produtiva_id, observacao, produto_capa_id)
+VALUES ('2023-10-08', 3, 'João', 2, 1, 'Produto retirado para uso interno', 1);
 
 -- Inserir outro registro de ProdutoSaida com valores diferentes
-INSERT INTO produto_saida (data_saida, quantidade, retirado_por, setor, observacao, produto_capa_id)
-VALUES ('2023-09-15', 1, 'Maria', 2, 'Produto retirado para teste', 2);
+INSERT INTO produto_saida (data_saida, quantidade, retirado_por, setor, unidade_produtiva_id, observacao, produto_capa_id)
+VALUES ('2023-09-15', 1, 'Maria', 1, 2, 'Produto retirado para teste', 2);

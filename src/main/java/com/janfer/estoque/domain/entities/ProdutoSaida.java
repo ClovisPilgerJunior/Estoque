@@ -31,6 +31,9 @@ public class ProdutoSaida {
   private String retiradoPor;
   @NotNull(message = "Por favor informe um setor")
   private Setor setor;
+  @ManyToOne
+  @JoinColumn(name = "unidade_produtiva_id", referencedColumnName = "id", nullable = false)
+  private UnidadeProdutiva unidadeProdutiva;
   private String observacao;
   @ManyToOne // Define a relação muitos-para-um
   @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false) // Define a coluna de chave estrangeira

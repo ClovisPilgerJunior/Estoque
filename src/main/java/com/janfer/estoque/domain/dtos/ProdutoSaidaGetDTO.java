@@ -19,6 +19,7 @@ public class ProdutoSaidaGetDTO implements Serializable {
   private Long quantidade;
   private String retiradoPor;
   private String setor;
+  private String unidadeProdutiva;
   private String observacao;
 
 }

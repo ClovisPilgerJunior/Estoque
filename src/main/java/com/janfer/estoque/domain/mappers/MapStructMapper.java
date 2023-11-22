@@ -92,10 +92,12 @@ public interface MapStructMapper {
 
    @Mapping(target = "id", ignore = true)
    @Mapping(target = "produtoCapa.id", source = "produtoCapa")
+   @Mapping(source = "unidadeProdutiva", target = "unidadeProdutiva.id")
    ProdutoSaida produtoSaidaToProdutoSaidaDTO(ProdutoSaidaPostDTO produtoSaidaDTO);
 
    @Mapping(source = "produtoCapa.id", target = "produtoCapa")
    @Mapping(source = "setor.cod", target = "setor")
+   @Mapping(source = "unidadeProdutiva.id", target = "unidadeProdutiva")
    ProdutoSaidaPostDTO produtoSaidaPostDTOToProdutoSaida(ProdutoSaida produtoSaida);
 
    default Setor mapSetor(Integer setorCod) {
@@ -105,6 +107,7 @@ public interface MapStructMapper {
    @Mapping(target = "produtoCapa", source = "produtoCapa.id")
    @Mapping(target = "produtoCapaDesc", source = "produtoCapa.description")
    @Mapping(target = "setor", source = "setor.desc")
+   @Mapping(target = "unidadeProdutiva", source = "unidadeProdutiva.nome")
    @Default
    ProdutoSaidaGetDTO produtoSaidaGetDTOToProdutoSaida(ProdutoSaida produtoSaida);
 
@@ -123,4 +126,12 @@ public interface MapStructMapper {
    @Mapping(target = "produtoCapaDesc", source = "produtoCapa.description")
    @Default
    ProdutoPerdaGetDTO produtoPerdaGetDTOToProdutoPerda(ProdutoPerda produtoPerda);
+
+   List<UnidadeProdutivaGetDTO> unidadeProdutivaGetAllDTOToUnidadeProdutiva(List<UnidadeProdutiva> unidadeProdutiva);
+
+   UnidadeProdutivaGetDTO unidadeProdutivaGetDTOToUnidadeProdutiva(UnidadeProdutiva unidadeProdutiva);
+
+   UnidadeProdutivaPostDTO unidadeProdutivaPostDTOToUnidadeProdutiva(UnidadeProdutivaPostDTO unidadeProdutiva);
+
+   UnidadeProdutiva unidadeProdutivaUnidadeProdutivaPostDTO(UnidadeProdutivaPostDTO unidadeProdutivaPostDTO);
 }
