@@ -41,24 +41,25 @@ public class UnidadeProdutivaService {
       throw new DataIntegrityViolationException("Unidade produtiva já cadastrada!");
     }
 
+    unidadeProdutivaPostDTO.setAtivo(true);
 
     return unidadeProdutivaRepository.save(mapStructMapper.unidadeProdutivaUnidadeProdutivaPostDTO(unidadeProdutivaPostDTO));
   }
 
   public UnidadeProdutiva update(UnidadeProdutivaPostDTO unidadeProdutivaPostDTO, Long id){
-    UnidadeProdutivaGetDTO unidadeProdutivaGetDTO = unidadeProdutivaRepository.findById(id)
-        .map(mapStructMapper::unidadeProdutivaGetDTOToUnidadeProdutiva)
-        .orElseThrow(()-> new ObjectNotFoundException("Unidade produtiva não encontrada!"));
-
-    if(unidadeProdutivaRepository.existsByNome(unidadeProdutivaPostDTO.getNome())
-    && !unidadeProdutivaRepository.existsById(id)) {
-      throw new DataIntegrityViolationException("Unidade produtiva já cadastrada");
+    if (unidadeProdutivaRepository.existsByNomeAndIdNot(unidadeProdutivaPostDTO.getNome(), id)) {
+      throw new DataIntegrityViolationException("Já existe uma unidade produtiva com esse nome.");
     }
 
+    UnidadeProdutivaGetDTO unidadeProdutivaGetDTO = unidadeProdutivaRepository.findById(id)
+        .map(mapStructMapper::unidadeProdutivaGetDTOToUnidadeProdutiva)
+        .orElseThrow(() -> new ObjectNotFoundException("Unidade produtiva não encontrada!"));
 
-
+    // Atualiza os dados da unidade produtiva com base no DTO recebido
     UnidadeProdutiva unidadeProdutiva = mapStructMapper.unidadeProdutivaUnidadeProdutivaPostDTO(unidadeProdutivaPostDTO);
     unidadeProdutiva.setId(unidadeProdutivaGetDTO.getId());
+
+    // Salva a unidade produtiva atualizada
     return unidadeProdutivaRepository.save(unidadeProdutiva);
   }
 

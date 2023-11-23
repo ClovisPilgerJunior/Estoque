@@ -32,7 +32,7 @@ public class ProdutoSaida {
   @NotNull(message = "Por favor informe um setor")
   private Setor setor;
   @ManyToOne
-  @JoinColumn(name = "unidade_produtiva_id", referencedColumnName = "id", nullable = false)
+  @JoinColumn(name = "unidade_produtiva_id", referencedColumnName = "id", nullable = true)
   private UnidadeProdutiva unidadeProdutiva;
   private String observacao;
   @ManyToOne // Define a relação muitos-para-um

@@ -10,7 +10,9 @@ public enum Setor {
   MARKETING(0, "MERKETING"),
   ESCRITORIO(1, "ESCRITORIO"),
   USO_INTERNO(2, "USO INTERNO"),
-  SERVICOS_GERAIS(3, "SERVIÇOS GERAIS");
+  SERVICOS_GERAIS(3, "SERVIÇOS GERAIS"),
+  FACCAO(4, "FACÇÃO");
+
 
   private int cod;
   private String desc;
