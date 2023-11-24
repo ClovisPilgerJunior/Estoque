@@ -6,10 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.Date;
 
@@ -18,6 +16,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ProdutoSaida {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,13 +30,12 @@ public class ProdutoSaida {
   private String retiradoPor;
   @NotNull(message = "Por favor informe um setor")
   private Setor setor;
-  @ManyToOne
-  @JoinColumn(name = "unidade_produtiva_id", referencedColumnName = "id", nullable = true)
+  @ManyToOne(targetEntity = ObjectUtils.Null)
+  @JoinColumn(name = "unidade_produtiva_id")
   private UnidadeProdutiva unidadeProdutiva;
   private String observacao;
-  @ManyToOne // Define a relação muitos-para-um
-  @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false) // Define a coluna de chave estrangeira
+  @ManyToOne
+  @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false)
   @NotNull(message = "Não é possível lançar saída sem passar um produto")
-  private ProdutoCapa produtoCapa; // Referência para o ProdutoCapa correspondente
-
+  private ProdutoCapa produtoCapa;
 }

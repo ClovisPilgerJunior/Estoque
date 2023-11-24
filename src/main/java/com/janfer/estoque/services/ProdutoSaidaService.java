@@ -8,6 +8,7 @@ import com.janfer.estoque.repositories.ProdutoCapaRepository;
 import com.janfer.estoque.repositories.ProdutoSaidaRepository;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import com.janfer.estoque.services.exceptions.ProductDisableException;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -30,11 +31,13 @@ public class ProdutoSaidaService {
     MapStructMapper mapStructMapper;
 
 
+
     @Transactional
     public List<ProdutoSaida> findAll(){
         return produtoSaidaRepository.findAll();
     }
 
+    @Transactional
     public ProdutoSaida save(ProdutoSaida produtoSaida){
 
         if(Boolean.FALSE.equals(produtoCapaRepository.isProdutoAtivoById(produtoSaida.getProdutoCapa().getId()))){
@@ -42,6 +45,7 @@ public class ProdutoSaidaService {
         }
 
         return produtoSaidaRepository.save(produtoSaida);
+
     }
 
     @Transactional

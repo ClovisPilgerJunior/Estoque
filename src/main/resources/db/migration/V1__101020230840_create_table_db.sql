@@ -72,7 +72,7 @@ CREATE TABLE produto_saida (
    quantidade BIGINT,
    retirado_por VARCHAR(255),
    setor SMALLINT NOT NULL,
-   unidade_produtiva_id BIGINT NULL,
+   unidade_produtiva_id BIGINT,
    observacao VARCHAR(255),
    produto_capa_id BIGINT NOT NULL,
    CONSTRAINT pk_produtosaida PRIMARY KEY (id)
