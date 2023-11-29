@@ -1,5 +1,6 @@
 package com.janfer.estoque.domain.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serial;
@@ -14,7 +15,8 @@ public class ProdutoPerdaGetDTO implements Serializable {
   private Long id;
   private String produtoCapa;
   private String produtoCapaDesc;
-  private Date data = new Date();
+  @JsonFormat(pattern = "dd/MM/yyyy")
+  private Date data;
   private Long quantidade;
   private String motivo;
 

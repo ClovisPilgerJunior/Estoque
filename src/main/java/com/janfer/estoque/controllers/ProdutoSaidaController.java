@@ -89,6 +89,10 @@ public class ProdutoSaidaController {
     public ResponseEntity<ProdutoSaida> update(@PathVariable(value = "id") Long id, @RequestBody @Valid ProdutoSaidaPostDTO produtoSaidaDTO){
         ProdutoSaidaGetDTO produtoSaidaGetDTO = produtoSaidaService.findById(id);
 
+        if (!produtoCapaService.existById(produtoSaidaDTO.getProdutoCapa())) {
+            throw new ObjectNotFoundException("Produto Capa correspondente não encontrado");
+        }
+
         ProdutoSaida produtoSaida = mapStructMapper.produtoSaidaToProdutoSaidaDTO(produtoSaidaDTO);
         produtoSaida.setId(produtoSaidaGetDTO.getId());
         return ResponseEntity.status(HttpStatus.OK).body(produtoSaidaService.save(produtoSaida));

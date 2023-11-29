@@ -30,7 +30,7 @@ public class ProdutoSaida {
   private String retiradoPor;
   @NotNull(message = "Por favor informe um setor")
   private Setor setor;
-  @ManyToOne(targetEntity = ObjectUtils.Null)
+  @ManyToOne
   @JoinColumn(name = "unidade_produtiva_id")
   private UnidadeProdutiva unidadeProdutiva;
   private String observacao;

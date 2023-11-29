@@ -1,5 +1,6 @@
 package com.janfer.estoque.domain.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -13,7 +14,8 @@ public class ProdutoPerdaPostDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1L;
-  private Date data = new Date();
+  @JsonFormat(pattern = "dd/MM/yyyy")
+  private Date data;
   private Long quantidade;
   private String motivo;
   @NotNull(message = "Produto capa não pode estar vazio")

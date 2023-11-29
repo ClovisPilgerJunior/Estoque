@@ -1,9 +1,6 @@
 package com.janfer.estoque.controllers.exceptions;
 
-import com.janfer.estoque.services.exceptions.ConstraintViolationException;
-import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
-import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
-import com.janfer.estoque.services.exceptions.ProductDisableException;
+import com.janfer.estoque.services.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -85,4 +82,18 @@ public class ResourceExceptionHandler {
     );
     return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
   }
+
+  @ExceptionHandler({SaldoNegativoException.class})
+  public ResponseEntity<StandardError> saldoNegativoException(SaldoNegativoException ex, HttpServletRequest request) {
+    StandardError error = new StandardError(
+        Instant.now().toEpochMilli(),
+        HttpStatus.CONFLICT.value(),
+        "A quantidade de saída é maior que o saldo disponível.",
+        ex.getMessage(),
+        request.getRequestURI()
+    );
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+  }
+
+
 }

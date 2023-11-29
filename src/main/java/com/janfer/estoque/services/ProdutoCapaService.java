@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,8 +36,12 @@ public class ProdutoCapaService {
   @Autowired
   ProdutoPerdaService produtoPerdaService;
 
+  private ProdutoSaidaService produtoSaidaService;
+
   @Autowired
-  ProdutoSaidaService produtoSaidaService;
+  public void setProdutoSaidaService(ProdutoSaidaService produtoSaidaService) {
+    this.produtoSaidaService = produtoSaidaService;
+  }
 
   @Autowired
   MapStructMapper mapStructMapper;
@@ -102,6 +107,17 @@ public class ProdutoCapaService {
 
     for (ProdutoCapa produtoCapa : produtoCapas) {
       if(produtoCapaRepository.isProdutoAtivoById(produtoCapa.getId())) {
+        ProdutoCapaCalculatedGetDTO produtoCapaCalculatedGetDTO = calcularProdutoCapa(produtoCapa);
+
+        produtoCapaGetDTOs.add(produtoCapaCalculatedGetDTO);
+      }
+    }
+
+    return produtoCapaGetDTOs;
+  }
+
+  private ProdutoCapaCalculatedGetDTO calcularProdutoCapa(ProdutoCapa produtoCapa)  {
+
         ProdutoCapaCalculatedGetDTO produtoCapaCalculatedGetDTO = mapStructMapper.produtoCapaToProdutoCapaCalculatedGetDTO(produtoCapa);
 
         // Calculo de produtoEntrada
@@ -134,11 +150,8 @@ public class ProdutoCapaService {
 
         produtoCapaCalculatedGetDTO.setResuprimento(resuprimento);
 
-        produtoCapaGetDTOs.add(produtoCapaCalculatedGetDTO);
-      }
-    }
 
-    return produtoCapaGetDTOs;
+    return produtoCapaCalculatedGetDTO;
   }
 
   public String calcularResuprimento(Double saldo, Long minimo, Long maximo) {
