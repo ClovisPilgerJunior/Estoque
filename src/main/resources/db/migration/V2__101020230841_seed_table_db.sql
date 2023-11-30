@@ -76,3 +76,12 @@ VALUES ('2023-10-08', 3, 'João', 2, 1, 'Produto retirado para uso interno', 1);
 -- Inserir outro registro de ProdutoSaida com valores diferentes
 INSERT INTO produto_saida (data_saida, quantidade, retirado_por, setor, unidade_produtiva_id, observacao, produto_capa_id)
 VALUES ('2023-09-15', 1, 'Maria', 1, 2, 'Produto retirado para teste', 2);
+
+-- Primeiro, inserimos o usuário na tabela "user"
+INSERT INTO "users" (name, password)
+VALUES ('admin', 'admin');
+
+-- Agora, inserimos o perfil no table "profiles"
+INSERT INTO profiles (users_id, profiles)
+VALUES (1, 0);
+

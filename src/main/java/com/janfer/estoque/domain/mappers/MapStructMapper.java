@@ -3,6 +3,7 @@ package com.janfer.estoque.domain.mappers;
 import com.janfer.estoque.domain.dtos.*;
 import com.janfer.estoque.domain.entities.*;
 import com.janfer.estoque.domain.enums.MedidaUnidade;
+import com.janfer.estoque.domain.enums.Profile;
 import com.janfer.estoque.domain.enums.Setor;
 import com.janfer.estoque.domain.enums.TipoProduto;
 import org.mapstruct.Mapper;
@@ -11,6 +12,7 @@ import org.mapstruct.factory.Mappers;
 
 import javax.enterprise.inject.Default;
 import java.util.List;
+import java.util.Set;
 
 @Mapper(componentModel = "Spring")
 public interface MapStructMapper {
@@ -136,4 +138,31 @@ public interface MapStructMapper {
    UnidadeProdutivaPostDTO unidadeProdutivaPostDTOToUnidadeProdutiva(UnidadeProdutivaPostDTO unidadeProdutiva);
    @Mapping(target = "id", ignore = true)
    UnidadeProdutiva unidadeProdutivaUnidadeProdutivaPostDTO(UnidadeProdutivaPostDTO unidadeProdutivaPostDTO);
+
+   @Mapping(target = "id", ignore = true)
+   User userToUserPostDTO(UserPostDTO userPostDTO);
+
+   List<UserGetDTO> userListAllUser(List<User> userGetDTOS);
+
+   UserGetDTO userGetDTOToUser(User user);
+
+   Set<Integer> profileToIntegerSet(Set<Profile> profiles);
+
+   Set<Profile> profileToIntegerSetP(Set<Integer> profiles);
+
+   default Integer mapProfileToInteger(Profile profile) {
+      if (profile == null) {
+         return null;
+      }
+      return profile.getCode();
+   }
+
+   default Profile mapIntegerToProfile(Integer code) {
+      if (code == null) {
+         return null;
+      }
+      return Profile.toEnum(code);
+   }
+
+
 }
