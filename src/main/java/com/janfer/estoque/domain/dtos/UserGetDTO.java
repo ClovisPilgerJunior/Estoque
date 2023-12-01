@@ -10,6 +10,6 @@ public class UserGetDTO {
   private Integer id;
   private String name;
   private String password;
-  private Set<Integer> profiles = new HashSet<>();
+  private Set<String> profiles = new HashSet<>();
 
 }

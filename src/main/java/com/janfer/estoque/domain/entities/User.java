@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements Serializable {
 
@@ -33,9 +34,6 @@ public class User implements Serializable {
   @CollectionTable(name = "PROFILES")
   private Set<Integer> profiles = new HashSet<>();
 
-  public User(){
-    addProfiles(Profile.ROLE_USER);
-  }
 
   public Set<Profile> getProfiles() {
     return profiles.stream().map(Profile::toEnum).collect(Collectors.toSet());
