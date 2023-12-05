@@ -15,10 +15,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -30,6 +33,7 @@ import java.util.Arrays;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -63,50 +67,15 @@ public class SecurityConfig {
         .cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .securityMatcher("/api/**", "/app/**")
         .authorizeHttpRequests(authorize -> authorize
-            .requestMatchers(mvc.pattern("/auth/login")).permitAll()
-            .requestMatchers(mvc.pattern("/h2-console/*")).permitAll()
-            .anyRequest().permitAll()
+            .requestMatchers(mvc.pattern("/api/auth/login")).permitAll()
+            .requestMatchers(mvc.pattern("/h2-console/**")).permitAll()
+            .anyRequest().authenticated()
         )
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
   }
-
-//  private static final String API_URL_PATTERN = "/*";
-//
-//  @Bean
-//  public SecurityFilterChain getSecurityFilterChain(HttpSecurity http,
-//                                                    HandlerMappingIntrospector introspector) throws Exception {
-//    MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
-//
-//    http.csrf(csrfConfigurer ->
-//        csrfConfigurer.ignoringRequestMatchers(mvcMatcherBuilder.pattern(API_URL_PATTERN),
-//            PathRequest.toH2Console()));
-//
-//    if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
-//      http
-//          .headers((headers) ->
-//              headers
-//                  .defaultsDisabled()
-//                  .cacheControl(withDefaults())
-//                  .frameOptions(withDefaults())
-//          );
-//    }
-//
-//    http.authorizeHttpRequests(auth ->
-//        auth
-//            .requestMatchers(mvcMatcherBuilder.pattern(API_URL_PATTERN)).permitAll()
-//            //This line is optional in .authenticated() case as .anyRequest().authenticated()
-//            //would be applied for H2 path anyway
-//            .requestMatchers(PathRequest.toH2Console()).authenticated()
-//            .anyRequest().authenticated()
-//    );
-//
-//    http.formLogin(Customizer.withDefaults());
-//    http.httpBasic(Customizer.withDefaults());
-//
-//    return http.build();
-//  }
 
   @Value("${cors.origins}")
   private String corsOrigins;
@@ -127,8 +96,8 @@ public class SecurityConfig {
   }
 
   @Bean
-  public BCryptPasswordEncoder bCryptPasswordEncoder() {
-    return new BCryptPasswordEncoder();
+  public PasswordEncoder bCryptPasswordEncoder() {
+    return NoOpPasswordEncoder.getInstance();
   }
 
 }

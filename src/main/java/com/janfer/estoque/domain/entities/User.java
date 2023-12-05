@@ -33,6 +33,7 @@ public class User implements Serializable {
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "PROFILES")
   private Set<Integer> profiles = new HashSet<>();
+  private boolean ativo;
 
 
   public Set<Profile> getProfiles() {

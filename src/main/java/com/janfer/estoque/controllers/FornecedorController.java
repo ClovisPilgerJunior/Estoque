@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,6 +35,7 @@ import static com.janfer.estoque.controllers.messages.FornecedorMessage.NOT_FOUN
 @Server(url = "http://estoque-production.up.railway.app", description = "Servidor de produção")
 @RestController
 @RequestMapping(value = "/api/fornecedor")
+@PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR'))")
 public class FornecedorController {
 
   @Autowired

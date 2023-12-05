@@ -17,4 +17,5 @@ public class UserPostDTO {
   private String name;
   private String password;
   private Set<Integer> profiles = new HashSet<>();
+  private boolean ativo;
 }

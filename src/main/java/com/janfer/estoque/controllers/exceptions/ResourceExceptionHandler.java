@@ -95,5 +95,30 @@ public class ResourceExceptionHandler {
     return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
   }
 
+  @ExceptionHandler({AccessDeniedException.class})
+  public ResponseEntity<StandardError> accessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
+    StandardError error = new StandardError(
+        Instant.now().toEpochMilli(),
+        HttpStatus.FORBIDDEN.value(),
+        "A quantidade de saída é maior que o saldo disponível.",
+        ex.getMessage(),
+        request.getRequestURI()
+    );
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+  }
+
+  @ExceptionHandler({BadCredentialsException.class})
+  public ResponseEntity<StandardError> badCredentialsException(BadCredentialsException ex, HttpServletRequest request) {
+    StandardError error = new StandardError(
+        Instant.now().toEpochMilli(),
+        HttpStatus.FORBIDDEN.value(),
+        "Usuário inexistente ou senha inválida",
+        ex.getMessage(),
+        request.getRequestURI()
+    );
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+  }
+
+
 
 }

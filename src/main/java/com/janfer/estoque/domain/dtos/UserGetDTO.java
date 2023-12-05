@@ -11,5 +11,6 @@ public class UserGetDTO {
   private String name;
   private String password;
   private Set<String> profiles = new HashSet<>();
+  private boolean ativo;
 
 }

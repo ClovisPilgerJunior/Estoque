@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -16,17 +17,21 @@ public class DBService {
   @Autowired
   UserRepository userRepository;
 
-  @Autowired
-  BCryptPasswordEncoder encoder;
 
   public void startDB(){
     Set<Integer> userProfiles = new HashSet<>();
     userProfiles.add(0);
     userProfiles.add(1);
 
-    User user = new User(null, "admin", encoder.encode("admin"), userProfiles);
-    user.addProfiles(Profile.ROLE_ADMIN);
+    Set<Integer> userProfiles1 = new HashSet<>();
+    userProfiles1.add(2);
 
-    userRepository.save(user);
+    User user = new User(null, "admin", "admin", userProfiles, true);
+
+    User user1 = new User(null, "user", "user", userProfiles1, true);
+
+    User user2 = new User(null, "user2", "user2", userProfiles1, false);
+
+    userRepository.saveAll(List.of(user, user1, user2));
   }
 }
