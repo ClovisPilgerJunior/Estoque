@@ -50,8 +50,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         // Set the authentication in the SecurityContext (if needed)
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println("SecurityFilet: Caiu no IF");
       } else {
-        System.out.println("Caiu aqui ");
+        System.out.println("SecurityFilter: Caiu aqui ");
         throw new RuntimeException();
       }
 

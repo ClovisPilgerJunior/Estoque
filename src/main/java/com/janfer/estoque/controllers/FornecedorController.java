@@ -35,7 +35,7 @@ import static com.janfer.estoque.controllers.messages.FornecedorMessage.NOT_FOUN
 @Server(url = "http://estoque-production.up.railway.app", description = "Servidor de produção")
 @RestController
 @RequestMapping(value = "/api/fornecedor")
-@PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR'))")
+@PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR'))")
 public class FornecedorController {
 
   @Autowired
@@ -44,6 +44,7 @@ public class FornecedorController {
   @Autowired
   FornecedorService fornecedorService;
 
+  @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_CREATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_CREATE'))")
   @PostMapping("/cadastrar")
   @Operation(summary = "Cadastrar um novo fornecedor", description = "Cadastra um novo fornecedor com base nos dados fornecidos.")
   @ApiResponse(responseCode = "201", description = "Fornecedor cadastrado com sucesso!")
@@ -63,6 +64,7 @@ public class FornecedorController {
     return ResponseEntity.created(uri).body(fornecedorDTO);
   }
 
+  @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_LIST'))")
   @GetMapping
   @Operation(summary = "Listar todos os fornecedores", description = "Recupera a lista de todos os fornecedores cadastrados.")
   @ApiResponse(responseCode = "200", description = "Lista de fornecedores encontrada com sucesso!")
@@ -70,6 +72,7 @@ public class FornecedorController {
     return new ResponseEntity<>(mapStructMapper.fornecedorAllToFornecedorDTO(fornecedorService.findAll()), HttpStatus.OK);
   }
 
+  @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_LIST'))")
   @GetMapping("/{id}")
   @Operation(summary = "Buscar fornecedor por ID", description = "Recupera um fornecedor pelo ID fornecido.")
   @ApiResponse(responseCode = "200", description = "Fornecedor encontrado com sucesso.")
@@ -85,6 +88,7 @@ public class FornecedorController {
         );
   }
 
+  @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_UPDATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_UPDATE'))")
   @PutMapping("/atualizar/{id}")
   @Operation(summary = "Atualizar fornecedor por ID", description = "Atualiza um fornecedor pelo ID fornecido.")
   @ApiResponse(responseCode = "200", description = "Fornecedor atualizado com sucesso.")
@@ -111,6 +115,7 @@ public class FornecedorController {
     return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.save(fornecedor));
   }
 
+  @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_DELETE')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_DELETE'))")
   @DeleteMapping("/deletar/{id}")
   @Operation(summary = "Deletar fornecedor por ID", description = "Exclui um fornecedor pelo ID fornecido.")
   @ApiResponse(responseCode = "200", description = "Fornecedor excluído com sucesso!")

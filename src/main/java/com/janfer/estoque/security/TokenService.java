@@ -31,7 +31,7 @@ public class TokenService {
   }
 
   private Instant genExpirationDate(){
-    return LocalDateTime.now().plusMinutes(180).toInstant(ZoneOffset.of("-03:00"));
+    return LocalDateTime.now().plusMinutes(1).toInstant(ZoneOffset.of("-03:00"));
   }
 
   public String validateToken(String token) {
@@ -43,6 +43,7 @@ public class TokenService {
           .verify(token)
           .getSubject();
     } catch (JWTVerificationException e){
+      System.out.println("Token Service: caiu aqui");
       return "";
     }
   }

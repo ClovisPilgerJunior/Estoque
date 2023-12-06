@@ -19,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Optional;
 @Server(url = "http://estoque-production.up.railway.app", description = "Servidor de produção")
 @RestController
 @RequestMapping(value = "/api/produtoPerda")
+@PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOPERDA_VIEW'))")
 public class ProdutoPerdaController {
 
     @Autowired
@@ -41,6 +43,7 @@ public class ProdutoPerdaController {
     @Autowired
     ProdutoCapaService produtoCapaService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOPERDA_CREATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOPERDA_CREATE'))")
     @PostMapping("/cadastrar")
     @Operation(summary = "Cadastrar uma nova perda de produto", description = "Cadastra uma nova perda de produto com base nos dados fornecidos.")
     @ApiResponse(responseCode = "201", description = "Perda de produto cadastrada com sucesso")
@@ -58,6 +61,7 @@ public class ProdutoPerdaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoPerdaPostDTO);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOPERDA_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOPERDA_LIST'))")
     @GetMapping
     @Operation(summary = "Listar todas as perdas de produtos", description = "Recupera a lista de todas as perdas de produtos cadastradas.")
     @ApiResponse(responseCode = "200", description = "Lista de perdas de produtos encontrada com sucesso")
@@ -65,6 +69,7 @@ public class ProdutoPerdaController {
         return new ResponseEntity<>(mapStructMapper.produtoPerdaGetDTOAllToProdutoPerda(produtoPerdaService.findAll()), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOPERDA_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOPERDA_LIST'))")
     @GetMapping("/{id}")
     @Operation(summary = "Buscar perda de produto por ID", description = "Recupera uma perda de produto pelo seu ID.")
     @ApiResponse(responseCode = "200", description = "Perda de produto encontrada com sucesso")
@@ -73,6 +78,7 @@ public class ProdutoPerdaController {
         return produtoCapaService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOPERDA_DELETE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOPERDA_DELETE'))")
     @DeleteMapping("/deletar/{id}")
     @Operation(summary = "Excluir uma perda de produto", description = "Exclui uma perda de produto existente com base no ID fornecido.")
     @ApiResponse(responseCode = "200", description = "Perda de produto excluída com sucesso")
@@ -81,6 +87,7 @@ public class ProdutoPerdaController {
         produtoPerdaService.delete(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOPERDA_UPDATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOPERDA_UPDATE'))")
     @PutMapping("/atualizar/{id}")
     @Operation(summary = "Atualizar uma perda de produto", description = "Atualiza uma perda de produto existente com base nos dados fornecidos.")
     @ApiResponse(responseCode = "200", description = "Perda de produto atualizada com sucesso")

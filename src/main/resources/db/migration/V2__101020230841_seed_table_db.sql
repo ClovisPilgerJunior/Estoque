@@ -77,3 +77,19 @@ VALUES ('2023-10-08', 3, 'João', 2, 1, 'Produto retirado para uso interno', 1);
 INSERT INTO produto_saida (data_saida, quantidade, retirado_por, setor, unidade_produtiva_id, observacao, produto_capa_id)
 VALUES ('2023-09-15', 1, 'Maria', 1, 2, 'Produto retirado para teste', 2);
 
+INSERT INTO users (name, password, ativo)
+VALUES ('admin', 'admin', TRUE);
+
+INSERT INTO users (name, password, ativo)
+VALUES ('user', 'user', TRUE);
+
+INSERT INTO users (name, password, ativo)
+VALUES ('user1', 'user2', FALSE);
+
+INSERT INTO profiles (user_id, profiles) VALUES(1, 0);
+
+INSERT INTO profiles (user_id, profiles) VALUES(2, 2);
+INSERT INTO profiles (user_id, profiles) VALUES(2, 3);
+
+INSERT INTO profiles (user_id, profiles) VALUES(3, 2);
+INSERT INTO profiles (user_id, profiles) VALUES(3, 3);

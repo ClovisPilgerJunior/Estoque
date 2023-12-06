@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Optional;
 @Server(url = "http://estoque-production.up.railway.app", description = "Servidor de produção")
 @RestController
 @RequestMapping(value = "/api/produtoSaida")
+@PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOSAIDA_VIEW'))")
 public class ProdutoSaidaController {
 
     @Autowired
@@ -39,6 +41,7 @@ public class ProdutoSaidaController {
     @Autowired
     ProdutoCapaService produtoCapaService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOSAIDA_CREATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOSAIDA_CREATE'))")
     @PostMapping("/cadastrar")
     @Operation(summary = "Cadastrar uma nova saída de produto", description = "Cadastra uma nova saída de produto com base nos dados fornecidos.")
     @ApiResponse(responseCode = "201", description = "Saída de produto cadastrada com sucesso")
@@ -57,6 +60,7 @@ public class ProdutoSaidaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoSaidaDTO);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOSAIDA_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOSAIDA_LIST'))")
     @GetMapping
     @Operation(summary = "Listar todas as saídas de produtos", description = "Recupera a lista de todas as saídas de produtos cadastradas.")
     @ApiResponse(responseCode = "200", description = "Lista de saídas de produtos encontrada com sucesso")
@@ -65,6 +69,7 @@ public class ProdutoSaidaController {
             produtoSaidaGetDTOAllToProdutoSaida(produtoSaidaService.findAll()), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOSAIDA_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOSAIDA_LIST'))")
     @GetMapping("/{id}")
     @Operation(summary = "Buscar saída de produto por ID", description = "Recupera uma saída de produto pelo seu ID.")
     @ApiResponse(responseCode = "200", description = "Saída de produto encontrada com sucesso")
@@ -73,6 +78,7 @@ public class ProdutoSaidaController {
         return produtoSaidaService.findById(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOSAIDA_DELETE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOSAIDA_DELETE'))")
     @DeleteMapping("/deletar/{id}")
     @Operation(summary = "Excluir uma saída de produto", description = "Exclui uma saída de produto existente com base no ID fornecido.")
     @ApiResponse(responseCode = "200", description = "Saída de produto excluída com sucesso")
@@ -80,7 +86,7 @@ public class ProdutoSaidaController {
     public void delete(@PathVariable(value = "id") Long id) {
         produtoSaidaService.delete(id);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOSAIDA_UPDATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOSAIDA_UPDATE'))")
     @PutMapping("/atualizar/{id}")
     @Operation(summary = "Atualizar uma saída de produto", description = "Atualiza uma saída de produto existente com base nos dados fornecidos.")
     @ApiResponse(responseCode = "200", description = "Saída de produto atualizada com sucesso")

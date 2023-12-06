@@ -100,7 +100,7 @@ public class ResourceExceptionHandler {
     StandardError error = new StandardError(
         Instant.now().toEpochMilli(),
         HttpStatus.FORBIDDEN.value(),
-        "A quantidade de saída é maior que o saldo disponível.",
+        "Você não tem permissão para acessar esse recurso ResourceHa",
         ex.getMessage(),
         request.getRequestURI()
     );

@@ -1,6 +1,8 @@
 package com.janfer.estoque.configs;
 
 import com.janfer.estoque.security.SecurityFilter;
+import com.janfer.estoque.services.exceptions.AccessDeniedException;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -74,6 +76,14 @@ public class SecurityConfig {
             .anyRequest().authenticated()
         )
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling(exceptionHandling -> exceptionHandling
+            .authenticationEntryPoint((request, response, authException) -> {
+              // Configurar uma resposta personalizada para usuário não autenticado
+              response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Não autenticado");
+            }).accessDeniedHandler((request, response, accessDeniedException) -> {
+              throw new AccessDeniedException("Acesso negaddo");
+            })
+        )
         .build();
   }
 

@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.Optional;
 @Server(url = "http://estoque-production.up.railway.app", description = "Servidor de produção")
 @RestController
 @RequestMapping(value = "/api/produtoCapa")
+@PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOCAPA_VIEW'))")
 public class ProdutoCapaController {
 
     @Autowired
@@ -39,7 +41,7 @@ public class ProdutoCapaController {
     @Autowired
     ProdutoCapaService produtoCapaService;
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOCAPA_CREATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOCAPA_CREATE'))")
     @PostMapping("/cadastrar")
     @Operation(summary = "Cadastrar um novo produto", description = "Cadastra um novo produto com base nos dados fornecidos.")
     @ApiResponse(responseCode = "201", description = "Produto cadastrado com sucesso")
@@ -55,7 +57,7 @@ public class ProdutoCapaController {
 //    return ResponseEntity.created(uri).body(produtoCapaPostDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoCapaPostDTO);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOCAPA_UPDATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOCAPA_UPDATE'))")
     @PutMapping("/atualizar/{id}")
     @Operation(summary = "Atualizar um produto", description = "Atualiza um produto existente com base nos dados fornecidos.")
     @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso")
@@ -73,6 +75,7 @@ public class ProdutoCapaController {
         return ResponseEntity.status(HttpStatus.OK).body(produtoCapaService.save(produtoCapa));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOCAPA_DELETE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOCAPA_DELETE'))")
     @DeleteMapping("/deletar/{id}")
     @Operation(summary = "Excluir um produto", description = "Exclui um produto existente com base no ID fornecido.")
     @ApiResponse(responseCode = "200", description = "Produto excluído com sucesso")
@@ -104,13 +107,14 @@ public class ProdutoCapaController {
         return new ResponseEntity<>(produtoCapaGetDTOs.get(0), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOCAPA_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOCAPA_LIST'))")
     @GetMapping
     @Operation(summary = "Listar todos os produtos capas", description = "Recupera a lista de todos os produtos capa cadastrados.")
     @ApiResponse(responseCode = "200", description = "Lista de produto capa encontrada com sucesso!")
     public ResponseEntity<List<ProdutoCapaGetDTO>> getAll() {
         return new ResponseEntity<>(mapStructMapper.produtoCapaAllToProdutoCapaDTO(produtoCapaService.findAll()), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOCAPA_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOCAPA_LIST'))")
     @GetMapping("/{id}")
     @Operation(summary = "Buscar produto Capa por ID", description = "Recupera um fornecedor pelo ID fornecido.")
     @ApiResponse(responseCode = "200", description = "Produto Capa encontrado com sucesso.")

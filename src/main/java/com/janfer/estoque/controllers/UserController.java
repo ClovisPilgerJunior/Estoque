@@ -9,10 +9,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -35,7 +37,7 @@ public class UserController {
     return userService.save(userPostDTO);
   }
 
-  @PutMapping("atualizar/{id}")
+  @PutMapping("/atualizar/{id}")
   public User update(@Valid @RequestBody UserPostDTO userPostDTO, @PathVariable @Positive @NotNull Integer id){
     return userService.update(userPostDTO, id);
   }
