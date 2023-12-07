@@ -1,11 +1,14 @@
 package com.janfer.estoque.domain.entities;
 
+import com.janfer.estoque.domain.audit.LocalBaseAuditEntity;
 import com.janfer.estoque.domain.enums.Profile;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.AuditTable;
+import org.hibernate.envers.Audited;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,8 +21,9 @@ import java.util.stream.Collectors;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Audited
 @Table(name = "users")
-public class User implements Serializable {
+public class User extends LocalBaseAuditEntity implements Serializable  {
 
   @Serial
   private static final long serialVersionUID = 1L;

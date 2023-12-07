@@ -1,5 +1,6 @@
 package com.janfer.estoque.domain.dtos;
 
+import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.io.Serial;
