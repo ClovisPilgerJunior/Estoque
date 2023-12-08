@@ -117,8 +117,8 @@ CREATE TABLE users_aud
     name            TEXT,
     password           TEXT,
     ativo BOOLEAN,
-    last_modified_by TEXT NOT NULL,
-    last_modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_modified_by TEXT,
+    last_modified_date TIMESTAMP,
     PRIMARY KEY (id, rev)
 );
 
@@ -130,7 +130,7 @@ CREATE TABLE profiles_aud (
    revend             INTEGER REFERENCES revinfo (rev), -- The version of the next version number after entity gets updated.
    revtype            TINYINT,                         -- The type of the revision.
    revend_tstmp       TIMESTAMP,                        -- The timestamp of the next version number after entity gets updated.
-   last_modified_by TEXT NOT NULL,
-   last_modified_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   last_modified_by TEXT,
+   last_modified_date TIMESTAMP,
    PRIMARY KEY (id, rev)
 );
