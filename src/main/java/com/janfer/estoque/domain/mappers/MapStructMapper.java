@@ -8,6 +8,7 @@ import com.janfer.estoque.domain.enums.Setor;
 import com.janfer.estoque.domain.enums.TipoProduto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import javax.enterprise.inject.Default;
@@ -139,6 +140,7 @@ public interface MapStructMapper {
    @Mapping(target = "id", ignore = true)
    UnidadeProdutiva unidadeProdutivaUnidadeProdutivaPostDTO(UnidadeProdutivaPostDTO unidadeProdutivaPostDTO);
 
+
    @Mapping(target = "id", ignore = true)
    User userToUserPostDTO(UserPostDTO userPostDTO);
 
@@ -163,6 +165,9 @@ public interface MapStructMapper {
       }
       return Profile.toEnum(code);
    }
+
+
+
 
 
 }

@@ -119,6 +119,18 @@ public class ResourceExceptionHandler {
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
   }
 
+  @ExceptionHandler({TokenExpiredException.class})
+  public ResponseEntity<StandardError> tokenExpiredException(TokenExpiredException ex, HttpServletRequest request) {
+    StandardError error = new StandardError(
+        Instant.now().toEpochMilli(),
+        HttpStatus.UNAUTHORIZED.value(),
+        "Token invalido ou expirado!",
+        ex.getMessage(),
+        request.getRequestURI()
+    );
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+  }
+
 
 
 }

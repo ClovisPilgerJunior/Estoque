@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.Mapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -56,4 +57,7 @@ public class UserService {
     return userRepository.save(user);
   }
 
+  public Optional<User> findByName(String nome) {
+    return userRepository.findByName(nome);
+  }
 }

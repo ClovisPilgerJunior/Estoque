@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,5 +19,7 @@ public class UserPostDTO implements Serializable {
   private String password;
   private Set<Integer> profiles = new HashSet<>();
   private boolean ativo;
+  private final Instant lastModifiedDate;
+  private final String lastModifiedBy;
 
 }

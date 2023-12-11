@@ -3,12 +3,12 @@ package com.janfer.estoque.security;
 import com.janfer.estoque.domain.entities.User;
 import com.janfer.estoque.repositories.UserRepository;
 import com.janfer.estoque.services.UserDetailsServiceImpl;
+import com.janfer.estoque.services.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,19 +41,21 @@ public class SecurityFilter extends OncePerRequestFilter {
   ) throws ServletException, IOException {
     var token = this.recoverToken(request);
     if(token !=null){
-      var name = tokenService.validateToken(token);
-      Optional<User> userOptional = userRepository.findByName(name);
-      if (userOptional.isPresent()) {
+      try {
+        var name = tokenService.validateToken(token);
+        Optional<User> userOptional = userRepository.findByName(name);
+        if (userOptional.isPresent()) {
 
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(name);
-        var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+          UserDetails userDetails = customUserDetailsService.loadUserByUsername(name);
+          var authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-        // Set the authentication in the SecurityContext (if needed)
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("SecurityFilet: Caiu no IF");
-      } else {
-        System.out.println("SecurityFilter: Caiu aqui ");
-        throw new RuntimeException();
+          // Set the authentication in the SecurityContext (if needed)
+          SecurityContextHolder.getContext().setAuthentication(authentication);
+          System.out.println("SecurityFilet: Caiu no IF");
+        }
+      } catch (TokenExpiredException e) {
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token de acesso expirado");
+        return;
       }
 
     }

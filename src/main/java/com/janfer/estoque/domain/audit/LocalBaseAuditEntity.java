@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
+import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -27,10 +28,12 @@ public abstract class LocalBaseAuditEntity {
   // You can use any date-time object.
   private Instant createDate = Instant.now();
 
+  @Audited
   @LastModifiedBy
   @Column(name = "last_modified_by")
   private String lastModifiedBy;
 
+  @Audited
   @LastModifiedDate
   @Column(name = "last_modified_date", nullable = false)
   // You can use any date-time object.

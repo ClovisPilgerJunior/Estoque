@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.janfer.estoque.services.exceptions.TokenExpiredException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -43,8 +44,7 @@ public class TokenService {
           .verify(token)
           .getSubject();
     } catch (JWTVerificationException e){
-      System.out.println("Token Service: caiu aqui");
-      return "";
+      return String.valueOf(new TokenExpiredException("O token expirou em:"));
     }
   }
 }
