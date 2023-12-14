@@ -1,9 +1,8 @@
 package com.janfer.estoque.domain.enums;
 
-import lombok.*;
-import org.hibernate.envers.Audited;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Audited
 @Getter
 @AllArgsConstructor
 public enum Profile {

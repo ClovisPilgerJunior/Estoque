@@ -1,19 +1,19 @@
 package com.janfer.estoque.domain.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class AuditRequestDTO {
-  private String property;
-  private String propertyValue;
-  @JsonFormat(pattern = "dd/MM/yyyy")
-  private LocalDate startDate;
-  @JsonFormat(pattern = "dd/MM/yyyy")
-  private LocalDate endDate;
 
-  // getters e setters
+  private Long revisaoId;
+  private Date revisaoData;
+  private String ip;
+  private String usuario;
+
 }
 

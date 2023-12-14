@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -17,5 +19,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
   boolean isUsersAtivoByName(@Param("name") String name);
   boolean existsByNameAndAndPasswordNot(String name, String password);
 
+  @Query(value = "SELECT u1_0.*, r1_0.* FROM users_aud u1_0 JOIN revisao r4_0 ON r4_0.revisao_id = u1_0.rev JOIN revisao r1_0 ON r1_0.revisao_id = u1_0.rev WHERE r4_0.revisao_data BETWEEN :startDate AND :endDate AND u1_0.rev = r1_0.revisao_id ORDER BY u1_0.rev", nativeQuery = true)
+  List<Object[]> findUsersAudByRevisionDate(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
 }

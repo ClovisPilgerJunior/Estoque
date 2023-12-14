@@ -43,20 +43,31 @@ public class AuditController {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
 
-  @RequestMapping(value = "/data", method = RequestMethod.GET)
+  @GetMapping("/v1")
   public List<Object[]> getAuditRecords(
       @RequestParam(name = "startDate")
-      @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+      @DateTimeFormat(pattern = "yyyy-MM-dd 00:00") Date startDate,
       @RequestParam(name = "endDate")
-      @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+      @DateTimeFormat(pattern = "yyyy-MM-dd 23:59") Date endDate) {
 
     AuditReader reader = AuditReaderFactory.get(entityManager);
     List<Object[]> results = reader.createQuery()
         .forRevisionsOfEntity(User.class, false, true)
-        .add(AuditEntity.revisionProperty("last_modified_date").between(startDate, endDate))
+        .add(AuditEntity.revisionProperty("revisaoData").between(startDate, endDate))
         .getResultList();
 
     return results;
+  }
+
+
+  @GetMapping("/data")
+  public ResponseEntity<List<Object[]>> getUsersAudByRevisionDate(
+      @RequestParam
+      @DateTimeFormat(pattern = "yyyy-MM-dd 00:00") Date startDate,
+      @RequestParam
+      @DateTimeFormat(pattern = "yyyy-MM-dd 23:59") Date endDate) {
+    List<Object[]> usersAud = userRepository.findUsersAudByRevisionDate(startDate, endDate);
+    return ResponseEntity.ok().body(usersAud);
   }
 
 }

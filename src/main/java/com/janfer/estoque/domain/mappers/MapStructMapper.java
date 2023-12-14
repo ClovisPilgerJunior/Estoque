@@ -1,5 +1,6 @@
 package com.janfer.estoque.domain.mappers;
 
+import com.janfer.estoque.domain.audit.Revisao;
 import com.janfer.estoque.domain.dtos.*;
 import com.janfer.estoque.domain.entities.*;
 import com.janfer.estoque.domain.enums.MedidaUnidade;
@@ -165,9 +166,5 @@ public interface MapStructMapper {
       }
       return Profile.toEnum(code);
    }
-
-
-
-
 
 }

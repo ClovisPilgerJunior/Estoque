@@ -1,5 +1,6 @@
 package com.janfer.estoque.domain.entities;
 
+import com.janfer.estoque.domain.audit.LocalBaseAuditEntity;
 import com.janfer.estoque.domain.enums.MedidaUnidade;
 import com.janfer.estoque.domain.enums.Resuprimento;
 import com.janfer.estoque.domain.enums.TipoProduto;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,7 +20,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ProdutoCapa")
-public class ProdutoCapa {
+@Audited
+public class ProdutoCapa extends LocalBaseAuditEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)

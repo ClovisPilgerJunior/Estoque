@@ -1,6 +1,7 @@
 package com.janfer.estoque.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.janfer.estoque.domain.audit.LocalBaseAuditEntity;
 import com.janfer.estoque.domain.enums.Setor;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.apache.commons.lang3.ObjectUtils;
+import org.hibernate.envers.Audited;
 
 import java.util.Date;
 
@@ -17,7 +19,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProdutoSaida {
+@Audited
+public class ProdutoSaida extends LocalBaseAuditEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
