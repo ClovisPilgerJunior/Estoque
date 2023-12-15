@@ -27,11 +27,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -66,7 +70,16 @@ public class SecurityConfig {
     }
 
     return http
-        .cors(AbstractHttpConfigurer::disable)
+        .cors(cors -> cors
+            .configurationSource(request -> {
+              CorsConfiguration configuration = new CorsConfiguration();
+              configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+              configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+              configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+              configuration.setAllowCredentials(true);
+              return configuration;
+            })
+        )
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .securityMatcher("/api/**", "/app/**")
@@ -81,24 +94,12 @@ public class SecurityConfig {
               // Configurar uma resposta personalizada para usuário não autenticado
               response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Não autenticado");
             }).accessDeniedHandler((request, response, accessDeniedException) -> {
-              throw new AccessDeniedException("Acesso negaddo");
+              throw new AccessDeniedException("Acesso negado");
             })
         )
         .build();
   }
 
-  @Value("${cors.origins}")
-  private String corsOrigins;
-
-  @Bean
-  public WebMvcConfigurer corsConfigurer() {
-    return new WebMvcConfigurer() {
-      @Override
-      public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*").allowedOrigins(corsOrigins);
-      }
-    };
-  }
 
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {

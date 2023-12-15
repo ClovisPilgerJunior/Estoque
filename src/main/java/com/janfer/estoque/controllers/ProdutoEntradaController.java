@@ -31,6 +31,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/produtoEntrada")
 @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOENTRADA_VIEW'))")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProdutoEntradaController {
 
     @Autowired
