@@ -35,7 +35,7 @@ import static com.janfer.estoque.controllers.messages.FornecedorMessage.NOT_FOUN
 @Server(url = "http://estoque-production.up.railway.app", description = "Servidor de produção")
 @RestController
 @RequestMapping(value = "/api/fornecedor")
-@PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR'))")
+@PreAuthorize("(hasRole('ROLE_ADMIN') and hasRole('ROLE_FORNECEDOR_VIEW')) or (hasRole('ROLE_MANAGER')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_VIEW'))")
 public class FornecedorController {
 
   @Autowired

@@ -7,10 +7,12 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.janfer.estoque.services.exceptions.TokenExpiredException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -24,6 +26,7 @@ public class TokenService {
       return JWT.create()
           .withIssuer("estoque-api")
           .withSubject(userSS.getUsername())
+          .withClaim("authorities", userSS.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
           .withExpiresAt(genExpirationDate())
           .sign(algorithm);
     } catch (JWTCreationException e){

@@ -87,9 +87,14 @@ INSERT INTO users (name, password, ativo, created_date, last_modified_date, crea
 VALUES ('user1', 'user2', FALSE, NOW(), NOW(), 'system', 'system');
 
 INSERT INTO profiles (user_id, profiles) VALUES(1, 0);
+INSERT INTO profiles (user_id, profiles) VALUES(1, 3);
 
 INSERT INTO profiles (user_id, profiles) VALUES(2, 2);
 INSERT INTO profiles (user_id, profiles) VALUES(2, 3);
+INSERT INTO profiles (user_id, profiles) VALUES(2, 7);
+INSERT INTO profiles (user_id, profiles) VALUES(2, 8);
+INSERT INTO profiles (user_id, profiles) VALUES(2, 12);
+
 
 INSERT INTO profiles (user_id, profiles) VALUES(3, 2);
 INSERT INTO profiles (user_id, profiles) VALUES(3, 3);
