@@ -33,13 +33,14 @@ public class AuthenticationController {
   @PostMapping("/login")
   public ResponseEntity login(@RequestBody @Valid UserGetDTO userGetDTO) {
 
+    if(!userRepository.existsByName(userGetDTO.getName())){
+      throw new BadCredentialsException("Usuário inexistente");
+    }
+
     if(!userRepository.isUsersAtivoByName(userGetDTO.getName())){
       throw new ProductDisableException("Usuário está inativo no sistema");
     }
 
-    if(!userRepository.existsByName(userGetDTO.getName())){
-      throw new BadCredentialsException("Usuário inexistente");
-    }
 
     if(userRepository.existsByNameAndAndPasswordNot(userGetDTO.getName(),userGetDTO.getPassword())){
       throw new BadCredentialsException("Senha inválida");

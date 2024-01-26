@@ -32,7 +32,6 @@ public class Fornecedor extends LocalBaseAuditEntity implements Serializable {
   private String empresa;
   private String nome;
   private TipoEmpresa tipoEmpresa;
-  @Column(unique = true)
   private String email;
   private String telefone;
   private String endereco;

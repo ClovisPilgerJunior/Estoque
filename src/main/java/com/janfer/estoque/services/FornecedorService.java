@@ -37,6 +37,10 @@ public class FornecedorService {
         return fornecedorRepository.save(fornecedor);
     }
 
+    public void saveAll(List<Fornecedor> fornecedors){
+        fornecedorRepository.saveAll(fornecedors);
+    }
+
     @Transactional
     public void delete(@Positive @NotNull Long id){
 

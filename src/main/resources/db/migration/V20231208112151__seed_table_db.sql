@@ -1,6 +1,6 @@
 -- Inserir um fornecedor ativo
 INSERT INTO fornecedor (empresa, nome, tipo_empresa, email, telefone, endereco, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES ('Ramatex', 'João', 1, 'joao@ramatex.com', '(48) 99999-0000', 'Rua das Palmeiras', true,  NOW(), NOW(), 'system', 'system');
+VALUES ('Ramatexyr', 'João', 1, 'joao@ramatex.com', '(48) 99999-0000', 'Rua das Palmeiras', true,  NOW(), NOW(), 'system', 'system');
 
 -- Inserir um fornecedor inativo
 INSERT INTO fornecedor (empresa, nome, tipo_empresa, email, telefone, endereco, ativo, created_date, last_modified_date, created_by, last_modified_by)
@@ -93,7 +93,6 @@ INSERT INTO profiles (user_id, profiles) VALUES(2, 2);
 INSERT INTO profiles (user_id, profiles) VALUES(2, 3);
 INSERT INTO profiles (user_id, profiles) VALUES(2, 7);
 INSERT INTO profiles (user_id, profiles) VALUES(2, 8);
-INSERT INTO profiles (user_id, profiles) VALUES(2, 12);
 
 
 INSERT INTO profiles (user_id, profiles) VALUES(3, 2);

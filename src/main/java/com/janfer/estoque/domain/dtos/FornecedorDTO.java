@@ -20,7 +20,6 @@ public class FornecedorDTO implements Serializable {
     private String empresa;
     private String nome;
     private TipoEmpresa tipoEmpresa;
-    @Email(message = "Insira um email válido")
     private String email;
     private String telefone;
     private String endereco;

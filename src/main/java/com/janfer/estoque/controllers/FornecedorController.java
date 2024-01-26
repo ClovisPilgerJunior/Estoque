@@ -14,9 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.janfer.estoque.controllers.messages.FornecedorMessage.NOT_FOUND;
 
@@ -62,6 +61,30 @@ public class FornecedorController {
     fornecedorService.save(mapStructMapper.fornecedorToFornecedorDTO(fornecedorDTO));
     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(fornecedorDTO.getId()).toUri();
     return ResponseEntity.created(uri).body(fornecedorDTO);
+  }
+
+  @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_CREATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_CREATE'))")
+  @PostMapping("/cadastrarAll")
+  @Operation(summary = "Cadastrar um novo fornecedor", description = "Cadastra um novo fornecedor com base nos dados fornecidos.")
+  @ApiResponse(responseCode = "201", description = "Fornecedor cadastrado com sucesso!")
+  @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
+  public ResponseEntity<Fornecedor> createAll(@RequestBody List<Fornecedor> fornecedorDTOs) {
+
+    for (Fornecedor fornecedorDTO : fornecedorDTOs) {
+      if (fornecedorService.existByEmpresa(fornecedorDTO.getEmpresa())) {
+        throw new DataIntegrityViolationException("Empresa já cadastrada");
+      }
+    }
+
+    List<Fornecedor> fornecedores = mapStructMapper.fornecedorAllToFornecedorDTO(fornecedorDTOs)
+        .stream()
+        .map(mapStructMapper::fornecedorToFornecedorDTO)
+        .collect(Collectors.toList());
+
+    fornecedorService.saveAll(fornecedores);
+
+    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(fornecedorDTOs.get(0).getId()).toUri();
+    return ResponseEntity.created(uri).body(fornecedorDTOs.get(0));
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_LIST'))")
