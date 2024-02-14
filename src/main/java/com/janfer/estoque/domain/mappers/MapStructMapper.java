@@ -31,6 +31,11 @@ public interface MapStructMapper {
    @Default
    ProdutoCapaGetDTO produtoCapaGetDTOToProdutoCapa(ProdutoCapa produtoCapa);
 
+   @Mapping(target = "fornecedor", ignore = true)
+   @Mapping(target = "tipoProduto", ignore = true)
+   @Mapping(target = "resuprimento", ignore = true)
+   ProdutoCapa produtoCapaGetDTOToProdutoCapa(ProdutoCapaGetDTO produtoCapaGetDTO);
+
 
    @Mapping(target = "fornecedor.id", source = "fornecedor")
    @Mapping(target = "tipoProduto", source = "tipoProduto")
