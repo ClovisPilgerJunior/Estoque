@@ -20,9 +20,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Tag(name = "Produto Entrada", description = "Endpoint da entrada de produtos")
@@ -88,6 +91,29 @@ public class ProdutoEntradaController {
 
         return ResponseEntity.ok(produtoEntradaDTO);
     }
+
+    @PostMapping("/cadastrarAll")
+    @Operation(summary = "Cadastrar uma nova entrada de produto", description = "Cadastra uma nova entrada de produto com base nos dados fornecidos.")
+    @ApiResponse(responseCode = "200", description = "Entrada de produto cadastrada com sucesso")
+    @ApiResponse(responseCode = "400", description = "Violação na integridade dos dados")
+    @ApiResponse(responseCode = "409", description = "Produto está inativado no sistema")
+    @Schema( implementation = ProdutoEntradaPostDTO.class)
+    public ResponseEntity<ProdutoEntrada> criarProdutoEntradaAll(@Valid @RequestBody List<ProdutoEntrada> produtoEntradaDTO) {
+
+    List<ProdutoEntrada> produtoEntradas = mapStructMapper.toProdutoEntrada(produtoEntradaDTO)
+            .stream()
+                .map(mapStructMapper::produtoEntradaToProdutoEntradaDTO)
+                    .collect(Collectors.toList());
+
+        produtoEntradaService.saveAll(produtoEntradas);
+
+        URI uri = ServletUriComponentsBuilder
+            .fromCurrentRequest()
+            .path("/{id}")
+            .buildAndExpand(produtoEntradaDTO.get(0).getId()).toUri();
+        return ResponseEntity.created(uri).body(produtoEntradaDTO.get(0));
+    }
+
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_PRODUTOENTRADA_UPDATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_PRODUTOENTRADA_UPDATE'))")
     @PutMapping("/atualizar/{id}")

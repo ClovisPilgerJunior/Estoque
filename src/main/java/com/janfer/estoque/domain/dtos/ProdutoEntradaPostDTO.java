@@ -1,6 +1,7 @@
 package com.janfer.estoque.domain.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.janfer.estoque.domain.entities.ItemOrdemCompra;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -24,5 +25,6 @@ public class ProdutoEntradaPostDTO implements Serializable {
   private String observacao;
   @NotNull(message = "Produto capa não pode estar vazio")
   private Long produtoCapa;
+  private ItemOrdemCompra itemOrdemCompra;
 
 }

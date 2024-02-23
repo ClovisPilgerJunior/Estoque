@@ -21,11 +21,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -38,6 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasRole;
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
@@ -56,6 +59,7 @@ public class SecurityConfig {
   MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
     return new MvcRequestMatcher.Builder(introspector);
   }
+
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc)
@@ -85,6 +89,7 @@ public class SecurityConfig {
         .securityMatcher("/api/**", "/app/**")
         .authorizeHttpRequests(authorize -> authorize
             .requestMatchers(mvc.pattern("/api/auth/login")).permitAll()
+            .requestMatchers(mvc.pattern("/api/produtoEntrada/cadastrarAll")).hasRole("ADMIN")
             .requestMatchers(mvc.pattern("/h2-console/**")).permitAll()
             .anyRequest().authenticated()
         )

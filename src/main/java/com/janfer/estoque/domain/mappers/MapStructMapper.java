@@ -84,6 +84,8 @@ public interface MapStructMapper {
    // Mapeamento de ProdutoEntrada
    List<ProdutoEntradaGetDTO> produtoEntradaGetAllToProdutoEntrada(List<ProdutoEntrada> produtoEntradas);
 
+   List<ProdutoEntradaPostDTO> toProdutoEntrada(List<ProdutoEntrada> produtoEntradas);
+
    @Mapping(target = "id", ignore = true)
    @Mapping(target = "produtoCapa.id", source = "produtoCapa")
    ProdutoEntrada produtoEntradaToProdutoEntradaDTO(ProdutoEntradaPostDTO produtoEntradaDTO);
@@ -171,5 +173,17 @@ public interface MapStructMapper {
       }
       return Profile.toEnum(code);
    }
+
+   @Mapping(target = "produtoCapa.id", source = "ordemCompra.id")
+   @Mapping(target = "ordemCompra.id", source = "ordemCompra.id")
+  ProdutoEntrada itemOrdemCompraToProdutoEntrada(ItemOrdemCompra item);
+
+   @Mapping(source = "produtoCapa.id", target = "produtoCapaId")
+   @Mapping(source = "ordemCompra.id", target = "itemOrdemCompraId")
+   OrdemProdutoDTO toItem(ItemOrdemCompra itemOrdemCompra);
+
+   @Mapping(target = "produtoCapa.id", source = "produtoCapaId")
+   @Mapping(target = "ordemCompra.id", source = "itemOrdemCompraId")
+   ItemOrdemCompra toOrder(OrdemProdutoDTO ordemProdutoDTO);
 
 }

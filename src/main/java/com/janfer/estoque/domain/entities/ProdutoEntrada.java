@@ -38,5 +38,8 @@ public class ProdutoEntrada extends LocalBaseAuditEntity {
   @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false) // Define a coluna de chave estrangeira
   @NotNull(message = "Não é possível lançar entrada sem passar um produto")
   private ProdutoCapa produtoCapa; // Referência para o ProdutoCapa correspondente
+  @ManyToOne
+  @JoinColumn(name = "item_ordem_compra_id")
+  private  OrdemCompra OrdemCompra;
 
 }

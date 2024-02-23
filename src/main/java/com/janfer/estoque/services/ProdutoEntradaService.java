@@ -1,6 +1,5 @@
 package com.janfer.estoque.services;
 
-import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.dtos.ProdutoEntradaGetDTO;
 import com.janfer.estoque.domain.entities.ProdutoEntrada;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProdutoEntradaService {
@@ -45,6 +43,10 @@ public class ProdutoEntradaService {
         return produtoEntradaRepository.save(produtoEntrada);
     }
 
+    public void saveAll(List<ProdutoEntrada> produtoEntrada) {
+         produtoEntradaRepository.saveAll(produtoEntrada);
+    }
+
     @Transactional
     public void delete(@Positive @NotNull Long id){
 
@@ -65,5 +67,4 @@ public class ProdutoEntradaService {
     public Double recuperarUltimoPrecoCompra(Long produtoCapaId){
         return produtoEntradaRepository.recuperarUltimoPrecoCompra(produtoCapaId);
     }
-
 }

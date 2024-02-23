@@ -42,4 +42,7 @@ public class ProdutoCapa extends LocalBaseAuditEntity {
   private Resuprimento resuprimento;
   private boolean ativo;
 
+  public ProdutoCapa(Long id) {
+    this.id = id;
+  }
 }

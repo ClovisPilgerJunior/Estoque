@@ -7,6 +7,7 @@ import com.janfer.estoque.security.TokenService;
 import com.janfer.estoque.security.UserSS;
 import com.janfer.estoque.services.exceptions.BadCredentialsException;
 import com.janfer.estoque.services.exceptions.ProductDisableException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class AuthenticationController {
   private TokenService tokenService;
 
   @PostMapping("/login")
-  public ResponseEntity login(@RequestBody @Valid UserGetDTO userGetDTO) {
+  public ResponseEntity login(@RequestBody @Valid UserGetDTO userGetDTO, HttpSession session) {
 
     if(!userRepository.existsByName(userGetDTO.getName())){
       throw new BadCredentialsException("Usuário inexistente");
@@ -52,6 +53,7 @@ public class AuthenticationController {
 
     var token = tokenService.generateToken((UserSS) auth.getPrincipal());
 
+    session.setAttribute("accessToken", token);
 
     return ResponseEntity.ok(new LoginResponseDTO(token));
   }
