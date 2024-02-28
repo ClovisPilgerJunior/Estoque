@@ -40,6 +40,6 @@ public class ProdutoEntrada extends LocalBaseAuditEntity {
   private ProdutoCapa produtoCapa; // Referência para o ProdutoCapa correspondente
   @ManyToOne
   @JoinColumn(name = "item_ordem_compra_id")
-  private  OrdemCompra OrdemCompra;
+  private  ItemOrdemCompra itemOrdemCompra;
 
 }

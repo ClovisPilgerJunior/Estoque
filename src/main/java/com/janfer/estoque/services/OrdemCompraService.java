@@ -65,7 +65,6 @@ public class OrdemCompraService {
   }
 
   public void faturarOrdem(OrdemCompra ordemCompra, String accessToken) {
-    ordemCompra.setStatusOrdem(StatusOrdem.FATURADA);
 
     WebClient webClient = WebClient.create("http://localhost:8080");
 
@@ -85,15 +84,11 @@ public class OrdemCompraService {
             response -> System.out.println("Ordem faturada com sucesso."),
             error -> System.err.println("Erro ao faturar ordem: " + error.getMessage())
         );
+    ordemCompra.setStatusOrdem(StatusOrdem.FATURADA);
   }
 
   public void estornarOrdem(OrdemCompra ordemCompra) {
-    ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
-
-    // Lógica para remover os itens do ProdutoEntrada
-    //produtoEntradaService.removerItens(ordemCompra.getItemOrdemCompras());
-
-    // ... outras lógicas necessárias
+    ordemCompra.setStatusOrdem(StatusOrdem.toEnum(2));
   }
 
 

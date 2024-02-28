@@ -68,7 +68,6 @@ public class OrdemCompraController {
 
     if (ordemCompra.getStatusOrdem() == StatusOrdem.toEnum(2)) {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      // Supondo que o Authentication seja um UsernamePasswordAuthenticationToken
       String accessToken = (String) authentication.getCredentials();
       ordemCompraService.faturarOrdem(ordemCompra, accessToken);
       return new ResponseEntity<>("Ordem faturada com sucesso.", HttpStatus.OK);

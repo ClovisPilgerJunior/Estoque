@@ -175,7 +175,7 @@ public interface MapStructMapper {
    }
 
    @Mapping(target = "produtoCapa.id", source = "ordemCompra.id")
-   @Mapping(target = "ordemCompra.id", source = "ordemCompra.id")
+   @Mapping(target = "itemOrdemCompra.id", source = "ordemCompra.id")
   ProdutoEntrada itemOrdemCompraToProdutoEntrada(ItemOrdemCompra item);
 
    @Mapping(source = "produtoCapa.id", target = "produtoCapaId")

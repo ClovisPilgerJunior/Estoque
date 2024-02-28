@@ -44,7 +44,8 @@ public class ProdutoEntradaService {
     }
 
     public void saveAll(List<ProdutoEntrada> produtoEntrada) {
-         produtoEntradaRepository.saveAll(produtoEntrada);
+
+        produtoEntradaRepository.saveAll(produtoEntrada);
     }
 
     @Transactional
