@@ -175,15 +175,17 @@ public interface MapStructMapper {
    }
 
    @Mapping(target = "produtoCapa.id", source = "ordemCompra.id")
-   @Mapping(target = "itemOrdemCompra.id", source = "ordemCompra.id")
+   @Mapping(target = "id", source = "ordemCompra.id")
   ProdutoEntrada itemOrdemCompraToProdutoEntrada(ItemOrdemCompra item);
 
    @Mapping(source = "produtoCapa.id", target = "produtoCapaId")
-   @Mapping(source = "ordemCompra.id", target = "itemOrdemCompraId")
+   @Mapping(source = "id", target = "itemOrdemCompraId")
    OrdemProdutoDTO toItem(ItemOrdemCompra itemOrdemCompra);
 
    @Mapping(target = "produtoCapa.id", source = "produtoCapaId")
-   @Mapping(target = "ordemCompra.id", source = "itemOrdemCompraId")
+   @Mapping(target = "id", source = "itemOrdemCompraId")
    ItemOrdemCompra toOrder(OrdemProdutoDTO ordemProdutoDTO);
+
+   OrdemCompra toOrdemCompraDTO(OrdemCompraDTO ordemCompraDTO);
 
 }

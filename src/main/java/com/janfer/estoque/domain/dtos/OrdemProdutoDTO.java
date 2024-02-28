@@ -9,6 +9,6 @@ import java.util.Date;
 public class OrdemProdutoDTO {
   private Long produtoCapaId;
   private int quantidade;
-  private Long itemOrdemCompraId;
+  private Long ordemCompra;
 }
 

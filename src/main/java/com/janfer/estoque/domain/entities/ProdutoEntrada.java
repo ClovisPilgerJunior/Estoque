@@ -39,7 +39,7 @@ public class ProdutoEntrada extends LocalBaseAuditEntity {
   @NotNull(message = "Não é possível lançar entrada sem passar um produto")
   private ProdutoCapa produtoCapa; // Referência para o ProdutoCapa correspondente
   @ManyToOne
-  @JoinColumn(name = "item_ordem_compra_id")
-  private  ItemOrdemCompra itemOrdemCompra;
+  @JoinColumn(name = "ordem_compra_id")
+  private  OrdemCompra ordemCompra;
 
 }

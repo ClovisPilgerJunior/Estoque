@@ -1,5 +1,6 @@
 package com.janfer.estoque.controllers;
 
+import com.janfer.estoque.domain.dtos.OrdemCompraDTO;
 import com.janfer.estoque.domain.dtos.OrdemProdutoDTO;
 import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.ItemOrdemCompra;
@@ -36,9 +37,10 @@ public class OrdemCompraController {
   MapStructMapper mapStruct;
 
   @PostMapping
-  public ResponseEntity<com.janfer.estoque.domain.entities.OrdemCompra> createOrder() {
-    OrdemCompra ordemCompra = ordemCompraService.createOrder();
-    return new ResponseEntity<>(ordemCompra, HttpStatus.CREATED);
+  public ResponseEntity<OrdemCompraDTO> createOrder(OrdemCompraDTO ordemCompra) {
+    ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
+    ordemCompraService.createOrder(mapStruct.toOrdemCompraDTO(ordemCompra));
+    return ResponseEntity.ok(ordemCompra);
   }
 
   @PostMapping("/{orderId}/addProducts")
@@ -62,7 +64,7 @@ public class OrdemCompraController {
     return new ResponseEntity<>(itensAdicionados, HttpStatus.CREATED);
   }
 
-  @PostMapping("/{orderId}/faturar")
+  @PutMapping("/{orderId}/faturar")
   public ResponseEntity<String> invoiceOrder(@PathVariable Long orderId) {
     OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
 
