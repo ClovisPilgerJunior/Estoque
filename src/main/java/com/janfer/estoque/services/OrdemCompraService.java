@@ -3,10 +3,12 @@ package com.janfer.estoque.services;
 import com.janfer.estoque.domain.entities.ItemOrdemCompra;
 import com.janfer.estoque.domain.entities.OrdemCompra;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
+import com.janfer.estoque.domain.entities.ProdutoEntrada;
 import com.janfer.estoque.domain.enums.StatusOrdem;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.ItemOrdemCompraRepository;
 import com.janfer.estoque.repositories.OrdemCompraRepository;
+import com.janfer.estoque.repositories.ProdutoEntradaRepository;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +29,9 @@ public class OrdemCompraService {
   private ItemOrdemCompraRepository orderItemRepository;
 
   @Autowired
+  private ProdutoEntradaRepository produtoEntradaRepository;
+
+  @Autowired
   private MapStructMapper mapStructMapper;
 
 
@@ -39,7 +44,7 @@ public class OrdemCompraService {
       orderRepository.save(ordemCompra);
   }
 
-  public ItemOrdemCompra addProductToOrder(OrdemCompra ordemCompra, ProdutoCapa produtoCapa, int quantidade) {
+  public ItemOrdemCompra addProductToOrder(OrdemCompra ordemCompra, ProdutoCapa produtoCapa, Long quantidade) {
    ItemOrdemCompra itemOrdemCompra = new ItemOrdemCompra();
     itemOrdemCompra.setOrdemCompra(ordemCompra);
     itemOrdemCompra.setProdutoCapa(produtoCapa);
@@ -49,32 +54,17 @@ public class OrdemCompraService {
   }
 
 
-  public List<ItemOrdemCompra> getOrderItems(OrdemCompra ordemCompra) {
-    return ordemCompra.getItemOrdemCompras();
-  }
+    public void faturarOrdem(OrdemCompra ordemCompra) {
+        for (ItemOrdemCompra item : ordemCompra.getItemOrdemCompras()) {
+            ProdutoEntrada produtoEntrada = new ProdutoEntrada();
+            produtoEntrada.setProdutoCapa(item.getProdutoCapa());
+            produtoEntrada.setOrdemCompra(item.getOrdemCompra());
+            produtoEntrada.setQuantidade(item.getQuantidade());
+            // Configure outros campos conforme necessário
+            produtoEntradaRepository.save(produtoEntrada);
+        }
 
-    public void faturarOrdem(OrdemCompra ordemCompra, String accessToken) {
-
-        WebClient webClient = WebClient.create("http://localhost:8080");
-
-        String produtoEntradaUrl = "/api/produtoEntrada/cadastrarAll";
-
-        // Fazer uma chamada POST usando o WebClient
-        webClient.post()
-                .uri(produtoEntradaUrl)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .bodyValue(ordemCompra.getItemOrdemCompras())
-                .retrieve()
-                .onStatus(status -> status.value() == HttpStatus.UNAUTHORIZED.value(), clientResponse ->
-                        Mono.error(new RuntimeException("Erro de autorização: Token inválido ou ausente"))
-                )
-                .bodyToMono(Void.class)
-                .subscribe(
-                        response -> {
-                            System.out.println("Ordem faturada com sucesso.");
-                        },
-                        error -> System.err.println("Erro ao faturar ordem: " + error.getMessage())
-                );
+        // Atualize o status da ordem de compra
         ordemCompra.setStatusOrdem(StatusOrdem.FATURADA);
         orderRepository.save(ordemCompra);
     }

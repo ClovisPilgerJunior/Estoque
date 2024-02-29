@@ -1,7 +1,7 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.dtos.OrdemCompraDTO;
-import com.janfer.estoque.domain.dtos.OrdemProdutoDTO;
+import com.janfer.estoque.domain.dtos.ItemOrdemProdutoDTO;
 import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.ItemOrdemCompra;
 import com.janfer.estoque.domain.entities.OrdemCompra;
@@ -44,18 +44,18 @@ public class OrdemCompraController {
   }
 
   @PostMapping("/{orderId}/addProducts")
-  public ResponseEntity<List<OrdemProdutoDTO>> addProductsToOrder(
+  public ResponseEntity<List<ItemOrdemProdutoDTO>> addProductsToOrder(
       @PathVariable Long orderId,
-      @RequestBody List<OrdemProdutoDTO> orderProductsDTO) {
+      @RequestBody List<ItemOrdemProdutoDTO> orderProductsDTO) {
 
     OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
-    List<OrdemProdutoDTO> itensAdicionados = new ArrayList<>();
+    List<ItemOrdemProdutoDTO> itensAdicionados = new ArrayList<>();
 
 
-    for (OrdemProdutoDTO orderProductDTO : orderProductsDTO) {
+    for (ItemOrdemProdutoDTO orderProductDTO : orderProductsDTO) {
       ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(orderProductDTO.getProdutoCapaId());
       ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
-      int quantidade = orderProductDTO.getQuantidade();
+      Long quantidade = orderProductDTO.getQuantidade();
 
       ItemOrdemCompra ordemProdutoDTO = ordemCompraService.addProductToOrder(ordemCompra, produtoCapa, quantidade);
       itensAdicionados.add(mapStruct.toItem(ordemProdutoDTO));
@@ -69,9 +69,7 @@ public class OrdemCompraController {
     OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
 
     if (ordemCompra.getStatusOrdem() == StatusOrdem.toEnum(2)) {
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      String accessToken = (String) authentication.getCredentials();
-      ordemCompraService.faturarOrdem(ordemCompra, accessToken);
+      ordemCompraService.faturarOrdem(ordemCompra);
       return new ResponseEntity<>("Ordem faturada com sucesso.", HttpStatus.OK);
     } else {
       return new ResponseEntity<>("A ordem já foi faturada.", HttpStatus.BAD_REQUEST);
@@ -92,11 +90,11 @@ public class OrdemCompraController {
   }
 
 
-  @GetMapping("/{orderId}/getOrderItems")
-  public ResponseEntity<List<ItemOrdemCompra>> getOrderItems(@PathVariable Long orderId) {
-    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
-    List<ItemOrdemCompra> itemOrdemCompras = ordemCompraService.getOrderItems(ordemCompra);
-    return new ResponseEntity<>(itemOrdemCompras, HttpStatus.OK);
-  }
+//  @GetMapping("/{orderId}/getOrderItems")
+//  public ResponseEntity<List<ItemOrdemCompra>> getOrderItems(@PathVariable Long orderId) {
+////    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
+////    List<ItemOrdemCompra> itemOrdemCompras = ordemCompraService.getOrderById();
+//    return new ResponseEntity<>(itemOrdemCompras, HttpStatus.OK);
+//  }
 }
 

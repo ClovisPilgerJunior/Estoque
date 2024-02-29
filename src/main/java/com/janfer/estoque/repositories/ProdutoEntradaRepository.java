@@ -15,7 +15,4 @@ public interface ProdutoEntradaRepository extends JpaRepository<ProdutoEntrada, 
     @Query("SELECT pe.precoCompra FROM ProdutoEntrada pe WHERE pe.produtoCapa.id = :produtoCapaId ORDER BY pe.id DESC LIMIT 1")
     Double recuperarUltimoPrecoCompra(@Param("produtoCapaId") Long produtoCapaId);
 
-    void deleteByItemOrdemCompraId(Long id);
-
-    boolean existsByItemOrdemCompraId(Long id);
 }

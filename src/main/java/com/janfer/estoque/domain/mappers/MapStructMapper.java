@@ -1,6 +1,5 @@
 package com.janfer.estoque.domain.mappers;
 
-import com.janfer.estoque.domain.audit.Revisao;
 import com.janfer.estoque.domain.dtos.*;
 import com.janfer.estoque.domain.entities.*;
 import com.janfer.estoque.domain.enums.MedidaUnidade;
@@ -9,7 +8,6 @@ import com.janfer.estoque.domain.enums.Setor;
 import com.janfer.estoque.domain.enums.TipoProduto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import javax.enterprise.inject.Default;
@@ -179,12 +177,12 @@ public interface MapStructMapper {
   ProdutoEntrada itemOrdemCompraToProdutoEntrada(ItemOrdemCompra item);
 
    @Mapping(source = "produtoCapa.id", target = "produtoCapaId")
-   @Mapping(source = "id", target = "itemOrdemCompraId")
-   OrdemProdutoDTO toItem(ItemOrdemCompra itemOrdemCompra);
+   @Mapping(source = "ordemCompra.id", target = "ordemCompraId")
+   ItemOrdemProdutoDTO toItem(ItemOrdemCompra itemOrdemCompra);
 
    @Mapping(target = "produtoCapa.id", source = "produtoCapaId")
-   @Mapping(target = "id", source = "itemOrdemCompraId")
-   ItemOrdemCompra toOrder(OrdemProdutoDTO ordemProdutoDTO);
+   @Mapping(target = "ordemCompra.id", source = "ordemCompraId")
+   ItemOrdemCompra toOrder(ItemOrdemProdutoDTO itemOrdemProdutoDTO);
 
    OrdemCompra toOrdemCompraDTO(OrdemCompraDTO ordemCompraDTO);
 

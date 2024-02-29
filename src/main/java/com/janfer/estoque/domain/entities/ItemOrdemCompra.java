@@ -38,7 +38,7 @@ public class ItemOrdemCompra {
   @JoinColumn(name = "produto_capa_id")
   private ProdutoCapa produtoCapa;
 
-  private int quantidade;
+  private Long quantidade;
 
 // outros campos e métodos conforme necessário
 }
