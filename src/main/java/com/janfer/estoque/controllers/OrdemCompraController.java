@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/orders")
+@RequestMapping(value = "/api/ordemCompra")
 public class OrdemCompraController {
 
   @Autowired
@@ -68,6 +68,10 @@ public class OrdemCompraController {
   public ResponseEntity<String> invoiceOrder(@PathVariable Long orderId) {
     OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
 
+    if (ordemCompra.getItemOrdemCompras().isEmpty()) {
+      return new ResponseEntity<>("A ordem de compra não pode ser faturada sem itens.", HttpStatus.BAD_REQUEST);
+    }
+
     if (ordemCompra.getStatusOrdem() == StatusOrdem.toEnum(2)) {
       ordemCompraService.faturarOrdem(ordemCompra);
       return new ResponseEntity<>("Ordem faturada com sucesso.", HttpStatus.OK);
@@ -82,19 +86,18 @@ public class OrdemCompraController {
     OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
 
     if (ordemCompra.getStatusOrdem() == StatusOrdem.toEnum(1)) {
-      ordemCompraService.estornarOrdem(ordemCompra);
-      return new ResponseEntity<>("Fatura cancelada com sucesso.", HttpStatus.OK);
+      ordemCompraService.estornarOrdem(ordemCompra, orderId);
+      return new ResponseEntity<>("Fatura estornada com sucesso.", HttpStatus.OK);
     } else {
       return new ResponseEntity<>("A ordem não foi faturada.", HttpStatus.BAD_REQUEST);
     }
   }
 
 
-//  @GetMapping("/{orderId}/getOrderItems")
-//  public ResponseEntity<List<ItemOrdemCompra>> getOrderItems(@PathVariable Long orderId) {
-////    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
-////    List<ItemOrdemCompra> itemOrdemCompras = ordemCompraService.getOrderById();
-//    return new ResponseEntity<>(itemOrdemCompras, HttpStatus.OK);
-//  }
+  @GetMapping("/{orderId}/getOrderItems")
+  public ResponseEntity<List<ItemOrdemCompra>> getOrderItems(@PathVariable Long orderId) {
+    List<ItemOrdemCompra> itemOrdemCompras = ordemCompraService.getOrderById(orderId).getItemOrdemCompras();
+    return new ResponseEntity<>(itemOrdemCompras, HttpStatus.OK);
+  }
 }
 

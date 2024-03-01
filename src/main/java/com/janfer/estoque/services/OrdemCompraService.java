@@ -69,9 +69,14 @@ public class OrdemCompraService {
         orderRepository.save(ordemCompra);
     }
 
-  public void estornarOrdem(OrdemCompra ordemCompra) {
-    ordemCompra.setStatusOrdem(StatusOrdem.toEnum(2));
-  }
+    public void estornarOrdem(OrdemCompra ordemCompra ,Long orderId) {
+        ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
+        orderRepository.save(ordemCompra);
+        // Obter a lista de ProdutoEntrada associadas à ordem de compra
+        List<ProdutoEntrada> produtoEntradas = produtoEntradaRepository.findByOrdemCompraId(orderId);
+        // Deletar todas as ProdutoEntrada na lista de uma vez
+        produtoEntradaRepository.deleteAll(produtoEntradas);
+    }
 
 
 }
