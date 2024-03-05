@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.envers.Audited;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
@@ -23,7 +24,14 @@ import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 public class  OrdemCompra {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+
   private Long id;
+  private Date dataPedidoOrdemCompra = new Date();
+  private Date dataRecebimentoOrdemCompra;
+
+  @ManyToOne
+  @JoinColumn(name = "fornecedor_id")
+  private Fornecedor fornecedor;
 
   @JsonIgnore
   @OneToMany(mappedBy = "ordemCompra", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -31,5 +39,17 @@ public class  OrdemCompra {
 
   private StatusOrdem statusOrdem;
 
+  private Double valorTotal;
+
+  public int getQuantidadeItens() {
+    return itemOrdemCompras.size();
+  }
+
+  // Método para calcular o valor total
+  public Double calcularValorTotal() {
+    return itemOrdemCompras.stream()
+            .mapToDouble(ItemOrdemCompra::getValorTotalItem)
+            .sum();
+  }
 
 }

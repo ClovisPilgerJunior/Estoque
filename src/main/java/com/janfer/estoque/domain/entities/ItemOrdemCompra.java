@@ -25,7 +25,7 @@ public class ItemOrdemCompra {
   private Long id;
 
   @JsonFormat(pattern = "dd/MM/yyyy")
-  private Date dataPedido = new Date();
+  private Date dataPedido;
 
   @Min(value = 0, message = "Preço unitário não pode ser negativo")
   private Double precoCompra;
@@ -39,6 +39,16 @@ public class ItemOrdemCompra {
   private ProdutoCapa produtoCapa;
 
   private Long quantidade;
+
+  public double getValorTotalItem() {
+    Double valor = precoCompra != null ? getPrecoCompra() * getQuantidade() : 0;
+    return valor;
+  }
+
+  public void setPrecoCompra(){
+    this.precoCompra = precoCompra != null ? getPrecoCompra() : 0;
+  }
+
 
 // outros campos e métodos conforme necessário
 }

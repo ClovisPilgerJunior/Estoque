@@ -8,6 +8,7 @@ import com.janfer.estoque.domain.entities.OrdemCompra;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.StatusOrdem;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
+import com.janfer.estoque.repositories.OrdemCompraRepository;
 import com.janfer.estoque.services.OrdemCompraService;
 import com.janfer.estoque.services.ProdutoCapaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,11 @@ public class OrdemCompraController {
 
   @Autowired
   MapStructMapper mapStruct;
+  @Autowired
+  private OrdemCompraRepository ordemCompraRepository;
 
   @PostMapping
   public ResponseEntity<OrdemCompraDTO> createOrder(OrdemCompraDTO ordemCompra) {
-    ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
     ordemCompraService.createOrder(mapStruct.toOrdemCompraDTO(ordemCompra));
     return ResponseEntity.ok(ordemCompra);
   }
@@ -56,10 +58,14 @@ public class OrdemCompraController {
       ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(orderProductDTO.getProdutoCapaId());
       ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
       Long quantidade = orderProductDTO.getQuantidade();
+      Double precoCompra = orderProductDTO.getPrecoCompra();
 
-      ItemOrdemCompra ordemProdutoDTO = ordemCompraService.addProductToOrder(ordemCompra, produtoCapa, quantidade);
+      ItemOrdemCompra ordemProdutoDTO = ordemCompraService.addProductToOrder(ordemCompra, produtoCapa, quantidade, precoCompra);
       itensAdicionados.add(mapStruct.toItem(ordemProdutoDTO));
     }
+
+    ordemCompra.getQuantidadeItens();
+    ordemCompraRepository.save(ordemCompra);
 
     return new ResponseEntity<>(itensAdicionados, HttpStatus.CREATED);
   }
@@ -93,6 +99,27 @@ public class OrdemCompraController {
     }
   }
 
+  @GetMapping
+  public ResponseEntity<List<OrdemCompraDTO>> getAllOrders() {
+    List<OrdemCompra> ordens = ordemCompraService.getAllOrdem();
+    List<OrdemCompraDTO> ordensDTO = new ArrayList<>();
+
+    for (OrdemCompra ordemCompra : ordens) {
+      OrdemCompraDTO ordemCompraDTO = mapStruct.toOrdemCompraEntity(ordemCompra);
+
+      // Calcula a quantidade de itens e o valor total
+      int quantidadeItens = ordemCompra.getQuantidadeItens();
+      Double valorTotal = ordemCompra.calcularValorTotal();
+
+      // Adiciona os valores ao DTO
+      ordemCompraDTO.setQuantidade(quantidadeItens);
+      ordemCompraDTO.setValorTotal(valorTotal);
+
+      ordensDTO.add(ordemCompraDTO);
+    }
+
+    return ResponseEntity.ok(ordensDTO);
+  }
 
   @GetMapping("/{orderId}/getOrderItems")
   public ResponseEntity<List<ItemOrdemCompra>> getOrderItems(@PathVariable Long orderId) {

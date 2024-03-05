@@ -2,10 +2,7 @@ package com.janfer.estoque.domain.mappers;
 
 import com.janfer.estoque.domain.dtos.*;
 import com.janfer.estoque.domain.entities.*;
-import com.janfer.estoque.domain.enums.MedidaUnidade;
-import com.janfer.estoque.domain.enums.Profile;
-import com.janfer.estoque.domain.enums.Setor;
-import com.janfer.estoque.domain.enums.TipoProduto;
+import com.janfer.estoque.domain.enums.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -184,6 +181,18 @@ public interface MapStructMapper {
    @Mapping(target = "ordemCompra.id", source = "ordemCompraId")
    ItemOrdemCompra toOrder(ItemOrdemProdutoDTO itemOrdemProdutoDTO);
 
+   default StatusOrdem mapStatusOrdem(Integer statusOrdemCod) {
+      return StatusOrdem.toEnum(statusOrdemCod);
+   }
+
+   @Mapping(source = "statusOrdem", target = "statusOrdem")
    OrdemCompra toOrdemCompraDTO(OrdemCompraDTO ordemCompraDTO);
+
+   @Mapping(source = "statusOrdem.cod", target = "statusOrdem")
+   OrdemCompraDTO toOrdemCompraEntity(OrdemCompra ordemCompra);
+
+   List<OrdemCompraDTO> toOrdemCompraList(List<OrdemCompra> ordemCompras);
+
+
 
 }
