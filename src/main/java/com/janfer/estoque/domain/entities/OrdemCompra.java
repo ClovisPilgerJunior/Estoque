@@ -26,7 +26,7 @@ public class  OrdemCompra {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   private Long id;
-  private Date dataPedidoOrdemCompra = new Date();
+  private Date dataPedidoOrdemCompra;
   private Date dataRecebimentoOrdemCompra;
 
   @ManyToOne

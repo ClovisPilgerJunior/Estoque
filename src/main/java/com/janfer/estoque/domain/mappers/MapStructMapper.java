@@ -185,13 +185,18 @@ public interface MapStructMapper {
       return StatusOrdem.toEnum(statusOrdemCod);
    }
 
-   @Mapping(source = "statusOrdem", target = "statusOrdem")
-   OrdemCompra toOrdemCompraDTO(OrdemCompraDTO ordemCompraDTO);
+   @Mapping(source = "fornecedor", target = "fornecedor.id")
+   OrdemCompra toOrdemCompraToPostDTO(OrdemCompraPostDTO ordemCompraPostDTO);
 
    @Mapping(source = "statusOrdem.cod", target = "statusOrdem")
-   OrdemCompraDTO toOrdemCompraEntity(OrdemCompra ordemCompra);
+   @Mapping(source = "fornecedor.id", target = "fornecedor")
+   OrdemCompraPostDTO toOrdemCompraPostEntity(OrdemCompra ordemCompra);
 
-   List<OrdemCompraDTO> toOrdemCompraList(List<OrdemCompra> ordemCompras);
+   @Mapping(source = "statusOrdem.desc", target = "statusOrdem")
+   @Mapping(source = "fornecedor.empresa", target = "fornecedor")
+   OrdemCompraGetDTO toOrdemCompraGetEntity(OrdemCompra ordemCompra);
+
+   List<OrdemCompraGetDTO> toOrdemCompraList(List<OrdemCompra> ordemCompras);
 
 
 

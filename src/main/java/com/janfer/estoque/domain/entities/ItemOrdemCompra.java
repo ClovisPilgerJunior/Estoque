@@ -24,8 +24,13 @@ public class ItemOrdemCompra {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  private Long numeroNota;
+
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataPedido;
+
+  @JsonFormat(pattern = "dd/MM/yyyy")
+  private Date dataRecebimento;
 
   @Min(value = 0, message = "Preço unitário não pode ser negativo")
   private Double precoCompra;
@@ -39,6 +44,10 @@ public class ItemOrdemCompra {
   private ProdutoCapa produtoCapa;
 
   private Long quantidade;
+
+  private Double valorTotalOrdem;
+
+  private String observacao;
 
   public double getValorTotalItem() {
     Double valor = precoCompra != null ? getPrecoCompra() * getQuantidade() : 0;

@@ -1,7 +1,8 @@
 package com.janfer.estoque.controllers;
 
-import com.janfer.estoque.domain.dtos.OrdemCompraDTO;
+import com.janfer.estoque.domain.dtos.OrdemCompraGetDTO;
 import com.janfer.estoque.domain.dtos.ItemOrdemProdutoDTO;
+import com.janfer.estoque.domain.dtos.OrdemCompraPostDTO;
 import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
 import com.janfer.estoque.domain.entities.ItemOrdemCompra;
 import com.janfer.estoque.domain.entities.OrdemCompra;
@@ -15,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -40,9 +39,9 @@ public class OrdemCompraController {
   private OrdemCompraRepository ordemCompraRepository;
 
   @PostMapping
-  public ResponseEntity<OrdemCompraDTO> createOrder(OrdemCompraDTO ordemCompra) {
-    ordemCompraService.createOrder(mapStruct.toOrdemCompraDTO(ordemCompra));
-    return ResponseEntity.ok(ordemCompra);
+  public ResponseEntity<OrdemCompraPostDTO> createOrder(@RequestBody OrdemCompraPostDTO ordemCompraPostDTO) {
+    ordemCompraService.generateOrder(mapStruct.toOrdemCompraToPostDTO(ordemCompraPostDTO));
+    return ResponseEntity.ok(ordemCompraPostDTO);
   }
 
   @PostMapping("/{orderId}/addProducts")
@@ -59,8 +58,13 @@ public class OrdemCompraController {
       ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
       Long quantidade = orderProductDTO.getQuantidade();
       Double precoCompra = orderProductDTO.getPrecoCompra();
+      Double valorTotaItemOrdem = orderProductDTO.getQuantidade() * orderProductDTO.getPrecoCompra();
 
-      ItemOrdemCompra ordemProdutoDTO = ordemCompraService.addProductToOrder(ordemCompra, produtoCapa, quantidade, precoCompra);
+      ItemOrdemCompra ordemProdutoDTO = ordemCompraService.addProductToOrder(ordemCompra,
+              produtoCapa,
+              quantidade,
+              precoCompra,
+              valorTotaItemOrdem);
       itensAdicionados.add(mapStruct.toItem(ordemProdutoDTO));
     }
 
@@ -100,22 +104,22 @@ public class OrdemCompraController {
   }
 
   @GetMapping
-  public ResponseEntity<List<OrdemCompraDTO>> getAllOrders() {
+  public ResponseEntity<List<OrdemCompraGetDTO>> getAllOrders() {
     List<OrdemCompra> ordens = ordemCompraService.getAllOrdem();
-    List<OrdemCompraDTO> ordensDTO = new ArrayList<>();
+    List<OrdemCompraGetDTO> ordensDTO = new ArrayList<>();
 
     for (OrdemCompra ordemCompra : ordens) {
-      OrdemCompraDTO ordemCompraDTO = mapStruct.toOrdemCompraEntity(ordemCompra);
+      OrdemCompraGetDTO ordemCompraGetDTO = mapStruct.toOrdemCompraGetEntity(ordemCompra);
 
       // Calcula a quantidade de itens e o valor total
       int quantidadeItens = ordemCompra.getQuantidadeItens();
       Double valorTotal = ordemCompra.calcularValorTotal();
 
       // Adiciona os valores ao DTO
-      ordemCompraDTO.setQuantidade(quantidadeItens);
-      ordemCompraDTO.setValorTotal(valorTotal);
+      ordemCompraGetDTO.setQuantidade(quantidadeItens);
+      ordemCompraGetDTO.setValorTotal(valorTotal);
 
-      ordensDTO.add(ordemCompraDTO);
+      ordensDTO.add(ordemCompraGetDTO);
     }
 
     return ResponseEntity.ok(ordensDTO);
