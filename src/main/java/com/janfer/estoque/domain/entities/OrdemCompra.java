@@ -26,6 +26,7 @@ public class  OrdemCompra {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   private Long id;
+  private Date dataEmissao;
   private Date dataPedidoOrdemCompra;
   private Date dataRecebimentoOrdemCompra;
 

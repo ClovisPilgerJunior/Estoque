@@ -15,6 +15,8 @@ public class OrdemCompraPostDTO implements Serializable {
 
     private Long id;
     @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date dataEmissao;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataPedidoOrdemCompra;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataRecebimentoOrdemCompra;

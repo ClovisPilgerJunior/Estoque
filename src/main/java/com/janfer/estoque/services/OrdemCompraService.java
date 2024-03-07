@@ -53,6 +53,8 @@ public class OrdemCompraService {
           }
       }
       ordemCompra.setDataPedidoOrdemCompra(new Date());
+      ordemCompra.setDataEmissao(new Date());
+      ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
       orderRepository.save(ordemCompra);
   }
 
@@ -92,7 +94,7 @@ public class OrdemCompraService {
         // Atualize o status da ordem de compra
         ordemCompra.setStatusOrdem(StatusOrdem.FATURADA);
         ordemCompra.setDataPedidoOrdemCompra(new Date());
-        ordemCompra.setValorTotal(ordemCompra.getValorTotal());
+        ordemCompra.setValorTotal(ordemCompra.calcularValorTotal());
         orderRepository.save(ordemCompra);
     }
 
