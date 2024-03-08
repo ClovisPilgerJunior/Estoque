@@ -39,11 +39,14 @@ public class OrdemCompraController {
   @Autowired
   private OrdemCompraRepository ordemCompraRepository;
 
-  @PostMapping
-  public ResponseEntity<OrdemCompraPostDTO> createOrder(@RequestBody OrdemCompraPostDTO ordemCompraPostDTO) {
-    ordemCompraService.generateOrder(mapStruct.toOrdemCompraToPostDTO(ordemCompraPostDTO));
-    return ResponseEntity.ok(ordemCompraPostDTO);
-  }
+    @PostMapping
+    public ResponseEntity<OrdemCompraPostDTO> createOrder(@RequestBody OrdemCompraPostDTO ordemCompraPostDTO) {
+        OrdemCompra ordemCompra = mapStruct.toOrdemCompraToPostDTO(ordemCompraPostDTO);
+        OrdemCompra savedOrder = ordemCompraService.generateOrder(ordemCompra);
+        // Atualiza o DTO de entrada com o ID gerado para a nova ordem de compra
+        ordemCompraPostDTO.setId(savedOrder.getId());
+        return ResponseEntity.ok(ordemCompraPostDTO);
+    }
 
   @PostMapping("/{orderId}/addProducts")
   public ResponseEntity<List<ItemOrdemProdutoDTO>> addProductsToOrder(

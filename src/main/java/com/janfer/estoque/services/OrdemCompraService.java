@@ -45,18 +45,19 @@ public class OrdemCompraService {
       return orderRepository.findAll();
   }
 
-  public void generateOrder(OrdemCompra ordemCompra) {
-      if (ordemCompra.getFornecedor() != null && ordemCompra.getFornecedor().getId() != null) {
-          Long fornecedorId = ordemCompra.getFornecedor().getId();
-          if (!fornecedorRepository.existsById(fornecedorId)) {
-              throw new ObjectNotFoundException("Fornecedor não encontrado");
-          }
-      }
-      ordemCompra.setDataPedidoOrdemCompra(new Date());
-      ordemCompra.setDataEmissao(new Date());
-      ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
-      orderRepository.save(ordemCompra);
-  }
+    public OrdemCompra generateOrder(OrdemCompra ordemCompra) {
+        if (ordemCompra.getFornecedor() != null && ordemCompra.getFornecedor().getId() != null) {
+            Long fornecedorId = ordemCompra.getFornecedor().getId();
+            if (!fornecedorRepository.existsById(fornecedorId)) {
+                throw new ObjectNotFoundException("Fornecedor não encontrado");
+            }
+        }
+        ordemCompra.setDataPedidoOrdemCompra(new Date());
+        ordemCompra.setDataEmissao(new Date());
+        ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
+        // Salva a ordem de compra e retorna o objeto atualizado
+        return orderRepository.save(ordemCompra);
+    }
 
   public ItemOrdemCompra addProductToOrder(OrdemCompra ordemCompra,
                                            ProdutoCapa produtoCapa,

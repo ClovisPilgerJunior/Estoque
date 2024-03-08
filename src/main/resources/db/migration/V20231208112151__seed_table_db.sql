@@ -10,25 +10,18 @@ VALUES ('ABC Corp', 'Maria', 0, 'maria@abc.com', '(123) 456-7890', 'Avenida Prin
 INSERT INTO fornecedor (empresa, nome, tipo_empresa, email, telefone, endereco, ativo, created_date, last_modified_date, created_by, last_modified_by)
 VALUES ('XYZ Ltda', 'Carlos', 1, 'carlos@xyz.com', '(987) 654-3210', 'Rua da Indústria', true,  NOW(), NOW(), 'system', 'system');
 
--- Produto Capa 1
 INSERT INTO produto_capa (cod_sistema, description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES (null, 'Produto Capa 1', 0, 1, 1, 10, 100, 1, false, NOW(), NOW(), 'system', 'system');
-
--- Produto Capa 2
-INSERT INTO produto_capa (cod_sistema, description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES (null, 'Produto Capa 2', 0, 2, 2, 20, 200, 2, true, NOW(), NOW(), 'system', 'system');
-
--- Produto Capa 3
-INSERT INTO produto_capa (cod_sistema, description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES (null, 'Produto Capa 3', 1, 3, 3, 30, 300, 0, true, NOW(), NOW(), 'system', 'system');
-
--- Produto Capa 4
-INSERT INTO produto_capa (cod_sistema, description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES (null, 'Produto Capa 4', 2, 4, 2, 40, 400, 0, true, NOW(), NOW(), 'system', 'system');
-
--- Produto Capa 5
-INSERT INTO produto_capa (cod_sistema, description, tipo_produto, medida_unidade, fornecedor_id, minimo, maximo, resuprimento, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES (null, 'Produto Capa 5', 0, 5, 3, 50, 500, 1, true, NOW(), NOW(), 'system', 'system');
+VALUES
+  (null, 'Botão Redondo Branco', 0, 1, 1, 10, 100, 1, false, NOW(), NOW(), 'system', 'system'),
+  (null, 'Zíper Preto 20cm', 0, 2, 2, 20, 200, 2, true, NOW(), NOW(), 'system', 'system'),
+  (null, 'Renda Bege Floral', 1, 3, 3, 30, 300, 0, true, NOW(), NOW(), 'system', 'system'),
+  (null, 'Linha para Bordado Vermelha', 2, 4, 2, 40, 400, 0, true, NOW(), NOW(), 'system', 'system'),
+  (null, 'Elástico Estampado 2cm', 0, 5, 3, 50, 500, 1, true, NOW(), NOW(), 'system', 'system'),
+  (null, 'Fecho de Pressão Niquelado', 1, 1, 1, 10, 100, 1, true, NOW(), NOW(), 'system', 'system'),
+  (null, 'Fita de Cetim Rosa 1cm', 2, 2, 2, 20, 200, 2, true, NOW(), NOW(), 'system', 'system'),
+  (null, 'Velcro Branco 3cm', 0, 3, 3, 30, 300, 0, true, NOW(), NOW(), 'system', 'system'),
+  (null, 'Botão de Pérola Grande', 1, 4, 2, 40, 400, 0, true, NOW(), NOW(), 'system', 'system'),
+  (null, 'Fita de Gorgorão Preta 2cm', 2, 5, 3, 50, 500, 1, true, NOW(), NOW(), 'system', 'system');
 
 -- Inserir um registro de ProdutoEntrada
 INSERT INTO produto_entrada (numero_nota, data_pedido, data_entrega, preco_compra, quantidade, observacao, produto_capa_id, created_date, last_modified_date, created_by, last_modified_by)
