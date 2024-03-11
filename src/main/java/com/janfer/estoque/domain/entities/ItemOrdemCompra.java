@@ -58,6 +58,4 @@ public class ItemOrdemCompra {
     this.precoCompra = precoCompra != null ? getPrecoCompra() : 0;
   }
 
-
-// outros campos e métodos conforme necessário
 }

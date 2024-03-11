@@ -64,6 +64,7 @@ public class OrdemCompraController {
       Double precoCompra = orderProductDTO.getPrecoCompra();
       Double valorTotaItemOrdem = orderProductDTO.getQuantidade() * orderProductDTO.getPrecoCompra();
 
+
       ItemOrdemCompra ordemProdutoDTO = ordemCompraService.addProductToOrder(ordemCompra,
               produtoCapa,
               quantidade,
