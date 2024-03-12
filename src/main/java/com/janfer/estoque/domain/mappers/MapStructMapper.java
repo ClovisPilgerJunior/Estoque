@@ -198,6 +198,11 @@ public interface MapStructMapper {
 
    List<OrdemCompraGetDTO> toOrdemCompraList(List<OrdemCompra> ordemCompras);
 
+   @Mapping(source = "produtoCapa.id", target = "produtoCapaId")
+   @Mapping(source = "ordemCompra.id", target = "ordemCompraId")
+   ItemOrdemProdutoGetDTO toItemOrdemCompraEntity(ItemOrdemCompra itemOrdemCompra);
+
+   List<ItemOrdemProdutoGetDTO> toItemOrdemCompraList(List<ItemOrdemCompra> itemOrdemCompra);
 
 
 }

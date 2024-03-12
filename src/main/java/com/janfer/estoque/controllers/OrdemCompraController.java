@@ -1,9 +1,6 @@
 package com.janfer.estoque.controllers;
 
-import com.janfer.estoque.domain.dtos.OrdemCompraGetDTO;
-import com.janfer.estoque.domain.dtos.ItemOrdemProdutoDTO;
-import com.janfer.estoque.domain.dtos.OrdemCompraPostDTO;
-import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
+import com.janfer.estoque.domain.dtos.*;
 import com.janfer.estoque.domain.entities.ItemOrdemCompra;
 import com.janfer.estoque.domain.entities.OrdemCompra;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
@@ -131,9 +128,9 @@ public class OrdemCompraController {
   }
 
   @GetMapping("/{orderId}/getOrderItems")
-  public ResponseEntity<List<ItemOrdemCompra>> getOrderItems(@PathVariable Long orderId) {
-    List<ItemOrdemCompra> itemOrdemCompras = ordemCompraService.getOrderById(orderId).getItemOrdemCompras();
-    return new ResponseEntity<>(itemOrdemCompras, HttpStatus.OK);
+  public ResponseEntity<List<ItemOrdemProdutoGetDTO>> getOrderItems(@PathVariable Long orderId) {
+    List<ItemOrdemProdutoGetDTO> itemOrdemProdutoGetDTOS = mapStruct.toItemOrdemCompraList(ordemCompraService.getOrderById(orderId).getItemOrdemCompras());
+    return new ResponseEntity<>(itemOrdemProdutoGetDTOS, HttpStatus.OK);
   }
 }
 
