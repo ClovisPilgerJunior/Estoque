@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrdemCompraService {
@@ -109,6 +110,33 @@ public class OrdemCompraService {
         produtoEntradaRepository.deleteAll(produtoEntradas);
     }
 
+    public ItemOrdemCompra updateItem(ItemOrdemCompra item) {
+        return orderItemRepository.save(item);
+    }
+
+    public void deleteItemFromOrder(OrdemCompra ordemCompra, Long produtoCapaId) {
+        // Busca o item na lista de itens da OrdemCompra pelo produtoCapaId
+        Optional<ItemOrdemCompra> itemToRemove = ordemCompra.getItemOrdemCompras().stream()
+                .filter(item -> item.getProdutoCapa().getId().equals(produtoCapaId))
+                .findFirst();
+
+        // Se o item foi encontrado, remove-o da lista de itens da OrdemCompra
+        if (itemToRemove.isPresent()) {
+            ItemOrdemCompra item = itemToRemove.get();
+            ordemCompra.getItemOrdemCompras().remove(item);
+
+            // Se você estiver usando JPA/Hibernate, pode ser necessário remover o item do contexto de persistência
+            // para que ele seja excluído do banco de dados na próxima operação de salvamento.
+            // Por exemplo:
+            orderItemRepository.delete(item);
+
+            // Salva a OrdemCompra atualizada
+            orderRepository.save(ordemCompra);
+        } else {
+            // Opcional: Trate o caso em que o item não foi encontrado
+            // Por exemplo, lançar uma exceção ou registrar um log
+        }
+    }
 
 }
 

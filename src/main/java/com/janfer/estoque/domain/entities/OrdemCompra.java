@@ -35,7 +35,7 @@ public class  OrdemCompra {
   private Fornecedor fornecedor;
 
   @JsonIgnore
-  @OneToMany(mappedBy = "ordemCompra", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "ordemCompra", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   private List<ItemOrdemCompra> itemOrdemCompras = new ArrayList<>();
 
   private StatusOrdem statusOrdem;

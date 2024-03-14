@@ -1,23 +1,25 @@
 package com.janfer.estoque.controllers;
 
 import com.janfer.estoque.domain.dtos.*;
+import com.janfer.estoque.domain.entities.Fornecedor;
 import com.janfer.estoque.domain.entities.ItemOrdemCompra;
 import com.janfer.estoque.domain.entities.OrdemCompra;
 import com.janfer.estoque.domain.entities.ProdutoCapa;
 import com.janfer.estoque.domain.enums.StatusOrdem;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.OrdemCompraRepository;
+import com.janfer.estoque.services.FornecedorService;
 import com.janfer.estoque.services.OrdemCompraService;
 import com.janfer.estoque.services.ProdutoCapaService;
+import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/ordemCompra")
@@ -35,6 +37,9 @@ public class OrdemCompraController {
   MapStructMapper mapStruct;
   @Autowired
   private OrdemCompraRepository ordemCompraRepository;
+
+  @Autowired
+  private FornecedorService fornecedorService;
 
     @PostMapping
     public ResponseEntity<OrdemCompraPostDTO> createOrder(@RequestBody OrdemCompraPostDTO ordemCompraPostDTO) {
@@ -132,5 +137,72 @@ public class OrdemCompraController {
     List<ItemOrdemProdutoGetDTO> itemOrdemProdutoGetDTOS = mapStruct.toItemOrdemCompraList(ordemCompraService.getOrderById(orderId).getItemOrdemCompras());
     return new ResponseEntity<>(itemOrdemProdutoGetDTOS, HttpStatus.OK);
   }
+
+  @PutMapping("/{orderId}/updateOrder")
+  public ResponseEntity<List<ItemOrdemProdutoDTO>> updateOrder(
+          @PathVariable Long orderId,
+          @RequestBody OrdemCompraUpdateDTO updateDTO) {
+
+    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
+    List<ItemOrdemProdutoDTO> updatedItems = new ArrayList<>();
+
+    // Atualiza o fornecedor da ordem de compra
+    if (updateDTO.getFornecedorId() != null) {
+      Fornecedor fornecedor = fornecedorService.findById(updateDTO.getFornecedorId())
+              .orElseThrow(() -> new ObjectNotFoundException("Fornecedor não encontrado com id: " + updateDTO.getFornecedorId()));
+      ordemCompra.setFornecedor(fornecedor);
+    }
+
+    // Primeiro, identifica os IDs dos itens que foram removidos da lista enviada
+    Set<Long> removedItemIds = new HashSet<>(ordemCompra.getItemOrdemCompras().stream()
+            .map(ItemOrdemCompra::getProdutoCapa)
+            .map(ProdutoCapa::getId)
+            .collect(Collectors.toSet()));
+    updateDTO.getItems().forEach(itemDTO -> removedItemIds.remove(itemDTO.getProdutoCapaId()));
+
+    // Exclui os itens que foram removidos da lista enviada
+    removedItemIds.forEach(id -> ordemCompraService.deleteItemFromOrder(ordemCompra, id));
+
+    // Agora, atualiza ou adiciona os itens enviados na lista
+    for (ItemOrdemProdutoDTO itemDTO : updateDTO.getItems()) {
+      ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(itemDTO.getProdutoCapaId());
+      ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
+      Long quantidade = itemDTO.getQuantidade();
+      Double precoCompra = itemDTO.getPrecoCompra();
+      Double valorTotalItemOrdem = itemDTO.getQuantidade() * itemDTO.getPrecoCompra();
+
+      // Verifica se o item já existe na ordem de compra
+      Optional<ItemOrdemCompra> existingItem = ordemCompra.getItemOrdemCompras().stream()
+              .filter(item -> item.getProdutoCapa().getId().equals(produtoCapa.getId()))
+              .findFirst();
+
+      if (existingItem.isPresent()) {
+        // Atualiza o item existente
+        ItemOrdemCompra item = existingItem.get();
+        item.setQuantidade(quantidade);
+        item.setPrecoCompra(precoCompra);
+        item.setValorTotalOrdem(valorTotalItemOrdem);
+        item.setObservacao(itemDTO.getObservacao());
+        item.setNumeroNota(itemDTO.getNumeroNota());
+        ordemCompraService.updateItem(item);
+      } else {
+        // Adiciona um novo item
+        ItemOrdemCompra newItem = ordemCompraService.addProductToOrder(ordemCompra,
+                produtoCapa,
+                quantidade,
+                precoCompra,
+                valorTotalItemOrdem);
+        updatedItems.add(mapStruct.toItem(newItem));
+      }
+    }
+
+    ordemCompraRepository.save(ordemCompra);
+
+    return new ResponseEntity<>(updatedItems, HttpStatus.OK);
+  }
+
+
+
+
 }
 

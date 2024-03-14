@@ -5,6 +5,7 @@ import com.janfer.estoque.domain.entities.*;
 import com.janfer.estoque.domain.enums.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import javax.enterprise.inject.Default;
@@ -28,13 +29,14 @@ public interface MapStructMapper {
 
    @Mapping(target = "fornecedor", ignore = true)
    @Mapping(target = "tipoProduto", ignore = true)
+   @Mapping(target = "medidaUnidade", ignore = true)
    @Mapping(target = "resuprimento", ignore = true)
    ProdutoCapa produtoCapaGetDTOToProdutoCapa(ProdutoCapaGetDTO produtoCapaGetDTO);
 
 
    @Mapping(target = "fornecedor.id", source = "fornecedor")
    @Mapping(target = "tipoProduto", source = "tipoProduto")
-   @Mapping(target = "medidaUnidade", source = "medidaUnidade")
+   @Mapping(target = "medidaUnidade", source = "medidaUnidade", qualifiedByName = "mapMedidaUnidade")
    @Mapping(target = "resuprimento", ignore = true)
    @Mapping(target = "id", ignore = true)
    ProdutoCapa produtoCapaToProdutoCapaPostDTO(ProdutoCapaPostDTO produtoCapaPostDTO);
@@ -44,6 +46,7 @@ public interface MapStructMapper {
       return TipoProduto.toEnum(tipoProdutoCod);
    }
 
+   @Named("mapMedidaUnidade")
    default MedidaUnidade mapMedidaUnidade(Integer medidaUnidadeCod) {
       return MedidaUnidade.toEnum(medidaUnidadeCod);
    }
@@ -206,4 +209,6 @@ public interface MapStructMapper {
    List<ItemOrdemProdutoGetDTO> toItemOrdemCompraList(List<ItemOrdemCompra> itemOrdemCompra);
 
 
+   @Mapping(source = "fornecedor.id", target = "fornecedorId")
+   OrdemCompraUpdateDTO ordemCompraPutDTOToEntity(OrdemCompra ordemCompra);
 }
