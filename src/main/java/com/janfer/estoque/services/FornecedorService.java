@@ -33,10 +33,12 @@ public class FornecedorService {
         return fornecedorRepository.findAll();
     }
 
+    @Transactional
     public Fornecedor save(Fornecedor fornecedor){
         return fornecedorRepository.save(fornecedor);
     }
 
+    @Transactional
     public void saveAll(List<Fornecedor> fornecedors){
         fornecedorRepository.saveAll(fornecedors);
     }
@@ -53,6 +55,10 @@ public class FornecedorService {
 
     public Optional<Fornecedor> findById(Long id) {
         return fornecedorRepository.findById(id);
+    }
+
+    public Optional<Fornecedor> findByEmpresa(String empresa) {
+        return fornecedorRepository.findByEmpresa(empresa);
     }
 
     public boolean existByEmpresaAndIdNot(String empresa, Long id){

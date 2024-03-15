@@ -14,6 +14,7 @@ public class OrdemCompraPostDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    private Long numeroNota;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataEmissao;
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -24,4 +25,5 @@ public class OrdemCompraPostDTO implements Serializable {
     private Integer statusOrdem;
     private Integer quantidade;
     private Double valorTotal;
+    private String observacao;
 }

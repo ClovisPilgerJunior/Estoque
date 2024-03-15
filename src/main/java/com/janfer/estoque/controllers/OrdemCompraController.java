@@ -44,6 +44,8 @@ public class OrdemCompraController {
     @PostMapping
     public ResponseEntity<OrdemCompraPostDTO> createOrder(@RequestBody OrdemCompraPostDTO ordemCompraPostDTO) {
         OrdemCompra ordemCompra = mapStruct.toOrdemCompraToPostDTO(ordemCompraPostDTO);
+        ordemCompra.setNumeroNota(ordemCompraPostDTO.getNumeroNota());
+        ordemCompra.setObservacao(ordemCompraPostDTO.getObservacao());
         OrdemCompra savedOrder = ordemCompraService.generateOrder(ordemCompra);
         // Atualiza o DTO de entrada com o ID gerado para a nova ordem de compra
         ordemCompraPostDTO.setId(savedOrder.getId());
@@ -64,6 +66,8 @@ public class OrdemCompraController {
       ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
       Long quantidade = orderProductDTO.getQuantidade();
       Double precoCompra = orderProductDTO.getPrecoCompra();
+      Long numeroNota = orderProductDTO.getNumeroNota();
+      String observacao = ordemCompra.getObservacao();
       Double valorTotaItemOrdem = orderProductDTO.getQuantidade() * orderProductDTO.getPrecoCompra();
 
 
@@ -71,7 +75,9 @@ public class OrdemCompraController {
               produtoCapa,
               quantidade,
               precoCompra,
-              valorTotaItemOrdem);
+              valorTotaItemOrdem,
+              numeroNota,
+              observacao);
       itensAdicionados.add(mapStruct.toItem(ordemProdutoDTO));
     }
 
@@ -169,6 +175,8 @@ public class OrdemCompraController {
       ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
       Long quantidade = itemDTO.getQuantidade();
       Double precoCompra = itemDTO.getPrecoCompra();
+      Long numeroNota = itemDTO.getNumeroNota();
+      String observacao = itemDTO.getObservacao();
       Double valorTotalItemOrdem = itemDTO.getQuantidade() * itemDTO.getPrecoCompra();
 
       // Verifica se o item já existe na ordem de compra
@@ -182,8 +190,8 @@ public class OrdemCompraController {
         item.setQuantidade(quantidade);
         item.setPrecoCompra(precoCompra);
         item.setValorTotalOrdem(valorTotalItemOrdem);
-        item.setObservacao(itemDTO.getObservacao());
-        item.setNumeroNota(itemDTO.getNumeroNota());
+        item.setObservacao(observacao);
+        item.setNumeroNota(numeroNota);
         ordemCompraService.updateItem(item);
       } else {
         // Adiciona um novo item
@@ -191,11 +199,15 @@ public class OrdemCompraController {
                 produtoCapa,
                 quantidade,
                 precoCompra,
-                valorTotalItemOrdem);
+                valorTotalItemOrdem,
+                numeroNota,
+                observacao);
         updatedItems.add(mapStruct.toItem(newItem));
       }
     }
 
+    ordemCompra.setNumeroNota(updateDTO.getNumeroNota());
+    ordemCompra.setObservacao(updateDTO.getObservacao());
     ordemCompraRepository.save(ordemCompra);
 
     return new ResponseEntity<>(updatedItems, HttpStatus.OK);

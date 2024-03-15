@@ -64,7 +64,9 @@ public class OrdemCompraService {
                                            ProdutoCapa produtoCapa,
                                            Long quantidade,
                                            Double precoCompra,
-                                           Double valorTotalItemOrdem) {
+                                           Double valorTotalItemOrdem,
+                                           Long numeroNota,
+                                           String observacao) {
    ItemOrdemCompra itemOrdemCompra = new ItemOrdemCompra();
     itemOrdemCompra.setOrdemCompra(ordemCompra);
     itemOrdemCompra.setProdutoCapa(produtoCapa);
@@ -72,8 +74,8 @@ public class OrdemCompraService {
     itemOrdemCompra.setPrecoCompra(precoCompra);
     itemOrdemCompra.setValorTotalOrdem(valorTotalItemOrdem);
     itemOrdemCompra.setDataPedido(new Date());
-    itemOrdemCompra.setObservacao(itemOrdemCompra.getObservacao());
-    itemOrdemCompra.setNumeroNota(itemOrdemCompra.getNumeroNota());
+    itemOrdemCompra.setObservacao(observacao);
+    itemOrdemCompra.setNumeroNota(numeroNota);
 
     return orderItemRepository.save(itemOrdemCompra);
   }
@@ -87,6 +89,9 @@ public class OrdemCompraService {
             produtoEntrada.setQuantidade(item.getQuantidade());
             produtoEntrada.setPrecoCompra(item.getPrecoCompra());
             produtoEntrada.setDataEntrega(new Date());
+            produtoEntrada.setDataPedido(ordemCompra.getDataPedidoOrdemCompra());
+            produtoEntrada.setObservacao(item.getObservacao());
+            produtoEntrada.setNumeroNota(item.getNumeroNota());
             item.setDataRecebimento(new Date());
             // Configure outros campos conforme necessário
             orderItemRepository.save(item);
@@ -95,7 +100,7 @@ public class OrdemCompraService {
 
         // Atualize o status da ordem de compra
         ordemCompra.setStatusOrdem(StatusOrdem.FATURADA);
-        ordemCompra.setDataPedidoOrdemCompra(new Date());
+        ordemCompra.setDataRecebimentoOrdemCompra(new Date());
         ordemCompra.setValorTotal(ordemCompra.calcularValorTotal());
         orderRepository.save(ordemCompra);
     }

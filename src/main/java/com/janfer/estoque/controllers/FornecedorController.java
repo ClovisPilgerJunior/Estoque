@@ -111,6 +111,22 @@ public class FornecedorController {
         );
   }
 
+  @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_LIST')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_LIST'))")
+  @GetMapping("/name/{name}")
+  @Operation(summary = "Buscar fornecedor por ID", description = "Recupera um fornecedor pelo Nome fornecido.")
+  @ApiResponse(responseCode = "200", description = "Fornecedor encontrado com sucesso.")
+  @ApiResponse(responseCode = "404", description = "Fornecedor não encontrado.")
+  public ResponseEntity<Object> findByEmpresa(@PathVariable(value = "name") String name) {
+    Optional<Fornecedor> fornecedorOptional = fornecedorService.findByEmpresa(name);
+    return fornecedorOptional.<ResponseEntity<Object>>map(fornecedor -> ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(fornecedor))
+            .orElseGet(() -> ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(NOT_FOUND)
+            );
+  }
+
   @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_MANAGER') and hasRole('ROLE_FORNECEDOR_UPDATE')) or (hasRole('ROLE_USER') and hasRole('ROLE_FORNECEDOR_UPDATE'))")
   @PutMapping("/atualizar/{id}")
   @Operation(summary = "Atualizar fornecedor por ID", description = "Atualiza um fornecedor pelo ID fornecido.")

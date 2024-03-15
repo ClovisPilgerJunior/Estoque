@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {
 
@@ -19,4 +21,5 @@ public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {
   @Query("select (count(f) > 0) from Fornecedor f where f.email = ?1 and f.id <> ?2")
   boolean existsByEmailAndIdNot(String email, Long id);
 
+    Optional<Fornecedor> findByEmpresa(String empresa);
 }
