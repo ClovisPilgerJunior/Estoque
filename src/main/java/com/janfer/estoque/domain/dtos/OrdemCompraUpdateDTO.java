@@ -14,6 +14,6 @@ public class OrdemCompraUpdateDTO implements Serializable {
 
     private Long fornecedorId;
     private List<ItemOrdemProdutoDTO> items;
-    private Long numeroNota;
-    private String observacao;
+    private Long numeroNotaOrdem;
+    private String ordemObservacao;
 }

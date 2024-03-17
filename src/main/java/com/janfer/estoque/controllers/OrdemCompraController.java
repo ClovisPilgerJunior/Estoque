@@ -44,8 +44,8 @@ public class OrdemCompraController {
     @PostMapping
     public ResponseEntity<OrdemCompraPostDTO> createOrder(@RequestBody OrdemCompraPostDTO ordemCompraPostDTO) {
         OrdemCompra ordemCompra = mapStruct.toOrdemCompraToPostDTO(ordemCompraPostDTO);
-        ordemCompra.setNumeroNota(ordemCompraPostDTO.getNumeroNota());
-        ordemCompra.setObservacao(ordemCompraPostDTO.getObservacao());
+        ordemCompra.setNumeroNotaOrdem(ordemCompraPostDTO.getNumeroNotaOrdem());
+        ordemCompra.setOrdemObservacao(ordemCompraPostDTO.getOrdemObservacao());
         OrdemCompra savedOrder = ordemCompraService.generateOrder(ordemCompra);
         // Atualiza o DTO de entrada com o ID gerado para a nova ordem de compra
         ordemCompraPostDTO.setId(savedOrder.getId());
@@ -67,7 +67,7 @@ public class OrdemCompraController {
       Long quantidade = orderProductDTO.getQuantidade();
       Double precoCompra = orderProductDTO.getPrecoCompra();
       Long numeroNota = orderProductDTO.getNumeroNota();
-      String observacao = ordemCompra.getObservacao();
+      String observacao = orderProductDTO.getObservacao();
       Double valorTotaItemOrdem = orderProductDTO.getQuantidade() * orderProductDTO.getPrecoCompra();
 
 
@@ -159,6 +159,13 @@ public class OrdemCompraController {
       ordemCompra.setFornecedor(fornecedor);
     }
 
+      if (updateDTO.getNumeroNotaOrdem() != null) {
+          ordemCompra.setNumeroNotaOrdem(updateDTO.getNumeroNotaOrdem());
+      }
+      if (updateDTO.getOrdemObservacao() != null) {
+          ordemCompra.setOrdemObservacao(updateDTO.getOrdemObservacao());
+      }
+
     // Primeiro, identifica os IDs dos itens que foram removidos da lista enviada
     Set<Long> removedItemIds = new HashSet<>(ordemCompra.getItemOrdemCompras().stream()
             .map(ItemOrdemCompra::getProdutoCapa)
@@ -206,8 +213,6 @@ public class OrdemCompraController {
       }
     }
 
-    ordemCompra.setNumeroNota(updateDTO.getNumeroNota());
-    ordemCompra.setObservacao(updateDTO.getObservacao());
     ordemCompraRepository.save(ordemCompra);
 
     return new ResponseEntity<>(updatedItems, HttpStatus.OK);

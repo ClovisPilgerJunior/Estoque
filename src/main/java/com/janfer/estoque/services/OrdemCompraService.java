@@ -91,7 +91,7 @@ public class OrdemCompraService {
             produtoEntrada.setDataEntrega(new Date());
             produtoEntrada.setDataPedido(ordemCompra.getDataPedidoOrdemCompra());
             produtoEntrada.setObservacao(item.getObservacao());
-            produtoEntrada.setNumeroNota(item.getNumeroNota());
+            produtoEntrada.setNumeroNota(item.getOrdemCompra().getNumeroNotaOrdem());
             item.setDataRecebimento(new Date());
             // Configure outros campos conforme necessário
             orderItemRepository.save(item);

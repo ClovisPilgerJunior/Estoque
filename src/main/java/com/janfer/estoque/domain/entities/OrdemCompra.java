@@ -26,7 +26,7 @@ public class  OrdemCompra {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   private Long id;
-  private Long numeroNota;
+  private Long numeroNotaOrdem;
   private Date dataEmissao;
   private Date dataPedidoOrdemCompra;
   private Date dataRecebimentoOrdemCompra;
@@ -43,7 +43,7 @@ public class  OrdemCompra {
 
   private Double valorTotal;
 
-  private String observacao;
+  private String ordemObservacao;
 
   public int getQuantidadeItens() {
     return itemOrdemCompras.size();
