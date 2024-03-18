@@ -159,12 +159,9 @@ public class OrdemCompraController {
       ordemCompra.setFornecedor(fornecedor);
     }
 
-      if (updateDTO.getNumeroNotaOrdem() != null) {
-          ordemCompra.setNumeroNotaOrdem(updateDTO.getNumeroNotaOrdem());
-      }
-      if (updateDTO.getOrdemObservacao() != null) {
-          ordemCompra.setOrdemObservacao(updateDTO.getOrdemObservacao());
-      }
+    ordemCompra.setNumeroNotaOrdem(updateDTO.getNumeroNotaOrdem());
+    ordemCompra.setOrdemObservacao(updateDTO.getOrdemObservacao());
+
 
     // Primeiro, identifica os IDs dos itens que foram removidos da lista enviada
     Set<Long> removedItemIds = new HashSet<>(ordemCompra.getItemOrdemCompras().stream()

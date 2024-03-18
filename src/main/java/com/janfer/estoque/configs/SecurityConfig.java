@@ -47,13 +47,14 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@Profile("dev")
+@Profile("test")
 public class SecurityConfig {
 
   @Autowired
   SecurityFilter securityFilter;
   @Autowired
   private Environment env;
+
 
   @Bean
   MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
@@ -65,7 +66,7 @@ public class SecurityConfig {
   public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc)
       throws Exception {
 
-    if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
+    if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
       http
           .headers((headers) ->
               headers

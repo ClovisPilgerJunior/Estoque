@@ -21,7 +21,7 @@ import java.util.Date;
 @Audited
 public class ProdutoEntrada extends LocalBaseAuditEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id", nullable = false)
   private Long id;
   private Long numeroNota;
