@@ -55,7 +55,7 @@ public class OrdemCompraService {
         }
         ordemCompra.setDataPedidoOrdemCompra(new Date());
         ordemCompra.setDataEmissao(new Date());
-        ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
+        ordemCompra.setStatusOrdem(StatusOrdem.AGUARDANDO_LIBERACAO);
         // Salva a ordem de compra e retorna o objeto atualizado
         return orderRepository.save(ordemCompra);
     }
@@ -99,14 +99,14 @@ public class OrdemCompraService {
         }
 
         // Atualize o status da ordem de compra
-        ordemCompra.setStatusOrdem(StatusOrdem.FATURADA);
+        ordemCompra.setStatusOrdem(StatusOrdem.RECEBIDO);
         ordemCompra.setDataRecebimentoOrdemCompra(new Date());
         ordemCompra.setValorTotal(ordemCompra.calcularValorTotal());
         orderRepository.save(ordemCompra);
     }
 
     public void estornarOrdem(OrdemCompra ordemCompra ,Long orderId) {
-        ordemCompra.setStatusOrdem(StatusOrdem.NAO_FATURADA);
+        ordemCompra.setStatusOrdem(StatusOrdem.AGUARDANDO_RECEBIMENTO);
         ordemCompra.setDataRecebimentoOrdemCompra(null);
         orderRepository.save(ordemCompra);
         // Obter a lista de ProdutoEntrada associadas à ordem de compra

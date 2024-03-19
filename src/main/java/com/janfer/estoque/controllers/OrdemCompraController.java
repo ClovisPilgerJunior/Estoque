@@ -95,11 +95,11 @@ public class OrdemCompraController {
       return new ResponseEntity<>("A ordem de compra não pode ser faturada sem itens.", HttpStatus.BAD_REQUEST);
     }
 
-    if (ordemCompra.getStatusOrdem() == StatusOrdem.toEnum(2)) {
+    if (ordemCompra.getStatusOrdem().equals(StatusOrdem.AGUARDANDO_RECEBIMENTO)) {
       ordemCompraService.faturarOrdem(ordemCompra);
-      return new ResponseEntity<>("Ordem faturada com sucesso.", HttpStatus.OK);
+      return new ResponseEntity<>("Ordem de Compra recebida com sucesso.", HttpStatus.OK);
     } else {
-      return new ResponseEntity<>("A ordem já foi faturada.", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("A ordem de Compra já foi recebida.", HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -108,11 +108,11 @@ public class OrdemCompraController {
   public ResponseEntity<String> cancelInvoiceOrder(@PathVariable Long orderId) {
     OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
 
-    if (ordemCompra.getStatusOrdem() == StatusOrdem.toEnum(1)) {
+    if (ordemCompra.getStatusOrdem().equals(StatusOrdem.RECEBIDO)) {
       ordemCompraService.estornarOrdem(ordemCompra, orderId);
-      return new ResponseEntity<>("Fatura estornada com sucesso.", HttpStatus.OK);
+      return new ResponseEntity<>("Ordem de compra estornada com sucesso.", HttpStatus.OK);
     } else {
-      return new ResponseEntity<>("A ordem não foi faturada.", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("A Ordem de Compra não foi Recebida.", HttpStatus.BAD_REQUEST);
     }
   }
 
