@@ -24,6 +24,8 @@ public class ItemOrdemCompra {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  private String produtoCapaDesc;
+
   private Long numeroNota;
 
   @JsonFormat(pattern = "dd/MM/yyyy")

@@ -66,10 +66,12 @@ public class OrdemCompraService {
                                            Double precoCompra,
                                            Double valorTotalItemOrdem,
                                            Long numeroNota,
-                                           String observacao) {
+                                           String observacao,
+                                           String produtoCapaDesc) {
    ItemOrdemCompra itemOrdemCompra = new ItemOrdemCompra();
     itemOrdemCompra.setOrdemCompra(ordemCompra);
     itemOrdemCompra.setProdutoCapa(produtoCapa);
+    itemOrdemCompra.setProdutoCapaDesc(produtoCapaDesc);
     itemOrdemCompra.setQuantidade(quantidade);
     itemOrdemCompra.setPrecoCompra(precoCompra);
     itemOrdemCompra.setValorTotalOrdem(valorTotalItemOrdem);

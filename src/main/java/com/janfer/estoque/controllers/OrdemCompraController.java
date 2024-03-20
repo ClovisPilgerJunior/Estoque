@@ -64,6 +64,7 @@ public class OrdemCompraController {
     for (ItemOrdemProdutoDTO orderProductDTO : orderProductsDTO) {
       ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(orderProductDTO.getProdutoCapaId());
       ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
+      String produtoCapaDesc = orderProductDTO.getProdutoCapaDesc();
       Long quantidade = orderProductDTO.getQuantidade();
       Double precoCompra = orderProductDTO.getPrecoCompra();
       Long numeroNota = orderProductDTO.getNumeroNota();
@@ -77,7 +78,8 @@ public class OrdemCompraController {
               precoCompra,
               valorTotaItemOrdem,
               numeroNota,
-              observacao);
+              observacao,
+              produtoCapaDesc);
       itensAdicionados.add(mapStruct.toItem(ordemProdutoDTO));
     }
 
@@ -181,6 +183,7 @@ public class OrdemCompraController {
       Double precoCompra = itemDTO.getPrecoCompra();
       Long numeroNota = itemDTO.getNumeroNota();
       String observacao = itemDTO.getObservacao();
+      String produtoCapaDesc = itemDTO.getProdutoCapaDesc();
       Double valorTotalItemOrdem = itemDTO.getQuantidade() * itemDTO.getPrecoCompra();
 
       // Verifica se o item já existe na ordem de compra
@@ -205,7 +208,8 @@ public class OrdemCompraController {
                 precoCompra,
                 valorTotalItemOrdem,
                 numeroNota,
-                observacao);
+                observacao,
+                produtoCapaDesc);
         updatedItems.add(mapStruct.toItem(newItem));
       }
     }

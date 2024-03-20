@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class ItemOrdemProdutoDTO {
   private Long produtoCapaId;
+  private String produtoCapaDesc;
   private Long numeroNota;
   private Long quantidade;
   private Long ordemCompraId;
