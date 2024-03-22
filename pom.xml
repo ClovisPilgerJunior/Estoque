@@ -142,10 +142,21 @@
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.16.0</version>
+			<version>6.20.0</version>
 		</dependency>
 
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>jasperreports</id>
+			<url>http://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases</url>
+		</repository>
+		<repository>
+			<id>jaspersoft-third-party</id>
+			<url>http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
@@ -236,5 +247,7 @@
 			</resource>
 		</resources>
 	</build>
+
+
 
 </project>
