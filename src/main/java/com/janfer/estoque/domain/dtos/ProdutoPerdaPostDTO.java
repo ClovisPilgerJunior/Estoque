@@ -16,7 +16,7 @@ public class ProdutoPerdaPostDTO implements Serializable {
   private static final long serialVersionUID = 1L;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date data;
-  private Long quantidade;
+  private Double quantidade;
   private String motivo;
   @NotNull(message = "Produto capa não pode estar vazio")
   private Long produtoCapa;

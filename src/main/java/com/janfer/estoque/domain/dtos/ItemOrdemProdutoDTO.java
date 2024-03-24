@@ -7,7 +7,7 @@ public class ItemOrdemProdutoDTO {
   private Long produtoCapaId;
   private String produtoCapaDesc;
   private Long numeroNota;
-  private Long quantidade;
+  private Double quantidade;
   private Long ordemCompraId;
   private Double precoCompra;
   private String observacao;

@@ -62,7 +62,7 @@ public class OrdemCompraService {
 
   public ItemOrdemCompra addProductToOrder(OrdemCompra ordemCompra,
                                            ProdutoCapa produtoCapa,
-                                           Long quantidade,
+                                           Double quantidade,
                                            Double precoCompra,
                                            Double valorTotalItemOrdem,
                                            Long numeroNota,

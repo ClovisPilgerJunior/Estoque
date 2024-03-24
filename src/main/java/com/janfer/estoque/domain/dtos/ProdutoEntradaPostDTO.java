@@ -21,7 +21,7 @@ public class ProdutoEntradaPostDTO implements Serializable {
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataEntrega;
   private Double precoCompra;
-  private Long quantidade;
+  private Double quantidade;
   private String observacao;
   @NotNull(message = "Produto capa não pode estar vazio")
   private Long produtoCapa;

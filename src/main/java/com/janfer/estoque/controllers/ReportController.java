@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,13 +35,13 @@ public class ReportController {
     private DataSource dataSource;
 
     @GetMapping("/generate-report")
-    public ResponseEntity<Resource> generateReport(@RequestParam("ID_ORDEM_COMPRA") int idOrdemCompra) throws JRException, IOException, SQLException {
+    public ResponseEntity<Resource> generateReport(@RequestParam("ID_ORDEM_COMPRA") Long idOrdemCompra) throws JRException, IOException, SQLException {
         // Caminho para o arquivo do relatório
-        Resource reportResource = new ClassPathResource("reports/ordemCompra/OrdemCompraItem.jasper");
-        String reportPath = reportResource.getURI().toString();
+        File file = ResourceUtils.getFile("classpath:reports/ordemCompra/OrdemCompraItem.jrxml");
 
         // Carregar o relatório
-        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(new File(reportPath));
+//        JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(String.valueOf(file));
+        JasperReport jasperReport = JasperCompileManager.compileReport(String.valueOf(file));
 
         // Parâmetros para o relatório
         Map<String, Object> parameters = new HashMap<>();
@@ -64,7 +65,7 @@ public class ReportController {
 
         // Definir o tipo de conteúdo da resposta como PDF
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=OrdemCompra.pdf");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=OrdemCompra.pdf");
 
         return ResponseEntity.ok()
                 .headers(headers)

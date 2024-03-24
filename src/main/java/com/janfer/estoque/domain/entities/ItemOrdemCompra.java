@@ -45,7 +45,7 @@ public class ItemOrdemCompra {
   @JoinColumn(name = "produto_capa_id")
   private ProdutoCapa produtoCapa;
 
-  private Long quantidade;
+  private Double quantidade;
 
   private Double valorTotalOrdem;
 

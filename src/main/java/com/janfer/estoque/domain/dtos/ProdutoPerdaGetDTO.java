@@ -17,7 +17,7 @@ public class ProdutoPerdaGetDTO implements Serializable {
   private String produtoCapaDesc;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date data;
-  private Long quantidade;
+  private Double quantidade;
   private String motivo;
 
 }

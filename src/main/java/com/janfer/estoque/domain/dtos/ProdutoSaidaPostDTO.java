@@ -17,7 +17,7 @@ public class ProdutoSaidaPostDTO implements Serializable {
   private static final long serialVersionUID = 1L;
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataSaida;
-  private Long quantidade;
+  private Double quantidade;
   private String retiradoPor;
   private Integer setor;
   private Long unidadeProdutiva;

@@ -61,12 +61,12 @@ WHERE
 		<property name="com.jaspersoft.studio.field.label" value="valor_total_ordem"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ordem_compra"/>
 	</field>
-	<field name="data_emissao" class="java.sql.Timestamp">
+	<field name="data_emissao" class="java.util.Date">
 		<property name="com.jaspersoft.studio.field.name" value="data_emissao"/>
 		<property name="com.jaspersoft.studio.field.label" value="data_emissao"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ordem_compra"/>
 	</field>
-	<field name="data_pedido" class="java.sql.Timestamp">
+	<field name="data_pedido" class="java.sql.Date">
 		<property name="com.jaspersoft.studio.field.name" value="data_pedido"/>
 		<property name="com.jaspersoft.studio.field.label" value="data_pedido"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="ordem_compra"/>
@@ -121,7 +121,7 @@ WHERE
 		<property name="com.jaspersoft.studio.field.label" value="numero_nota_item"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="item_ordem_compra"/>
 	</field>
-	<field name="quantidade_item" class="java.lang.Long">
+	<field name="quantidade_item" class="java.lang.Double">
 		<property name="com.jaspersoft.studio.field.name" value="quantidade_item"/>
 		<property name="com.jaspersoft.studio.field.label" value="quantidade_item"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="item_ordem_compra"/>
@@ -161,7 +161,7 @@ WHERE
 		<property name="com.jaspersoft.studio.field.label" value="fornecedor_telefone"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="fornecedor"/>
 	</field>
-	<variable name="OC_QUANT_TOTAL" class="java.lang.Long" resetType="Column" calculation="Sum">
+	<variable name="OC_QUANT_TOTAL" class="java.lang.Double" resetType="Column" calculation="Sum">
 		<variableExpression><![CDATA[$F{quantidade_item}]]></variableExpression>
 	</variable>
 	<variable name="OC_VALOR_TOTAL" class="java.lang.Double" calculation="Sum">
@@ -188,96 +188,106 @@ WHERE
 					</textElement>
 					<text><![CDATA[ORDEM DE COMPRA]]></text>
 				</staticText>
-				<image>
-					<reportElement x="2" y="2" width="96" height="57" uuid="02415d49-e934-4f38-afb9-286991b80b4c"/>
-					<imageExpression><![CDATA["janfer_logo.png"]]></imageExpression>
-				</image>
 			</frame>
 			<frame>
 				<reportElement x="-11" y="44" width="578" height="64" uuid="d8c9bfe9-1711-4bad-a477-54bd844aa886"/>
 				<staticText>
-					<reportElement x="12" y="14" width="44" height="12" uuid="983534f6-bc26-4c19-98e3-e28424f6e1aa"/>
+					<reportElement x="11" y="8" width="44" height="12" uuid="983534f6-bc26-4c19-98e3-e28424f6e1aa"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Fornecedor:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="388" y="8" width="68" height="12" uuid="07c4bd44-b3cd-45ae-951a-e24c034ba161"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
+					<reportElement x="514" y="20" width="52" height="12" uuid="07c4bd44-b3cd-45ae-951a-e24c034ba161"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[DATEFORMAT($F{data_emissao},"dd/MM/yyyy")]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{data_emissao})]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="514" y="8" width="52" height="12" uuid="dac3d979-5519-4aa3-96c4-6a52605d5bd4"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
+					<reportElement x="514" y="32" width="52" height="12" uuid="dac3d979-5519-4aa3-96c4-6a52605d5bd4"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
 						<font size="8"/>
 					</textElement>
-					<textFieldExpression><![CDATA[DATEFORMAT($F{data_pedido},"dd/MM/yyyy")]]></textFieldExpression>
+					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{data_pedido})]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="456" y="8" width="58" height="12" uuid="313070b3-903b-4f05-bb21-e909cd79fd57"/>
-					<textElement>
+					<reportElement x="450" y="32" width="64" height="12" uuid="313070b3-903b-4f05-bb21-e909cd79fd57"/>
+					<textElement verticalAlignment="Bottom">
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Data do Pedido:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="324" y="8" width="64" height="12" uuid="dc5ce829-0782-47ad-a8c0-565c4059ca34"/>
-					<textElement>
+					<reportElement x="450" y="20" width="64" height="12" uuid="dc5ce829-0782-47ad-a8c0-565c4059ca34"/>
+					<textElement verticalAlignment="Bottom">
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Data da Emissão:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="56" y="14" width="100" height="12" uuid="9c6f951b-7844-4f8b-8e4b-6894f5247c1a"/>
+					<reportElement x="55" y="8" width="100" height="12" uuid="9c6f951b-7844-4f8b-8e4b-6894f5247c1a"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="6"/>
+						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{fornecedor_empresa}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="12" y="26" width="44" height="12" uuid="7685762f-e90e-4e15-ab69-68e21f2ce506"/>
+					<reportElement x="11" y="20" width="44" height="12" uuid="7685762f-e90e-4e15-ab69-68e21f2ce506"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Email:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="56" y="26" width="100" height="12" uuid="0751fe64-e712-4c67-9281-a334dd04d902"/>
+					<reportElement x="55" y="20" width="100" height="12" uuid="0751fe64-e712-4c67-9281-a334dd04d902"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="6"/>
+						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{fornecedor_email}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="12" y="38" width="44" height="12" uuid="fc661420-0ee0-4e5c-9aa7-abe32d127371"/>
+					<reportElement x="11" y="32" width="44" height="12" uuid="fc661420-0ee0-4e5c-9aa7-abe32d127371"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Contato:]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="12" y="50" width="44" height="12" uuid="fffc63e5-0352-4477-884f-b83fa683d441"/>
+					<reportElement x="11" y="44" width="44" height="12" uuid="fffc63e5-0352-4477-884f-b83fa683d441"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font size="8"/>
 					</textElement>
 					<text><![CDATA[Telefone:]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="56" y="50" width="100" height="12" uuid="d730fa59-5a2b-478b-a6ae-b530ac9fa92f"/>
+					<reportElement x="55" y="44" width="100" height="12" uuid="d730fa59-5a2b-478b-a6ae-b530ac9fa92f"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="6"/>
+						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{fornecedor_telefone}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="56" y="38" width="100" height="12" uuid="070f11a5-e539-476b-84e4-dcd612807ba6"/>
+					<reportElement x="55" y="32" width="100" height="12" uuid="070f11a5-e539-476b-84e4-dcd612807ba6"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="6"/>
+						<font size="8"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{fornecedor_nome}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="450" y="8" width="64" height="12" uuid="af1e3b8a-6650-4930-82ef-3d201caf4bb5"/>
+					<textElement verticalAlignment="Bottom">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nº ORDEM:]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="514" y="8" width="52" height="12" uuid="01e6addf-70d7-4dad-a707-526337022295"/>
+					<textElement textAlignment="Right">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ordem_compra_id}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>
@@ -300,7 +310,7 @@ WHERE
 				<reportElement mode="Opaque" x="276" y="4" width="54" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="9dd3b2df-fd2f-4d84-a5a6-8848cb4e487d">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c05ad058-170a-4509-a399-94885525e2f2"/>
 				</reportElement>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[QTDE]]></text>
@@ -309,19 +319,19 @@ WHERE
 				<reportElement mode="Opaque" x="330" y="4" width="70" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="80fb2e3b-47de-4da2-a3d8-2e6973a21606">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="86673ed8-8f48-4eeb-9a0f-80de9306e171"/>
 				</reportElement>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[UNIT (R$)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="470" y="4" width="82" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="c853a6f8-d8b6-4573-a729-46f51c80f0e1">
+				<reportElement mode="Opaque" x="470" y="4" width="97" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="c853a6f8-d8b6-4573-a729-46f51c80f0e1">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="71eeb0f2-3a4a-4173-b222-8359d8a9535d"/>
 				</reportElement>
-				<textElement textAlignment="Left">
+				<textElement textAlignment="Center">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[observacao]]></text>
+				<text><![CDATA[OBSERVAÇÃO]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="100" y="4" width="176" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="db72104a-a60e-4c35-b292-27d0d7414a08">
@@ -345,7 +355,7 @@ WHERE
 				<reportElement mode="Opaque" x="400" y="4" width="70" height="12" forecolor="#006699" backcolor="#E6E6E6" uuid="7643e83c-0501-410b-bdbc-6ba63bb9c10a">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="71eeb0f2-3a4a-4173-b222-8359d8a9535d"/>
 				</reportElement>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL (R$)]]></text>
@@ -413,7 +423,7 @@ WHERE
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{quantidade_item}]]></textFieldExpression>
@@ -429,13 +439,13 @@ WHERE
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{preco_compra}]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight">
-				<reportElement x="470" y="0" width="82" height="10" uuid="77f6bc47-dd3c-4cdc-85ea-3c6747c54d72">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement x="470" y="0" width="97" height="10" uuid="77f6bc47-dd3c-4cdc-85ea-3c6747c54d72">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="71eeb0f2-3a4a-4173-b222-8359d8a9535d"/>
 				</reportElement>
 				<box>
@@ -445,7 +455,7 @@ WHERE
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{observacao_item}]]></textFieldExpression>
@@ -461,7 +471,7 @@ WHERE
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{valor_total_item}]]></textFieldExpression>
@@ -477,12 +487,12 @@ WHERE
 	<pageFooter>
 		<band height="17">
 			<textField>
-				<reportElement mode="Opaque" x="0" y="3" width="515" height="13" backcolor="#E6E6E6" uuid="a9b56edd-df19-49a9-b629-798f279acc7a"/>
+				<reportElement mode="Opaque" x="0" y="3" width="515" height="13" backcolor="rgba(230, 230, 230, 0.29411766)" uuid="a9b56edd-df19-49a9-b629-798f279acc7a"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="515" y="3" width="40" height="13" backcolor="#E6E6E6" uuid="9847449d-ee2c-4424-9b82-13159f10b791"/>
+				<reportElement mode="Opaque" x="515" y="3" width="52" height="13" backcolor="rgba(230, 230, 230, 0.29411766)" uuid="9847449d-ee2c-4424-9b82-13159f10b791"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>

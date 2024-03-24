@@ -65,7 +65,7 @@ public class OrdemCompraController {
       ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(orderProductDTO.getProdutoCapaId());
       ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
       String produtoCapaDesc = orderProductDTO.getProdutoCapaDesc();
-      Long quantidade = orderProductDTO.getQuantidade();
+      Double quantidade = orderProductDTO.getQuantidade();
       Double precoCompra = orderProductDTO.getPrecoCompra();
       Long numeroNota = orderProductDTO.getNumeroNota();
       String observacao = orderProductDTO.getObservacao();
@@ -179,7 +179,7 @@ public class OrdemCompraController {
     for (ItemOrdemProdutoDTO itemDTO : updateDTO.getItems()) {
       ProdutoCapaGetDTO produtoCapaGetDTO = produtoCapaService.findById(itemDTO.getProdutoCapaId());
       ProdutoCapa produtoCapa = mapStruct.produtoCapaGetDTOToProdutoCapa(produtoCapaGetDTO);
-      Long quantidade = itemDTO.getQuantidade();
+      Double quantidade = itemDTO.getQuantidade();
       Double precoCompra = itemDTO.getPrecoCompra();
       Long numeroNota = itemDTO.getNumeroNota();
       String observacao = itemDTO.getObservacao();

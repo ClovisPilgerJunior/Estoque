@@ -32,7 +32,7 @@ public class ProdutoEntrada extends LocalBaseAuditEntity {
   @Min(value = 0, message = "Preço unitário não pode ser negativo")
   private Double precoCompra;
   @Min(value = 0, message = "Quantidade não pode ser negativo")
-  private Long quantidade;
+  private Double quantidade;
   private String observacao;
   @ManyToOne // Define a relação muitos-para-um
   @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false) // Define a coluna de chave estrangeira

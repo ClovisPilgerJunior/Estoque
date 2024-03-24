@@ -21,7 +21,7 @@ public class ProdutoEntradaGetDTO implements Serializable {
   @JsonFormat(pattern = "dd/MM/yyyy")
   private Date dataEntrega;
   private Double precoCompra;
-  private Long quantidade;
+  private Double quantidade;
   private String observacao;
 
 }
