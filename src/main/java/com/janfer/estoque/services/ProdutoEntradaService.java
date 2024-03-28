@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class ProdutoEntradaService {
 
     @Transactional
     public List<ProdutoEntrada> findAll(){
-        return produtoEntradaRepository.findAll();
+        return produtoEntradaRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
     public ProdutoEntrada save(ProdutoEntrada produtoEntrada){

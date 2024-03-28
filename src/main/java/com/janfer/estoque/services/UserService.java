@@ -8,6 +8,7 @@ import com.janfer.estoque.repositories.UserRepository;
 import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.Mapping;
 
@@ -24,7 +25,7 @@ public class UserService {
   MapStructMapper mapStructMapper;
 
   public List<UserGetDTO> findAll(){
-    return mapStructMapper.userListAllUser(userRepository.findAll());
+    return mapStructMapper.userListAllUser(userRepository.findAll(Sort.by(Sort.Direction.ASC, "id")));
   }
 
   public UserGetDTO findById(Integer id){

@@ -11,6 +11,7 @@ import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class UnidadeProdutivaService {
   private ProdutoSaidaRepository produtoSaidaRepository;
 
   public List<UnidadeProdutivaGetDTO> listAll() {
-    return mapStructMapper.unidadeProdutivaGetAllDTOToUnidadeProdutiva(unidadeProdutivaRepository.findAll());
+    return mapStructMapper.unidadeProdutivaGetAllDTOToUnidadeProdutiva(unidadeProdutivaRepository.findAll(Sort.by(Sort.Direction.DESC, "id")));
   }
 
   public UnidadeProdutivaGetDTO findById(Long id){

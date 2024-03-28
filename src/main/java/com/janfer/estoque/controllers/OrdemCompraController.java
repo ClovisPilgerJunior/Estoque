@@ -46,6 +46,8 @@ public class OrdemCompraController {
         OrdemCompra ordemCompra = mapStruct.toOrdemCompraToPostDTO(ordemCompraPostDTO);
         ordemCompra.setNumeroNotaOrdem(ordemCompraPostDTO.getNumeroNotaOrdem());
         ordemCompra.setOrdemObservacao(ordemCompraPostDTO.getOrdemObservacao());
+        ordemCompra.setNomeSolicitante(ordemCompraPostDTO.getNomeSolicitante());
+        ordemCompra.setDataPrevisaoEntrega(ordemCompraPostDTO.getDataPrevisaoEntrega() == null ? null : ordemCompraPostDTO.getDataPrevisaoEntrega() );
         OrdemCompra savedOrder = ordemCompraService.generateOrder(ordemCompra);
         // Atualiza o DTO de entrada com o ID gerado para a nova ordem de compra
         ordemCompraPostDTO.setId(savedOrder.getId());
@@ -118,6 +120,52 @@ public class OrdemCompraController {
     }
   }
 
+  @PutMapping("/{orderId}/liberar")
+  public ResponseEntity<String> releasePurchaseOrder(@PathVariable Long orderId) {
+    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
+    ordemCompraService.liberarOrdem(ordemCompra);
+    return new ResponseEntity<>("Ordem liberada com sucesso!.", HttpStatus.OK);
+  }
+
+  @PutMapping("/{orderId}/devolver")
+  public ResponseEntity<String> returnPurchaseOrder(@PathVariable Long orderId) {
+    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
+    ordemCompraService.devolverOrdem(ordemCompra);
+    return new ResponseEntity<>("Ordem devolvida para revisão!.", HttpStatus.OK);
+  }
+
+  @PutMapping("/{orderId}/realizarPedido")
+  public ResponseEntity<String> placePurchaseOrder(@PathVariable Long orderId) {
+    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
+    ordemCompraService.relizarPedidoOrdem(ordemCompra);
+    return new ResponseEntity<>("Pedido realizado com sucesso!.", HttpStatus.OK);
+  }
+
+  @PutMapping("/{orderId}/cancelar")
+  public ResponseEntity<String> cancelPurchaseOrder(@PathVariable Long orderId) {
+    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
+    ordemCompraService.cancelarOrdem(ordemCompra);
+    return new ResponseEntity<>("Ordem de compra cancelada!.", HttpStatus.OK);
+  }
+
+  @PutMapping("/{orderId}/revisar")
+  public ResponseEntity<String> reviewPurchaseOrder(@PathVariable Long orderId) {
+    OrdemCompra ordemCompra = ordemCompraService.getOrderById(orderId);
+    ordemCompraService.revisarOrdem(ordemCompra);
+    return new ResponseEntity<>("Ordem Revisada com sucesso!.", HttpStatus.OK);
+  }
+
+  @PutMapping("/{id}/atualizar-data-previsao")
+  public ResponseEntity<?> atualizarDataPrevisao(@PathVariable Long id, @RequestBody OrdemCompra ordemCompra) {
+    try {
+      OrdemCompra updatedOrder = ordemCompraService.updateDataPrevisao(id, ordemCompra.getDataPrevisaoEntrega());
+      return ResponseEntity.ok(updatedOrder);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body("Erro ao atualizar a data de previsão de entrega");
+    }
+  }
+
+
   @GetMapping
   public ResponseEntity<List<OrdemCompraGetDTO>> getAllOrders() {
     List<OrdemCompra> ordens = ordemCompraService.getAllOrdem();
@@ -163,6 +211,8 @@ public class OrdemCompraController {
 
     ordemCompra.setNumeroNotaOrdem(updateDTO.getNumeroNotaOrdem());
     ordemCompra.setOrdemObservacao(updateDTO.getOrdemObservacao());
+    ordemCompra.setNomeSolicitante(updateDTO.getNomeSolicitante());
+    ordemCompra.setDataPrevisaoEntrega(updateDTO.getDataPrevisaoEntrega());
 
 
     // Primeiro, identifica os IDs dos itens que foram removidos da lista enviada

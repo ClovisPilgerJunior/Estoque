@@ -12,6 +12,7 @@ import com.janfer.estoque.repositories.OrdemCompraRepository;
 import com.janfer.estoque.repositories.ProdutoEntradaRepository;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -43,7 +44,7 @@ public class OrdemCompraService {
   }
 
   public List<OrdemCompra> getAllOrdem() {
-      return orderRepository.findAll();
+      return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
   }
 
     public OrdemCompra generateOrder(OrdemCompra ordemCompra) {
@@ -53,7 +54,6 @@ public class OrdemCompraService {
                 throw new ObjectNotFoundException("Fornecedor não encontrado");
             }
         }
-        ordemCompra.setDataPedidoOrdemCompra(new Date());
         ordemCompra.setDataEmissao(new Date());
         ordemCompra.setStatusOrdem(StatusOrdem.AGUARDANDO_LIBERACAO);
         // Salva a ordem de compra e retorna o objeto atualizado
@@ -107,6 +107,33 @@ public class OrdemCompraService {
         orderRepository.save(ordemCompra);
     }
 
+
+    public void liberarOrdem(OrdemCompra ordemCompra) {
+      ordemCompra.setStatusOrdem(StatusOrdem.LIBERADO);
+      orderRepository.save(ordemCompra);
+    }
+
+    public void devolverOrdem(OrdemCompra ordemCompra) {
+      ordemCompra.setStatusOrdem(StatusOrdem.REVISAR);
+      orderRepository.save(ordemCompra);
+    }
+
+    public void relizarPedidoOrdem(OrdemCompra ordemCompra) {
+      ordemCompra.setStatusOrdem(StatusOrdem.AGUARDANDO_RECEBIMENTO);
+      ordemCompra.setDataPedidoOrdemCompra(new Date());
+      orderRepository.save(ordemCompra);
+    }
+
+    public void revisarOrdem(OrdemCompra ordemCompra) {
+      ordemCompra.setStatusOrdem(StatusOrdem.AGUARDANDO_LIBERACAO);
+      orderRepository.save(ordemCompra);
+    }
+
+    public void cancelarOrdem(OrdemCompra ordemCompra) {
+      ordemCompra.setStatusOrdem(StatusOrdem.CANCELADO);
+      orderRepository.save(ordemCompra);
+    }
+
     public void estornarOrdem(OrdemCompra ordemCompra ,Long orderId) {
         ordemCompra.setStatusOrdem(StatusOrdem.AGUARDANDO_RECEBIMENTO);
         ordemCompra.setDataRecebimentoOrdemCompra(null);
@@ -145,5 +172,12 @@ public class OrdemCompraService {
         }
     }
 
+
+    public OrdemCompra updateDataPrevisao(Long id, Date dataPrevisaoEntrega) {
+        OrdemCompra ordemCompra = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ordem de compra não encontrada"));
+        ordemCompra.setDataPrevisaoEntrega(dataPrevisaoEntrega);
+        return orderRepository.save(ordemCompra);
+    }
 }
 

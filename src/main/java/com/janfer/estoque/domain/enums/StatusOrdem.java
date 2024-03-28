@@ -13,7 +13,7 @@ public enum StatusOrdem {
   RECEBIDO(3,"RECEBIDO"),
   CANCELADO(4, "CANCELADO"),
   EM_ANDAMENTO(5, "EM ANDAMENTO"),
-  PENDENTE(6, "PENDENTE");
+  REVISAR(6, "REVISAR");
 
   private final int cod;
   private final String desc;

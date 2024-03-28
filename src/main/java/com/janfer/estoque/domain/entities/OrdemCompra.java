@@ -26,10 +26,12 @@ public class  OrdemCompra {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   private Long id;
+  private String nomeSolicitante;
   private Long numeroNotaOrdem;
   private Date dataEmissao;
   private Date dataPedidoOrdemCompra;
   private Date dataRecebimentoOrdemCompra;
+  private Date dataPrevisaoEntrega;
 
   @ManyToOne
   @JoinColumn(name = "fornecedor_id")

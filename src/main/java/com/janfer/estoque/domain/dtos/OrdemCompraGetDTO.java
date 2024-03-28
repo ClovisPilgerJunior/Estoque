@@ -14,11 +14,14 @@ public class OrdemCompraGetDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    private String nomeSolicitante;
     private Long numeroNotaOrdem;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataEmissao;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataPedidoOrdemCompra;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date dataPrevisaoEntrega;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataRecebimentoOrdemCompra;
     private String fornecedor;

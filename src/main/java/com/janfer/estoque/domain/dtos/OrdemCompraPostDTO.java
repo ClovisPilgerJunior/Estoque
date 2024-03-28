@@ -1,6 +1,7 @@
 package com.janfer.estoque.domain.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Null;
 import lombok.Data;
 
 import java.io.Serial;
@@ -14,11 +15,14 @@ public class OrdemCompraPostDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+    private String nomeSolicitante;
     private Long numeroNotaOrdem;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataEmissao;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataPedidoOrdemCompra;
+    @Null
+    private Date dataPrevisaoEntrega;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dataRecebimentoOrdemCompra;
     private Long fornecedor;

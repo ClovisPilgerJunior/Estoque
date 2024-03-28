@@ -40,9 +40,9 @@ public class ReportController {
         File file = ResourceUtils.getFile("classpath:reports/ordemCompra/OrdemCompraItem.jrxml");
 
         // Carregar o relatório
-//        JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(String.valueOf(file));
-        JasperReport jasperReport = JasperCompileManager.compileReport(String.valueOf(file));
-
+//        JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(file.getAbsolutePath());
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        System.out.println("Jasper Path: " + file);
         // Parâmetros para o relatório
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("ID_ORDEM_COMPRA", idOrdemCompra);

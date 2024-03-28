@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class ProdutoCapaService {
 
   @Transactional
   public List<ProdutoCapa> findAll() {
-    return produtoCapaRepository.findAll();
+    return produtoCapaRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
   }
 
   @Transactional
