@@ -206,6 +206,7 @@ public interface MapStructMapper {
 
    @Mapping(source = "produtoCapa.id", target = "produtoCapaId")
    @Mapping(source = "ordemCompra.id", target = "ordemCompraId")
+   @Mapping(source = "produtoCapa.description", target = "produtoCapaDesc")
    ItemOrdemProdutoGetDTO toItemOrdemCompraEntity(ItemOrdemCompra itemOrdemCompra);
 
    List<ItemOrdemProdutoGetDTO> toItemOrdemCompraList(List<ItemOrdemCompra> itemOrdemCompra);
@@ -213,4 +214,61 @@ public interface MapStructMapper {
 
    @Mapping(source = "fornecedor.id", target = "fornecedorId")
    OrdemCompraUpdateDTO ordemCompraPutDTOToEntity(OrdemCompra ordemCompra);
+
+   // -------- Ordem Aviamento ----------------
+
+   OrdemAviamentoGetDTO toOrdemAviamentoGetEntity(OrdemAviamento ordemAviamento);
+
+    @Mapping(source = "numeroOP", target = "numeroOP")
+    @Mapping(source = "dataOrdemAviamento", target = "dataOrdemAviamento")
+    @Mapping(source = "descOrdemAviamento", target = "descOrdemAviamento")
+    @Mapping(source = "quantidadeOrdemAviamento", target = "quantidadeOrdemAviamento")
+    @Mapping(source = "precoUnitarioOrdemAviamento", target = "precoUnitarioOrdemAviamento")
+    @Mapping(source = "tecidoOrdemAviamento", target = "tecidoOrdemAviamento")
+    @Mapping(source = "statusOrdemAviamento", target = "statusOrdemAviamento")
+    OrdemAviamento ordemAviamentoPostDTOToOrdemAviamento(OrdemAviamentoPostDTO ordemAviamentoPostDTO);
+
+   List<OrdemAviamentoGetDTO> toListOrdemAviamentoGetEntity(List<OrdemAviamento> ordemAviamento);
+
+   @Mapping(source = "produtoCapa.id", target = "produtoCapa")
+   @Mapping(source = "ordemAviamento.id", target = "ordemAviamento")
+//   @Mapping(source = "unidadeProdutiva.nome", target = "unidadeProdutiva")
+   @Mapping(target = "produtoCapaDesc", source = "produtoCapa.description")
+   ItemOrdemAviamentoGetDTO toItemOrdemAviamentoEntity(ItemOrdemAviamento itemOrdemAviamento);
+
+    @Mapping(target = "produtoCapaDesc", source = "produtoCapa.description")
+   ItemOrdemAviamento toProdutoSaidaEntity(ProdutoSaida produtoSaida);
+
+    @Mapping(target = "produtoCapa.id", source = "ordemAviamento.id")
+    @Mapping(target = "id", source = "ordemAviamento.id")
+   ProdutoSaida toItemOrdemAviamentoProdutoSaida(ItemOrdemAviamento itemOrdemAviamento);
+
+    @Mapping(target = "produtoCapa", source = "produtoCapa.id")
+    @Mapping(target = "ordemAviamento", source = "ordemAviamento.id")
+//    @Mapping(target = "unidadeProdutiva", source = "unidadeProdutiva.id")
+    ItemOrdemAviamentoPostDTO toEntityOV(ItemOrdemAviamento itemOrdemAviamento);
+
+
+    @Mapping(target = "produtoCapa.id", source = "produtoCapa")
+    @Mapping(target = "ordemAviamento.id", source = "ordemAviamento")
+//    @Mapping(target = "unidadeProdutiva.id", source = "unidadeProdutiva")
+    ItemOrdemAviamento itemOrdemAviamentoPostDTOToItemOrdemAviamento(ItemOrdemAviamentoPostDTO itemOrdemAviamentoPostDTO);
+
+
+    // Mapeamento para Combinacao
+    CombinacaoGetDTO combinacaoToCombinacaoGetDTO(Combinacao combinacao);
+    Combinacao combinacaoPostDTOToCombinacao(CombinacaoPostDTO combinacaoPostDTO);
+
+    // Mapeamento para CombinacaoDetalhe
+    CombinacaoDetalheGetDTO combinacaoDetalheToCombinacaoDetalheGetDTO(CombinacaoDetalhe combinacaoDetalhe);
+    CombinacaoDetalhe combinacaoDetalhePostDTOToCombinacaoDetalhe(CombinacaoDetalhePostDTO combinacaoDetalhePostDTO);
+
+    // Mapeamento inverso para CombinacaoDetalhe
+    CombinacaoDetalhePostDTO combinacaoDetalheToCombinacaoDetalhePostDTO(CombinacaoDetalhe combinacaoDetalhe);
+    CombinacaoDetalhe combinacaoDetalheGetDTOToCombinacaoDetalhe(CombinacaoDetalheGetDTO combinacaoDetalheGetDTO);
+
+    // Mapeamento para listas
+    List<CombinacaoGetDTO> combinacoesToCombinacaoGetDTOs(List<Combinacao> combinacoes);
+    List<CombinacaoDetalheGetDTO> combinacaoDetalhesToCombinacaoDetalheGetDTOs(List<CombinacaoDetalhe> combinacaoDetalhes);
+
 }

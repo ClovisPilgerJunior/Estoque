@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 public class OrdemCompraController {
 
   @Autowired
-  private AuthenticationManager authenticationManager;
-  @Autowired
   private OrdemCompraService ordemCompraService;
 
   @Autowired

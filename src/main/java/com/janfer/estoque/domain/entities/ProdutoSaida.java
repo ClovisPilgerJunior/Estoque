@@ -41,4 +41,7 @@ public class ProdutoSaida extends LocalBaseAuditEntity {
   @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false)
   @NotNull(message = "Não é possível lançar saída sem passar um produto")
   private ProdutoCapa produtoCapa;
+  @ManyToOne
+  @JoinColumn(name = "ordem_aviamento_id")
+  private OrdemAviamento ordemAviamento;
 }

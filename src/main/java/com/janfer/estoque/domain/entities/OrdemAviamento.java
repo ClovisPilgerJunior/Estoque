@@ -1,5 +1,7 @@
 package com.janfer.estoque.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.janfer.estoque.domain.enums.StatusOrdemAviamento;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
@@ -28,5 +32,12 @@ public class OrdemAviamento {
     private Long quantidadeOrdemAviamento;
     private Double precoUnitarioOrdemAviamento;
     private String tecidoOrdemAviamento;
+    private StatusOrdemAviamento statusOrdemAviamento;
+    @OneToMany(mappedBy = "ordemAviamento", cascade = CascadeType.ALL)
+    private List<ItemOrdemAviamento> itemOrdemAviamento = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "ordemAviamento", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Combinacao> combinacoes = new ArrayList<>();
+
 
 }
