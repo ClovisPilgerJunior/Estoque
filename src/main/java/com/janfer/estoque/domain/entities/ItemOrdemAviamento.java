@@ -44,8 +44,10 @@ public class ItemOrdemAviamento {
     @JoinColumn(name = "produto_capa_id", referencedColumnName = "id", nullable = false)
     @NotNull(message = "Não é possível lançar saída sem passar um produto")
     private ProdutoCapa produtoCapa;
-    @ManyToOne
-    @JoinColumn(name = "ordem_aviamento_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+
+
+    @JoinColumn(name = "ordem_aviamento_id", referencedColumnName = "id", nullable = false)
     private OrdemAviamento ordemAviamento;
 
 }

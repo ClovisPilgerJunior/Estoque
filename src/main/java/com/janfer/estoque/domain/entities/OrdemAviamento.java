@@ -33,10 +33,10 @@ public class OrdemAviamento {
     private Double precoUnitarioOrdemAviamento;
     private String tecidoOrdemAviamento;
     private StatusOrdemAviamento statusOrdemAviamento;
-    @OneToMany(mappedBy = "ordemAviamento", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ordemAviamento", orphanRemoval = true)
     private List<ItemOrdemAviamento> itemOrdemAviamento = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "ordemAviamento", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "ordemAviamento", orphanRemoval = true)
     private List<Combinacao> combinacoes = new ArrayList<>();
 
 

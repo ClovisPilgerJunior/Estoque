@@ -6,6 +6,7 @@ import com.janfer.estoque.domain.entities.Combinacao;
 import com.janfer.estoque.domain.entities.CombinacaoDetalhe;
 import com.janfer.estoque.domain.entities.ItemOrdemAviamento;
 import com.janfer.estoque.domain.entities.OrdemAviamento;
+import com.janfer.estoque.domain.enums.StatusOrdemAviamento;
 import com.janfer.estoque.domain.mappers.MapStructMapper;
 import com.janfer.estoque.repositories.CombinacaoDetalheRepository;
 import com.janfer.estoque.repositories.CombinacaoRepository;
@@ -13,12 +14,14 @@ import com.janfer.estoque.repositories.ItemOrdemAviamentoRepository;
 import com.janfer.estoque.repositories.OrdemAviamentoRepository;
 import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdemAviamentoService {
@@ -83,16 +86,80 @@ public class OrdemAviamentoService {
         return ordemAviamento.map(mapStructMapper::toOrdemAviamentoGetEntity);
     }
 
+    @Transactional
     public OrdemAviamentoGetDTO updateOrdemAviamento(Long id, OrdemAviamentoPostDTO ordemAviamentoPostDTO) {
         Optional<OrdemAviamento> ordemAviamentoOptional = ordemAviamentoRepository.findById(id);
         if (ordemAviamentoOptional.isPresent()) {
             OrdemAviamento ordemAviamento = ordemAviamentoOptional.get();
-            // Atualize os campos necessários aqui
+
+            // Atualizar campos simples da ordem de aviamento
+            // (NúmeroOP, Data, Descrição, Quantidade, etc.)
+            // ...
+
+            // Atualizar itens da ordem de aviamento
+            List<ItemOrdemAviamento> itensAtualizados = new ArrayList<>();
+            for (ItemOrdemAviamentoPostDTO itemDTO : ordemAviamentoPostDTO.getItemOrdemAviamento()) {
+                ItemOrdemAviamento item = mapStructMapper.itemOrdemAviamentoPostDTOToItemOrdemAviamento(itemDTO);
+                item.setOrdemAviamento(ordemAviamento);
+                itensAtualizados.add(item);
+            }
+            ordemAviamento.getItemOrdemAviamento().clear();
+            ordemAviamento.getItemOrdemAviamento().addAll(itensAtualizados);
+
+            // Atualizar combinações e seus detalhes
+            List<Combinacao> combinacoesAtualizadas = new ArrayList<>();
+            for (CombinacaoPostDTO combinacaoDTO : ordemAviamentoPostDTO.getCombinacoes()) {
+                Combinacao combinacao = mapStructMapper.combinacaoPostDTOToCombinacao(combinacaoDTO);
+                combinacao.setOrdemAviamento(ordemAviamento);
+
+                List<CombinacaoDetalhe> detalhesAtualizados = new ArrayList<>();
+                for (CombinacaoDetalhePostDTO detalheDTO : combinacaoDTO.getCombinacoesDetalhes()) {
+                    CombinacaoDetalhe detalhe = mapStructMapper.combinacaoDetalhePostDTOToCombinacaoDetalhe(detalheDTO);
+                    detalhe.setCombinacao(combinacao);
+                    detalhesAtualizados.add(detalhe);
+                }
+                combinacao.getCombinacoesDetalhes().clear();
+                combinacao.getCombinacoesDetalhes().addAll(detalhesAtualizados);
+
+                combinacoesAtualizadas.add(combinacao);
+            }
+            ordemAviamento.getCombinacoes().clear();
+            ordemAviamento.getCombinacoes().addAll(combinacoesAtualizadas);
+
+            // Salvar a ordem de aviamento atualizada
             OrdemAviamento updatedOrdemAviamento = ordemAviamentoRepository.save(ordemAviamento);
+
             return mapStructMapper.toOrdemAviamentoGetEntity(updatedOrdemAviamento);
         } else {
-            throw new RuntimeException("OrdemAviamento não encontrada com o id: " + id);
+            throw new ObjectNotFoundException("OrdemAviamento não encontrada com o id: " + id);
         }
     }
+
+
+    private void excluirItensNaoIncluidos(OrdemAviamento ordemAviamento, List<ItemOrdemAviamentoPostDTO> itensDTO) {
+        List<Long> idsItensDTO = itensDTO.stream()
+                .map(itemDTO -> mapStructMapper.itemOrdemAviamentoPostDTOToItemOrdemAviamento(itemDTO).getId()) // Ajuste aqui para usar getDTO e getId
+                .toList();
+        List<ItemOrdemAviamento> itensNoBanco = itemOrdemAviamentoRepository.findByOrdemAviamentoId(ordemAviamento.getId());
+        for (ItemOrdemAviamento itemNoBanco : itensNoBanco) {
+            if (!idsItensDTO.contains(itemNoBanco.getId())) {
+                itemOrdemAviamentoRepository.delete(itemNoBanco);
+            }
+        }
+    }
+
+
+    private void excluirCombinacoesNaoIncluidos(OrdemAviamento ordemAviamento, List<CombinacaoPostDTO> combinacoesDTO) {
+        List<Long> idsCombinacoesDTO = combinacoesDTO.stream()
+                .map(combinacaoDTO -> mapStructMapper.combinacaoPostDTOToCombinacao(combinacaoDTO).getId()) // Ajuste aqui para usar getDTO e getId
+                .toList();
+        List<Combinacao> combinacoesNoBanco = combinacaoRepository.findByOrdemAviamentoId(ordemAviamento.getId());
+        for (Combinacao combinacaoNoBanco : combinacoesNoBanco) {
+            if (!idsCombinacoesDTO.contains(combinacaoNoBanco.getId())) {
+                combinacaoRepository.delete(combinacaoNoBanco);
+            }
+        }
+    }
+
 
 }

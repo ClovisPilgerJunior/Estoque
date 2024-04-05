@@ -27,8 +27,8 @@ public class CombinacaoDetalhe {
     private String aviamento;
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "combinacao_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "combinacao_id", referencedColumnName = "id")
     private Combinacao combinacao;
     // Getters e setters
 }

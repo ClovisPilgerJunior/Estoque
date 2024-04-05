@@ -25,7 +25,7 @@ public class Combinacao {
 
     private String titulo;
 
-    @OneToMany(mappedBy = "combinacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "combinacao")
     private List<CombinacaoDetalhe> combinacoesDetalhes;
 
     @JsonIgnore

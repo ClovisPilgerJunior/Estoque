@@ -1,10 +1,13 @@
 package com.janfer.estoque.domain.dtos;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class CombinacaoPostDTO {
     private String titulo;
     private List<CombinacaoDetalhePostDTO> combinacoesDetalhes;

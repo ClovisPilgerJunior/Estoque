@@ -18,7 +18,8 @@ import java.util.Date;
 
 import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
-@Data
+@Getter
+@Setter
 public class ItemOrdemAviamentoPostDTO implements Serializable {
 
     @Serial
