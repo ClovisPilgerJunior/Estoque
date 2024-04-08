@@ -92,39 +92,50 @@ public class OrdemAviamentoService {
         if (ordemAviamentoOptional.isPresent()) {
             OrdemAviamento ordemAviamento = ordemAviamentoOptional.get();
 
-            // Atualizar campos simples da ordem de aviamento
-            // (NúmeroOP, Data, Descrição, Quantidade, etc.)
-            // ...
+            BeanUtils.copyProperties(ordemAviamentoPostDTO, ordemAviamento);
 
             // Atualizar itens da ordem de aviamento
+            List<ItemOrdemAviamento> itensExistentes = ordemAviamento.getItemOrdemAviamento();
             List<ItemOrdemAviamento> itensAtualizados = new ArrayList<>();
             for (ItemOrdemAviamentoPostDTO itemDTO : ordemAviamentoPostDTO.getItemOrdemAviamento()) {
                 ItemOrdemAviamento item = mapStructMapper.itemOrdemAviamentoPostDTOToItemOrdemAviamento(itemDTO);
                 item.setOrdemAviamento(ordemAviamento);
-                itensAtualizados.add(item);
-            }
-            ordemAviamento.getItemOrdemAviamento().clear();
-            ordemAviamento.getItemOrdemAviamento().addAll(itensAtualizados);
-
-            // Atualizar combinações e seus detalhes
-            List<Combinacao> combinacoesAtualizadas = new ArrayList<>();
-            for (CombinacaoPostDTO combinacaoDTO : ordemAviamentoPostDTO.getCombinacoes()) {
-                Combinacao combinacao = mapStructMapper.combinacaoPostDTOToCombinacao(combinacaoDTO);
-                combinacao.setOrdemAviamento(ordemAviamento);
-
-                List<CombinacaoDetalhe> detalhesAtualizados = new ArrayList<>();
-                for (CombinacaoDetalhePostDTO detalheDTO : combinacaoDTO.getCombinacoesDetalhes()) {
-                    CombinacaoDetalhe detalhe = mapStructMapper.combinacaoDetalhePostDTOToCombinacaoDetalhe(detalheDTO);
-                    detalhe.setCombinacao(combinacao);
-                    detalhesAtualizados.add(detalhe);
+                Optional<ItemOrdemAviamento> existingItemOptional = itensExistentes.stream()
+                        .filter(existingItem -> existingItem.getProdutoCapa().getId().equals(item.getProdutoCapa().getId()))
+                        .findFirst();
+                if (existingItemOptional.isPresent()) {
+                    // Se o item já existe na ordem de aviamento, atualiza-o
+                    ItemOrdemAviamento existingItem = existingItemOptional.get();
+                    existingItem.setQuantidade(item.getQuantidade());
+                    existingItem.setOrdemAviamento(item.getOrdemAviamento());
+                    existingItem.setSetor(item.getSetor());
+                    existingItem.setProdutoCapa(item.getProdutoCapa());
+                    existingItem.setDataSaida(item.getDataSaida());
+                    existingItem.setRetiradoPor(item.getRetiradoPor());
+                    itemOrdemAviamentoRepository.save(existingItem);
+                    itensAtualizados.add(existingItem);
+                } else {
+                    // Se o item não existe na ordem de aviamento, adiciona-o
+                    itemOrdemAviamentoRepository.save(item);
+                    itensAtualizados.add(item);
                 }
-                combinacao.getCombinacoesDetalhes().clear();
-                combinacao.getCombinacoesDetalhes().addAll(detalhesAtualizados);
-
-                combinacoesAtualizadas.add(combinacao);
             }
-            ordemAviamento.getCombinacoes().clear();
-            ordemAviamento.getCombinacoes().addAll(combinacoesAtualizadas);
+
+            // Excluir itens que não estão presentes na lista fornecida
+            itensExistentes.removeIf(existingItem ->
+                    ordemAviamentoPostDTO.getItemOrdemAviamento().stream()
+                            .noneMatch(itemDTO -> itemDTO.getProdutoCapa().equals(existingItem.getProdutoCapa().getId()))
+            );
+
+            // Remover os itens da ordem de aviamento que não estão presentes na lista fornecida
+            for (ItemOrdemAviamento item : new ArrayList<>(itensExistentes)) {
+                if (ordemAviamentoPostDTO.getItemOrdemAviamento().stream()
+                        .noneMatch(itemDTO -> itemDTO.getProdutoCapa().equals(item.getProdutoCapa().getId()))) {
+                    itensExistentes.remove(item);
+                    itemOrdemAviamentoRepository.delete(item);
+                }
+            }
+
 
             // Salvar a ordem de aviamento atualizada
             OrdemAviamento updatedOrdemAviamento = ordemAviamentoRepository.save(ordemAviamento);
