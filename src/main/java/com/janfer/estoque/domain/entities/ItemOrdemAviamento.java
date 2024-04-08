@@ -46,7 +46,7 @@ public class ItemOrdemAviamento {
     @NotNull(message = "Não é possível lançar saída sem passar um produto")
     private ProdutoCapa produtoCapa;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "ordem_aviamento_id", referencedColumnName = "id", nullable = false)
     private OrdemAviamento ordemAviamento;
 

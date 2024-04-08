@@ -136,6 +136,46 @@ public class OrdemAviamentoService {
                 }
             }
 
+            // Atualizar combinações e seus detalhes
+            List<Combinacao> combinacoesExistentes = ordemAviamento.getCombinacoes();
+            List<Combinacao> combinacoesAtualizadas = new ArrayList<>();
+            for (CombinacaoPostDTO combinacaoDTO : ordemAviamentoPostDTO.getCombinacoes()) {
+                Combinacao combinacao = mapStructMapper.combinacaoPostDTOToCombinacao(combinacaoDTO);
+                combinacao.setOrdemAviamento(ordemAviamento);
+                if (!combinacoesExistentes.contains(combinacao)) {
+                    combinacoesExistentes.add(combinacao);
+                }
+                // Atualizar detalhes da combinação
+                List<CombinacaoDetalhe> detalhesExistentes = combinacao.getCombinacoesDetalhes();
+                List<CombinacaoDetalhe> detalhesAtualizados = new ArrayList<>();
+                for (CombinacaoDetalhePostDTO detalheDTO : combinacaoDTO.getCombinacoesDetalhes()) {
+                    CombinacaoDetalhe detalhe = mapStructMapper.combinacaoDetalhePostDTOToCombinacaoDetalhe(detalheDTO);
+                    detalhe.setCombinacao(combinacao);
+                    detalhesAtualizados.add(detalhe);
+                }
+                combinacao.getCombinacoesDetalhes().clear();
+                combinacao.getCombinacoesDetalhes().addAll(detalhesAtualizados);
+
+                // Salvar a combinação atualizada
+                Combinacao updatedCombinacao = combinacaoRepository.save(combinacao);
+                combinacoesAtualizadas.add(updatedCombinacao);
+            }
+
+            // Excluir combinações que não estão presentes na lista fornecida
+            combinacoesExistentes.removeIf(existingCombinacao ->
+                    ordemAviamentoPostDTO.getCombinacoes().stream()
+                            .noneMatch(combinacaoDTO -> combinacaoDTO.getId().equals(existingCombinacao.getId()))
+            );
+
+            // Remover as combinações que não estão presentes na lista fornecida
+            for (Combinacao combinacao : new ArrayList<>(combinacoesExistentes)) {
+                if (ordemAviamentoPostDTO.getCombinacoes().stream()
+                        .noneMatch(combinacaoDTO -> combinacaoDTO.getId().equals(combinacao.getId()))) {
+                    combinacoesExistentes.remove(combinacao);
+                    combinacaoRepository.delete(combinacao);
+                }
+            }
+
 
             // Salvar a ordem de aviamento atualizada
             OrdemAviamento updatedOrdemAviamento = ordemAviamentoRepository.save(ordemAviamento);
