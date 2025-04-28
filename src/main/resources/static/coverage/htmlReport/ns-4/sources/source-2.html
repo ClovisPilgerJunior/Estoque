@@ -106,13 +106,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.services;
 &nbsp;
-&nbsp;import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
-&nbsp;import com.janfer.estoque.domain.entities.ProdutoCapa;
-&nbsp;import com.janfer.estoque.domain.enums.Resuprimento;
-&nbsp;import com.janfer.estoque.domain.mappers.MapStructMapper;
+&nbsp;import dtos.domain.com.storage.stockflow.ProdutoCapaGetDTO;
+&nbsp;import entities.domain.com.storage.stockflow.ProdutoCapa;
+&nbsp;import enums.domain.com.storage.stockflow.Resuprimento;
+&nbsp;import mappers.domain.com.storage.stockflow.MapStructMapper;
 &nbsp;import com.janfer.estoque.repositories.*;
-&nbsp;import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
-&nbsp;import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
+&nbsp;import exceptions.services.com.storage.stockflow.DataIntegrityViolationException;
+&nbsp;import exceptions.services.com.storage.stockflow.ObjectNotFoundException;
 &nbsp;import jakarta.transaction.Transactional;
 &nbsp;import org.springframework.beans.factory.annotation.Autowired;
 &nbsp;import org.springframework.stereotype.Service;
@@ -157,7 +157,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="pc">&nbsp;    if (produtoCapa.getFornecedor() != null &amp;&amp; produtoCapa.getFornecedor().getId() != null) {</b>
 <b class="fc">&nbsp;      Long fornecedorId = produtoCapa.getFornecedor().getId();</b>
 <b class="fc">&nbsp;      if (!fornecedorRepository.existsById(fornecedorId)) {</b>
-<b class="fc">&nbsp;        throw new ObjectNotFoundException(&quot;Fornecedor não encontrado&quot;);</b>
+<b class="fc">&nbsp;        throw new ObjectNotFoundException(&quot;Fornecedor nï¿½o encontrado&quot;);</b>
 &nbsp;      }
 &nbsp;    }
 &nbsp;
@@ -181,7 +181,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;  @Transactional
 &nbsp;  public void delete(ProdutoCapa produtoCapa) {
 <b class="fc">&nbsp;    if (produtoEntradaRepository.existsById(produtoCapa.getId())) {</b>
-<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Não é possível excluir um produto com entrada existente&quot;);</b>
+<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Nï¿½o ï¿½ possï¿½vel excluir um produto com entrada existente&quot;);</b>
 &nbsp;    }
 <b class="fc">&nbsp;    produtoCapaRepository.delete(produtoCapa);</b>
 &nbsp;  }

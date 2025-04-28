@@ -106,10 +106,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.services;
 &nbsp;
-&nbsp;import com.janfer.estoque.domain.entities.ProdutoPerda;
-&nbsp;import com.janfer.estoque.repositories.ProdutoCapaRepository;
-&nbsp;import com.janfer.estoque.repositories.ProdutoPerdaRepository;
-&nbsp;import com.janfer.estoque.services.exceptions.ProductDisableException;
+&nbsp;import entities.domain.com.storage.stockflow.ProdutoPerda;
+&nbsp;import repositories.com.storage.stockflow.ProdutoCapaRepository;
+&nbsp;import repositories.com.storage.stockflow.ProdutoPerdaRepository;
+&nbsp;import exceptions.services.com.storage.stockflow.ProductDisableException;
 &nbsp;import jakarta.transaction.Transactional;
 &nbsp;import org.springframework.beans.factory.annotation.Autowired;
 &nbsp;import org.springframework.stereotype.Service;
@@ -134,7 +134,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    public ProdutoPerda save(ProdutoPerda produtoPerda){
 &nbsp;
 <b class="fc">&nbsp;        if(Boolean.FALSE.equals(produtoCapaRepository.isProdutoAtivoById(produtoPerda.getProdutoCapa().getId()))){</b>
-<b class="fc">&nbsp;            throw new ProductDisableException(&quot;Produto está inativo&quot;);</b>
+<b class="fc">&nbsp;            throw new ProductDisableException(&quot;Produto estï¿½ inativo&quot;);</b>
 &nbsp;        }
 &nbsp;
 <b class="fc">&nbsp;        return produtoPerdaRepository.save(produtoPerda);</b>

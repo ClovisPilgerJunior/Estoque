@@ -8,10 +8,10 @@
 		<version>3.1.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.estoque</groupId>
-	<artifactId>estoque</artifactId>
+	<groupId>com.stockflow</groupId>
+	<artifactId>stockflow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>estoque</name>
+	<name>stockflow</name>
 	<description>estoque de produtos generico</description>
 	<properties>
 		<java.version>17</java.version>

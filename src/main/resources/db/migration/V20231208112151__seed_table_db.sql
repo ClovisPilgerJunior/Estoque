@@ -71,13 +71,13 @@ INSERT INTO produto_saida (data_saida, quantidade, retirado_por, setor, unidade_
 VALUES ('2023-09-15', 1, 'Maria', 1, 2, 'Produto retirado para teste', 2, NOW(), NOW(), 'system', 'system');
 
 INSERT INTO users (name, password, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES ('admin', 'admin', TRUE, NOW(), NOW(), 'system', 'system');
+VALUES ('admin', '$2a$10$lGJ9h2UCs6bvTf86twGOQuLHkFSvSe8A2uwnMelh0KtF.ZLxouLTy', TRUE, NOW(), NOW(), 'system', 'system');
 
 INSERT INTO users (name, password, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES ('user', 'user', TRUE, NOW(), NOW(), 'system', 'system');
+VALUES ('user', '$2a$10$OO000/oIGVUGUuQsfrK.cOJySJ/jtVzrbG2ojVkvbbPHEsHfBpDwO', TRUE, NOW(), NOW(), 'system', 'system');
 
 INSERT INTO users (name, password, ativo, created_date, last_modified_date, created_by, last_modified_by)
-VALUES ('user1', 'user2', FALSE, NOW(), NOW(), 'system', 'system');
+VALUES ('user1', '$2a$10$43XYhtTFSYdIjkFawVYcVedNDFMICBlWWBZTU0wOHCSa7mDTarKmy', FALSE, NOW(), NOW(), 'system', 'system');
 
 INSERT INTO profiles (user_id, profiles) VALUES(1, 0);
 INSERT INTO profiles (user_id, profiles) VALUES(1, 3);

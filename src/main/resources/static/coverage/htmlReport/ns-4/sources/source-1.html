@@ -106,10 +106,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.services;
 &nbsp;
-&nbsp;import com.janfer.estoque.domain.entities.Fornecedor;
-&nbsp;import com.janfer.estoque.repositories.FornecedorRepository;
-&nbsp;import com.janfer.estoque.repositories.ProdutoCapaRepository;
-&nbsp;import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
+&nbsp;import entities.domain.com.storage.stockflow.Fornecedor;
+&nbsp;import repositories.com.storage.stockflow.FornecedorRepository;
+&nbsp;import repositories.com.storage.stockflow.ProdutoCapaRepository;
+&nbsp;import exceptions.services.com.storage.stockflow.DataIntegrityViolationException;
 &nbsp;import jakarta.transaction.Transactional;
 &nbsp;import lombok.NoArgsConstructor;
 &nbsp;import org.springframework.beans.factory.annotation.Autowired;
@@ -140,7 +140,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    public void delete(Fornecedor fornecedor){
 &nbsp;
 <b class="fc">&nbsp;        if(produtoCapaRepository.existsById(fornecedor.getId())){</b>
-<b class="fc">&nbsp;            throw new DataIntegrityViolationException(&quot;Não é possível excluir um fornecedor com produto existente&quot;);</b>
+<b class="fc">&nbsp;            throw new DataIntegrityViolationException(&quot;Nï¿½o ï¿½ possï¿½vel excluir um fornecedor com produto existente&quot;);</b>
 &nbsp;        }
 &nbsp;
 <b class="fc">&nbsp;        fornecedorRepository.delete(fornecedor);</b>

@@ -88,13 +88,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.controllers;
 &nbsp;
-&nbsp;import com.janfer.estoque.domain.dtos.ProdutoSaidaGetDTO;
-&nbsp;import com.janfer.estoque.domain.dtos.ProdutoSaidaPostDTO;
-&nbsp;import com.janfer.estoque.domain.entities.ProdutoSaida;
-&nbsp;import com.janfer.estoque.domain.mappers.MapStructMapper;
-&nbsp;import com.janfer.estoque.services.ProdutoCapaService;
-&nbsp;import com.janfer.estoque.services.ProdutoSaidaService;
-&nbsp;import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
+&nbsp;import dtos.domain.com.storage.stockflow.ProdutoSaidaGetDTO;
+&nbsp;import dtos.domain.com.storage.stockflow.ProdutoSaidaPostDTO;
+&nbsp;import entities.domain.com.storage.stockflow.ProdutoSaida;
+&nbsp;import mappers.domain.com.storage.stockflow.MapStructMapper;
+&nbsp;import services.com.storage.stockflow.ProdutoCapaService;
+&nbsp;import services.com.storage.stockflow.ProdutoSaidaService;
+&nbsp;import exceptions.services.com.storage.stockflow.ObjectNotFoundException;
 &nbsp;import io.swagger.v3.oas.annotations.Operation;
 &nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
 &nbsp;import io.swagger.v3.oas.annotations.servers.Server;
@@ -113,7 +113,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;@AllArgsConstructor</b>
 &nbsp;@Tag(name = &quot;Produto Saida&quot;, description = &quot;Endpoint da saida de produtos&quot;)
 &nbsp;@Server(url = &quot;http://localhost:8080&quot;, description = &quot;Servidor local de desenvolvimento&quot;)
-&nbsp;@Server(url = &quot;http://estoque-production.up.railway.app&quot;, description = &quot;Servidor de produção&quot;)
+&nbsp;@Server(url = &quot;http://estoque-production.up.railway.app&quot;, description = &quot;Servidor de produï¿½ï¿½o&quot;)
 &nbsp;@RestController
 &nbsp;@RequestMapping(value = &quot;/api/produtoSaida&quot;)
 &nbsp;public class ProdutoSaidaController {
@@ -128,20 +128,20 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    ProdutoCapaService produtoCapaService;
 &nbsp;
 &nbsp;    @PostMapping(&quot;/cadastrar&quot;)
-&nbsp;    @Operation(summary = &quot;Cadastrar uma nova saída de produto&quot;, description = &quot;Cadastra uma nova saída de produto com base nos dados fornecidos.&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Saída de produto cadastrada com sucesso&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violação na integridade dos dados&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;409&quot;, description = &quot;Produto está inativado no sistema&quot;)
+&nbsp;    @Operation(summary = &quot;Cadastrar uma nova saï¿½da de produto&quot;, description = &quot;Cadastra uma nova saï¿½da de produto com base nos dados fornecidos.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Saï¿½da de produto cadastrada com sucesso&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violaï¿½ï¿½o na integridade dos dados&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;409&quot;, description = &quot;Produto estï¿½ inativado no sistema&quot;)
 &nbsp;    public ResponseEntity&lt;Object&gt; create(@RequestBody ProdutoSaidaPostDTO produtoSaidaDTO) {
 &nbsp;
 <b class="pc">&nbsp;        if (produtoSaidaDTO.getProdutoCapa().getId() == null) {</b>
-<b class="nc">&nbsp;            return ResponseEntity.badRequest().body(&quot;ProdutoCapa não pode ser nulo.&quot;);</b>
+<b class="nc">&nbsp;            return ResponseEntity.badRequest().body(&quot;ProdutoCapa nï¿½o pode ser nulo.&quot;);</b>
 &nbsp;        }
 &nbsp;
 <b class="fc">&nbsp;        Long produtoCapaId = produtoSaidaDTO.getProdutoCapa().getId();</b>
 &nbsp;
 <b class="fc">&nbsp;        if (!produtoCapaService.existById(produtoCapaId)) {</b>
-<b class="fc">&nbsp;            return ResponseEntity.badRequest().body(&quot;ProdutoCapa correspondente não encontrado.&quot;);</b>
+<b class="fc">&nbsp;            return ResponseEntity.badRequest().body(&quot;ProdutoCapa correspondente nï¿½o encontrado.&quot;);</b>
 &nbsp;        }
 &nbsp;
 <b class="fc">&nbsp;        produtoSaidaService.save(mapStructMapper.produtoSaidaToProdutoSaidaDTO(produtoSaidaDTO));</b>
@@ -149,48 +149,48 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;    }
 &nbsp;
 &nbsp;    @GetMapping
-&nbsp;    @Operation(summary = &quot;Listar todas as saídas de produtos&quot;, description = &quot;Recupera a lista de todas as saídas de produtos cadastradas.&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista de saídas de produtos encontrada com sucesso&quot;)
+&nbsp;    @Operation(summary = &quot;Listar todas as saï¿½das de produtos&quot;, description = &quot;Recupera a lista de todas as saï¿½das de produtos cadastradas.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista de saï¿½das de produtos encontrada com sucesso&quot;)
 &nbsp;    public ResponseEntity&lt;List&lt;ProdutoSaidaGetDTO&gt;&gt; findAll() {
 <b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(mapStructMapper.</b>
 <b class="fc">&nbsp;            produtoSaidaGetDTOAllToProdutoSaida(produtoSaidaService.findAll()), HttpStatus.OK);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @GetMapping(&quot;/{id}&quot;)
-&nbsp;    @Operation(summary = &quot;Buscar saída de produto por ID&quot;, description = &quot;Recupera uma saída de produto pelo seu ID.&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Saída de produto encontrada com sucesso&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Saída de produto não encontrada&quot;)
+&nbsp;    @Operation(summary = &quot;Buscar saï¿½da de produto por ID&quot;, description = &quot;Recupera uma saï¿½da de produto pelo seu ID.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Saï¿½da de produto encontrada com sucesso&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Saï¿½da de produto nï¿½o encontrada&quot;)
 &nbsp;    public ResponseEntity&lt;ProdutoSaidaGetDTO&gt; findById(@PathVariable(value = &quot;id&quot;) Long id) {
 <b class="fc">&nbsp;        Optional&lt;ProdutoSaida&gt; produtoSaidaOptional = produtoSaidaService.findById(id);</b>
 &nbsp;
 <b class="fc">&nbsp;        return produtoSaidaOptional.map(produtoSaida -&gt; {</b>
 <b class="fc">&nbsp;            ProdutoSaidaGetDTO produtoSaidaGetDTO = mapStructMapper.produtoSaidaGetDTOToProdutoSaida(produtoSaida);</b>
 <b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.OK).body(produtoSaidaGetDTO);</b>
-<b class="fc">&nbsp;        }).orElseThrow(() -&gt; new ObjectNotFoundException(&quot;Produto não encontrado com ID: &quot; + id));</b>
+<b class="fc">&nbsp;        }).orElseThrow(() -&gt; new ObjectNotFoundException(&quot;Produto nï¿½o encontrado com ID: &quot; + id));</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @DeleteMapping(&quot;/deletar/{id}&quot;)
-&nbsp;    @Operation(summary = &quot;Excluir uma saída de produto&quot;, description = &quot;Exclui uma saída de produto existente com base no ID fornecido.&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Saída de produto excluída com sucesso&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Saída de produto não encontrada&quot;)
+&nbsp;    @Operation(summary = &quot;Excluir uma saï¿½da de produto&quot;, description = &quot;Exclui uma saï¿½da de produto existente com base no ID fornecido.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Saï¿½da de produto excluï¿½da com sucesso&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Saï¿½da de produto nï¿½o encontrada&quot;)
 &nbsp;    public ResponseEntity&lt;Object&gt; delete(@PathVariable(value = &quot;id&quot;) Long id) {
 <b class="fc">&nbsp;        Optional&lt;ProdutoSaida&gt; produtoSaidaOptional = produtoSaidaService.findById(id);</b>
 <b class="fc">&nbsp;        if (produtoSaidaOptional.isEmpty()) {</b>
-<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto não encontrado&quot;);</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto nï¿½o encontrado&quot;);</b>
 &nbsp;        }
 <b class="fc">&nbsp;        produtoSaidaService.delete(produtoSaidaOptional.get());</b>
-<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(&quot;Produto &quot; + id + &quot; excluído com sucesso&quot;);</b>
+<b class="fc">&nbsp;        return ResponseEntity.status(HttpStatus.OK).body(&quot;Produto &quot; + id + &quot; excluï¿½do com sucesso&quot;);</b>
 &nbsp;    }
 &nbsp;
 &nbsp;    @PutMapping(&quot;/atualizar/{id}&quot;)
-&nbsp;    @Operation(summary = &quot;Atualizar uma saída de produto&quot;, description = &quot;Atualiza uma saída de produto existente com base nos dados fornecidos.&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Saída de produto atualizada com sucesso&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Saída de produto não encontrada&quot;)
-&nbsp;    @ApiResponse(responseCode = &quot;409&quot;, description = &quot;Produto está inativado no sistema&quot;)
+&nbsp;    @Operation(summary = &quot;Atualizar uma saï¿½da de produto&quot;, description = &quot;Atualiza uma saï¿½da de produto existente com base nos dados fornecidos.&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Saï¿½da de produto atualizada com sucesso&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Saï¿½da de produto nï¿½o encontrada&quot;)
+&nbsp;    @ApiResponse(responseCode = &quot;409&quot;, description = &quot;Produto estï¿½ inativado no sistema&quot;)
 &nbsp;    public ResponseEntity&lt;Object&gt; update(@PathVariable(value = &quot;id&quot;) Long id, @RequestBody @Valid ProdutoSaidaPostDTO produtoSaidaDTO){
 <b class="fc">&nbsp;        Optional&lt;ProdutoSaida&gt; produtoSaidaOptional = produtoSaidaService.findById(id);</b>
 <b class="fc">&nbsp;        if(produtoSaidaOptional.isEmpty()) {</b>
-<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Fornecedor não encontrado&quot;);</b>
+<b class="fc">&nbsp;            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Fornecedor nï¿½o encontrado&quot;);</b>
 &nbsp;        }
 <b class="fc">&nbsp;        var produtoSaida = new ProdutoSaida();</b>
 <b class="fc">&nbsp;        BeanUtils.copyProperties(produtoSaidaDTO, produtoSaida);</b>

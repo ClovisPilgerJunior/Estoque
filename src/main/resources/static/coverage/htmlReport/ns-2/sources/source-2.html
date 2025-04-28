@@ -88,15 +88,15 @@ Current scope:     <a href="../../index.html">all classes</a>
 <pre>
 <code class="sourceCode" id="sourceCode">&nbsp;package com.janfer.estoque.controllers;
 &nbsp;
-&nbsp;import com.janfer.estoque.domain.entities.ProdutoCapa;
-&nbsp;import com.janfer.estoque.domain.dtos.ProdutoCapaGetDTO;
-&nbsp;import com.janfer.estoque.domain.dtos.ProdutoCapaPostDTO;
-&nbsp;import com.janfer.estoque.domain.mappers.MapStructMapper;
-&nbsp;import com.janfer.estoque.services.ProdutoCapaService;
-&nbsp;import com.janfer.estoque.services.ProdutoEntradaService;
-&nbsp;import com.janfer.estoque.services.exceptions.DataIntegrityViolationException;
-&nbsp;import com.janfer.estoque.services.exceptions.ObjectNotFoundException;
-&nbsp;import com.janfer.estoque.services.exceptions.ProductDisableException;
+&nbsp;import entities.domain.com.storage.stockflow.ProdutoCapa;
+&nbsp;import dtos.domain.com.storage.stockflow.ProdutoCapaGetDTO;
+&nbsp;import dtos.domain.com.storage.stockflow.ProdutoCapaPostDTO;
+&nbsp;import mappers.domain.com.storage.stockflow.MapStructMapper;
+&nbsp;import services.com.storage.stockflow.ProdutoCapaService;
+&nbsp;import services.com.storage.stockflow.ProdutoEntradaService;
+&nbsp;import exceptions.services.com.storage.stockflow.DataIntegrityViolationException;
+&nbsp;import exceptions.services.com.storage.stockflow.ObjectNotFoundException;
+&nbsp;import exceptions.services.com.storage.stockflow.ProductDisableException;
 &nbsp;import io.swagger.v3.oas.annotations.Operation;
 &nbsp;import io.swagger.v3.oas.annotations.responses.ApiResponse;
 &nbsp;import io.swagger.v3.oas.annotations.servers.Server;
@@ -116,7 +116,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 <b class="fc">&nbsp;@AllArgsConstructor</b>
 &nbsp;@Tag(name = &quot;ProdutoCapa&quot;, description = &quot;Endpoint do ProdutoCapa&quot;)
 &nbsp;@Server(url = &quot;http://localhost:8080&quot;, description = &quot;Servidor local de desenvolvimento&quot;)
-&nbsp;@Server(url = &quot;http://estoque-production.up.railway.app&quot;, description = &quot;Servidor de produção&quot;)
+&nbsp;@Server(url = &quot;http://estoque-production.up.railway.app&quot;, description = &quot;Servidor de produï¿½ï¿½o&quot;)
 &nbsp;@RestController
 &nbsp;@RequestMapping(value = &quot;/api/produtoCapa&quot;)
 &nbsp;public class ProdutoCapaController {
@@ -131,11 +131,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;  @PostMapping(&quot;/cadastrar&quot;)
 &nbsp;  @Operation(summary = &quot;Cadastrar um novo produto&quot;, description = &quot;Cadastra um novo produto com base nos dados fornecidos.&quot;)
 &nbsp;  @ApiResponse(responseCode = &quot;201&quot;, description = &quot;Produto cadastrado com sucesso&quot;)
-&nbsp;  @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violação na integridade dos dados&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violaï¿½ï¿½o na integridade dos dados&quot;)
 &nbsp;  public ResponseEntity&lt;Object&gt; create(@Valid @RequestBody ProdutoCapaPostDTO produtoCapaDTO) {
 &nbsp;
 <b class="pc">&nbsp;    if(produtoCapaService.existByDesc(produtoCapaDTO.getDesc())){</b>
-<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Produto já cadastrado&quot;);</b>
+<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Produto jï¿½ cadastrado&quot;);</b>
 &nbsp;    }
 &nbsp;
 <b class="nc">&nbsp;    produtoCapaService.save(mapStructMapper.produtoCapaToProdutoCapaDTO(produtoCapaDTO));</b>
@@ -145,16 +145,16 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;  @PutMapping(&quot;/atualizar/{id}&quot;)
 &nbsp;  @Operation(summary = &quot;Atualizar um produto&quot;, description = &quot;Atualiza um produto existente com base nos dados fornecidos.&quot;)
 &nbsp;  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Produto atualizado com sucesso&quot;)
-&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto não encontrado&quot;)
-&nbsp;  @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violação na integridade dos dados&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto nï¿½o encontrado&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Violaï¿½ï¿½o na integridade dos dados&quot;)
 &nbsp;  public ResponseEntity&lt;Object&gt; update(@PathVariable(value = &quot;id&quot;) Long id, @RequestBody @Valid ProdutoCapaPostDTO produtoCapaPostDTO){
 <b class="fc">&nbsp;    Optional&lt;ProdutoCapa&gt; produtoCapaOptional = produtoCapaService.findById(id);</b>
 <b class="fc">&nbsp;    if(produtoCapaOptional.isEmpty()) {</b>
-<b class="fc">&nbsp;      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto não encontrado&quot;);</b>
+<b class="fc">&nbsp;      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto nï¿½o encontrado&quot;);</b>
 &nbsp;    }
 &nbsp;
 <b class="pc">&nbsp;    if(produtoCapaService.existByDescAndIdNot(produtoCapaPostDTO.getDesc(), id)){</b>
-<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Já existe um produto com esse nome cadastrado&quot;);</b>
+<b class="fc">&nbsp;      throw new DataIntegrityViolationException(&quot;Jï¿½ existe um produto com esse nome cadastrado&quot;);</b>
 &nbsp;    }
 &nbsp;
 <b class="nc">&nbsp;    var produtoCapa = new ProdutoCapa();</b>
@@ -165,15 +165,15 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;
 &nbsp;  @DeleteMapping(&quot;/deletar/{id}&quot;)
 &nbsp;  @Operation(summary = &quot;Excluir um produto&quot;, description = &quot;Exclui um produto existente com base no ID fornecido.&quot;)
-&nbsp;  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Produto excluído com sucesso&quot;)
-&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto não encontrado&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Produto excluï¿½do com sucesso&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto nï¿½o encontrado&quot;)
 &nbsp;  public ResponseEntity&lt;Object&gt; delete(@PathVariable(value = &quot;id&quot;) Long id) {
 <b class="fc">&nbsp;    Optional&lt;ProdutoCapa&gt; produtoCapaOptional = produtoCapaService.findById(id);</b>
 <b class="fc">&nbsp;    if (produtoCapaOptional.isEmpty()) {</b>
-<b class="fc">&nbsp;      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto não encontrado&quot;);</b>
+<b class="fc">&nbsp;      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(&quot;Produto nï¿½o encontrado&quot;);</b>
 &nbsp;    }
 <b class="fc">&nbsp;    produtoCapaService.delete(produtoCapaOptional.get());</b>
-<b class="fc">&nbsp;    return ResponseEntity.status(HttpStatus.OK).body(&quot;Produto &quot; + id + &quot; excluído com sucesso&quot;);</b>
+<b class="fc">&nbsp;    return ResponseEntity.status(HttpStatus.OK).body(&quot;Produto &quot; + id + &quot; excluï¿½do com sucesso&quot;);</b>
 &nbsp;  }
 &nbsp;
 &nbsp;  @GetMapping
@@ -188,11 +188,11 @@ Current scope:     <a href="../../index.html">all classes</a>
 &nbsp;  @GetMapping(&quot;/{id}&quot;)
 &nbsp;  @Operation(summary = &quot;Buscar produto por ID&quot;, description = &quot;Recupera um produto pelo seu ID.&quot;)
 &nbsp;  @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Produto encontrado com sucesso&quot;)
-&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto não encontrado&quot;)
+&nbsp;  @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Produto nï¿½o encontrado&quot;)
 &nbsp;  public ResponseEntity&lt;ProdutoCapaGetDTO&gt; findById(@PathVariable(value = &quot;id&quot;) Long id) {
 <b class="fc">&nbsp;    Optional&lt;ProdutoCapa&gt; produtoCapaOptional = produtoCapaService.findById(id);</b>
 <b class="pc">&nbsp;    if (produtoCapaOptional.isEmpty()) {</b>
-<b class="fc">&nbsp;      throw new ObjectNotFoundException(&quot;Produto não encontrado!&quot;);</b>
+<b class="fc">&nbsp;      throw new ObjectNotFoundException(&quot;Produto nï¿½o encontrado!&quot;);</b>
 &nbsp;    }
 &nbsp;
 <b class="nc">&nbsp;    List&lt;ProdutoCapa&gt; produtoCapas = new ArrayList&lt;&gt;();</b>
